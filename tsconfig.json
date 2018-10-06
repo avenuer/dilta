@@ -15,6 +15,16 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@dilta/core": ["modules/core"],
+      "@dilta/database": ["modules/database"],
+      "@dilta/elecron": ["modules/electron"],
+      "@dilta/emdb": ["modules/embededDb"],
+      "@dilta/gen": ["modules/generator"],
+      "@dilta/shared": ["modules/platform-shared"],
+      "@dilta/security": ["modules/security"],
+      "@dilta/util": ["modules/util"]
+    }
   }
 }
