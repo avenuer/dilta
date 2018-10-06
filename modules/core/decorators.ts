@@ -1,6 +1,6 @@
-import { Provider, Injectable } from 'injection-js';
+import { Provider } from 'injection-js';
 import { flatten, uniq } from 'lodash';
-
+import { ModelBase } from '@dilta/database';
 
 /**
  * Decorator Constantts
@@ -14,18 +14,6 @@ enum DecoratorSymbols {
 
 /** The Types that matches the object propery type to be applied  */
 type ObjectName = string | number | symbol;
-
-/**
- * Property Detail mapped to the Action decorator symbol
- *
- * @export
- * @interface ActionFunction
- */
-export interface ActionFunction {
-  name: string;
-  method: Function;
-  enabled?: boolean;
-}
 
 /** Default Action Symbol to retrive collates all actions on an object */
 export const ActionSymbol = Symbol(DecoratorSymbols.Actions);
@@ -44,24 +32,18 @@ export function Action(name: string, enabled = true) {
     key: ObjectName,
     descriptor: PropertyDescriptor
   ) {
-    const method: Function = descriptor.value;
-    if (typeof method !== 'function') {
+    const value: Function = descriptor.value;
+    if (typeof value !== 'function') {
       throw functionDecoratorRequiredError;
     }
-    if (target.hasOwnProperty(ActionSymbol)) {
-      (target[ActionSymbol] as ActionFunction[]).push({
-        name,
-        method,
-        enabled
-      });
-    } else {
-      target[ActionSymbol] = [];
-      (target[ActionSymbol] as ActionFunction[]).push({
-        name,
-        method,
-        enabled
+    if (!target.hasOwnProperty(ActionSymbol)) {
+      const map = new Map<string, string>();
+      Object.defineProperty(target, ActionSymbol, {
+        value: map,
+        writable: true
       });
     }
+    (target[ActionSymbol] as Map<string, string>).set(name, key as string);
   };
 }
 
@@ -69,7 +51,6 @@ export function Action(name: string, enabled = true) {
 const functionDecoratorRequiredError = new Error(
   `This decorator should be applied to a function has a target`
 );
-
 
 /**
  * Module Colation of Providers.
@@ -100,7 +81,10 @@ export function Module(module: Module) {
     moduleProviders = flatten(module.imports.map(e => e[moduleSymbol]));
   }
   return function(target: any) {
-    const resolved = uniq([ ...moduleProviders, ...providers, target ]);
-    Object.defineProperty(target, moduleSymbol, { value: resolved, writable: true });
+    const resolved = uniq([...moduleProviders, ...providers, target]);
+    Object.defineProperty(target, moduleSymbol, {
+      value: resolved,
+      writable: true
+    });
   };
 }
