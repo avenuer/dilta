@@ -1,6 +1,5 @@
 import { Provider } from 'injection-js';
 import { flatten, uniq } from 'lodash';
-import { ModelBase } from '@dilta/database';
 
 /**
  * Decorator Constantts
