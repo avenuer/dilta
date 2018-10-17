@@ -1,0 +1,55 @@
+<form [formGroup]="studentForm">
+  <div class="form-group">
+    <label class="required">Student Name</label>
+    <input size="75" formControlName="name" type="text" class="form-control">
+    <span *ngIf="!studentForm.controls['name'].valid && studentForm.controls['name'].touched" class="form-error"><i class="mi mi-Info "></i> school Name is required </span>
+  </div>
+  <div class="form-group">
+    <label class="required"> Class </label>
+    <input formControlName="class" type="text" class="form-control">
+    <span *ngIf="!studentForm.controls['class'].valid && studentForm.controls['class'].touched" class="form-error"><i class="mi mi-Info "></i> Class is required </span>
+  </div>
+  <div class="form-group">
+    <label class="required"> Date Of Birth </label>
+    <input id="dateControl" type="date" clrDate formControlName="dob"/>
+    <span *ngIf="!studentForm.controls['dob'].valid && studentForm.controls['dob'].touched" class="form-error"><i class="mi mi-Info "></i> dob is required </span>
+  </div>
+  <div class="form-group row">
+    <div class="col-xs m-left">
+      <label class="required">Gender</label>
+      <div class="select">
+        <select formControlName="gender">
+            <option disabled>Gender</option>
+                  <option>Male</option>
+                  <option>Female</option>
+        </select>
+      </div>
+      <span *ngIf="!studentForm.controls['gender'].valid && studentForm.controls['gender'].touched" class="form-error"><i class="mi mi-Info "></i> Gender is required </span>
+    </div>
+    <div class="col-xs space-left">
+      <label>Blood Group </label>
+      <div class="select">
+        <select formControlName="bloodgroup">
+            <option disabled>Blood Group</option>
+            <option>A</option>
+            <option>B</option>
+            <option>AB</option>
+            <option>O</option>
+     </select>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="required">Previous School </label>
+    <input formControlName="prevschool" type="text" class="form-control">
+    <span *ngIf="!studentForm.controls['prevschool'].valid && studentForm.controls['prevschool'].touched" class="form-error"><i class="mi mi-Info "></i> Previous school Name is required </span>
+  </div>
+  <div class="form-group">
+    <label class="required">Parent Phone No </label>
+    <input formControlName="parentPhone" type="text" class="form-control">
+    <span *ngIf="!studentForm.controls['parentPhone'].valid && studentForm.controls['parentPhone'].touched" class="form-error"><i class="mi mi-Info "></i> Previous school Name is required </span>
+  </div>
+  <div class="float-right">
+    <button id="save" [disabled]="!studentForm.valid" (click)="emit(studentForm.value)" class="btn btn-primary"> Save</button>
+  </div>
+</form>

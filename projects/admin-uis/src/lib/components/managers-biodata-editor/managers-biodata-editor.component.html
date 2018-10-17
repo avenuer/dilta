@@ -1,0 +1,50 @@
+<form class="container" [formGroup]="managersForm">
+  <mat-form-field>
+    <mat-label>Proprietors name</mat-label>
+    <input matInput required size="75" id="propName" formControlName="propName" type="text" class="form-control">
+    <mat-error *ngIf="!managersForm.controls['propName'].valid && managersForm.controls['propName'].touched">
+      Proprietors Name is required
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label> Proprietors Phone </mat-label>
+    <input required matInput formControlName="propPhone" type="text" class="form-control">
+    <mat-error *ngIf="!managersForm.controls['propPhone'].valid && managersForm.controls['propPhone'].touched">
+      Proprietors Phone Number is required
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label> Proprietors Email </mat-label>
+    <input formControlName="propEmail" matInput type="email" class="form-control">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>School Manager Name</mat-label>
+    <input required matInput formControlName="sMName" type="text" class="form-control">
+    <mat-error *ngIf="!managersForm.controls['sMName'].valid && managersForm.controls['sMName'].touched">
+      HeadMaster or Principals name is required
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>School Manager Phone</mat-label>
+    <input matInput required formControlName="sMPhone" type="text" class="form-control">
+    <mat-error *ngIf="!managersForm.controls['sMPhone'].valid && managersForm.controls['sMPhone'].touched">
+      school Manager Phone is required
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>School Manager Email</mat-label>
+    <input matInput formControlName="sMEmail" type="email" class="form-control">
+    <mat-error></mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>School Motto</mat-label>
+    <input matInput required formControlName="motto" type="text" class="form-control">
+    <mat-error *ngIf="!managersForm.controls['motto'].valid && managersForm.controls['motto'].touched">
+      school Motto is required
+    </mat-error>
+  </mat-form-field>
+  <div class="save-btn">
+    <button mat-raised-button color="primary" id="saver" [disabled]="!managersForm.valid" (click)="emit(managersForm.value)" class="btn btn-primary"><i></i>
+      Save</button>
+  </div>
+</form>

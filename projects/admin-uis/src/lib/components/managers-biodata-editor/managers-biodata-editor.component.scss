@@ -1,0 +1,9 @@
+.container {
+  display: flex;
+  flex-direction: column;
+
+  .save-btn {
+    align-self: flex-end;
+    justify-self: left;
+  }
+}

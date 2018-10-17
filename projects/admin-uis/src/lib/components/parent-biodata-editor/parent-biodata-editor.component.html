@@ -1,0 +1,86 @@
+<form class="form-group" [formGroup]="parentForm">
+  <h3> Parent Form </h3>
+  <div class="form-group">
+    <label class="required">Full Name</label>
+    <input size="75" formControlName="name" type="text" class="form-control">
+    <span *ngIf="!parentForm.controls['name'].valid && parentForm.controls['name'].touched" class="form-error"> <i class="mi mi-Info "></i> Parent Full Name is required </span>
+  </div>
+  <div class="form-group">
+    <label class="required">Phone Number</label>
+    <input formControlName="phoneNo" type="text" class="form-control">
+    <span *ngIf="!parentForm.controls['phoneNo'].valid && parentForm.controls['phoneNo'].touched" class="form-error"> <i class="mi mi-Info "></i> Parent Phone No is required </span>
+  </div>
+  <div class="form-group">
+    <label >Email </label>
+    <input formControlName="email" type="email" class="form-control">
+  </div>
+  <div class="form-group">
+    <label class="required">Profession</label>
+    <input type="text" formControlName="profession" class="form-control">
+    <span *ngIf="!parentForm.controls['profession'].valid && parentForm.controls['profession'].touched" class="form-error"><i class="mi mi-Info "></i> Parent Profession is required. </span>
+  </div>
+  <div class="form-group">
+    <label class="required">Home Address</label>
+    <textarea formControlName="homeAddress" class="form-control entry-text-area" rows="3"></textarea>
+    <span *ngIf="!parentForm.controls['homeAddress'].valid && parentForm.controls['homeAddress'].touched" class="form-error"><i class="mi mi-Info "></i> Parent Home Address is required. </span>
+  </div>
+  <div class="form-group row flex-items-xs-between">
+    <div class="col-xs m-left">
+      <label class="required"> Relationship </label>
+      <div class="select">
+        <select formControlName="relationship">
+              <option> Parent </option>
+              <option> Guardian </option>
+              <option> Other </option>
+            </select>
+        <span *ngIf="!parentForm.controls['relationship'].valid && parentForm.controls['relationship'].touched" class="form-error"> <i class="mi mi-Info "></i> Parent Working category is required </span>
+      </div>
+    </div>
+    <div class="col-xs space-left">
+      <label class="required"> Working Category </label>
+      <div class="select">
+        <select formControlName="workcategory">
+              <option value="civil-servant" > Civil Servant </option>
+              <option  value="nursery" > Others </option>
+            </select>
+        <span *ngIf="!parentForm.controls['workcategory'].valid && parentForm.controls['workcategory'].touched" class="form-error"><i class="mi mi-Info "></i> Parent Working category is required </span>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label >Work Address</label>
+    <textarea formControlName="workAddress" class="form-control entry-text-area" rows="3"></textarea>
+  </div>
+  <div class="form-group row flex-items-xs-between">
+    <div class="col-xs m-left">
+      <label class="required"> Home Town </label>
+      <div class="select">
+        <select formControlName="town" class="form-control">
+                <option disabled> Town </option>
+                <option>Ede</option>
+                <option>Owode</option>
+                <option>Oshogbo</option>
+            </select>
+        <span *ngIf="!parentForm.controls['town'].valid && parentForm.controls['town'].touched" class="form-error"> <i class="mi mi-Info "></i> Home Town location is required </span>
+      </div>
+
+    </div>
+    <div class="col-xs space-left">
+      <label class="required"> State </label>
+      <div class="select">
+        <select formControlName="state">
+                <option disabled> State </option>
+                <option>Osun State</option>
+                <option>Oyo State</option>
+                <option>Lagos State</option>
+                <option>Ondo State</option>
+            </select>
+        <span *ngIf="!parentForm.controls['state'].valid && parentForm.controls['state'].touched" class="form-error"><i class="mi mi-Info "></i>state of origin is required </span>
+      </div>
+    </div>
+  </div>
+  <div class="float-right">
+    <button id="save" [disabled]="!parentForm.valid" (click)="emit(parentForm.value)" class="btn btn-primary"> Save</button>
+
+  </div>
+</form>

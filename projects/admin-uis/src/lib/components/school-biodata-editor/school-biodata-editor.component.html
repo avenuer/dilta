@@ -1,0 +1,65 @@
+<form class="container" [formGroup]="schoolForm">
+  <div class="image-group">
+    <img class="sm-img school-logo-img" [src]="img" />
+    <div class="upload-button">
+      <label >
+        <input type="file" ngFileSelect [options]="uploadOptions" (uploadOutput)="fil($event.file)" [uploadInput]="uploadInput">
+        School Logo
+      </label>
+    </div>
+  </div>
+  <mat-form-field>
+    <mat-label> School name </mat-label>
+    <input matInput required size="75" formControlName="name" type="text" >
+    <mat-error *ngIf="!schoolForm.controls['name'].valid && schoolForm.controls['name'].touched">
+      school Name is required
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label> Email </mat-label>
+    <input matInput formControlName="email" type="email" class="form-control">
+    <mat-error></mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label> Description </mat-label>
+    <textarea matInput required formControlName="description" rows="3"></textarea>
+    <mat-error *ngIf="!schoolForm.controls['description'].valid && schoolForm.controls['description'].touched"> school description is required and char length should between 60 and 200. </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Category </mat-label>
+    <mat-select formControlName="category" required placeholder="Select">
+      <mat-option *ngFor="let categ of categorys" [value]="categ"> {{ categ }} </mat-option>
+    </mat-select>
+    <mat-error *ngIf="!schoolForm.controls['category'].valid && schoolForm.controls['category'].touched">
+      category is required
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Address</mat-label>
+    <textarea required matInput formControlName="address"  rows="3"></textarea>
+    <mat-error *ngIf="!schoolForm.controls['address'].valid && schoolForm.controls['address'].touched">
+      address is required
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>State</mat-label>
+    <mat-select formControlName="state" required placeholder="State">
+      <mat-option  *ngFor="let state of states" [value]="state">{{ state }}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="!schoolForm.controls['state'].valid && schoolForm.controls['state'].touched">
+      state location is required
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label> LGA </mat-label>
+    <mat-select formControlName="town" required placeholder="LGA">
+      <mat-option *ngFor="let lga of lgas" [value]="lga"> {{ lga }} </mat-option>
+    </mat-select>
+    <mat-error *ngIf="!schoolForm.controls['town'].valid && schoolForm.controls['town'].touched">
+      LGA is required
+    </mat-error>
+  </mat-form-field>
+  <div class="save-btn">
+    <button id="save" mat-raised-button color="primary"  [disabled]="!schoolForm.valid" (click)="emit(schoolForm.value)" > Save</button>
+  </div>
+</form>

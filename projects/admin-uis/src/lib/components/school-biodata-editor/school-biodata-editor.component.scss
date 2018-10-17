@@ -1,0 +1,27 @@
+.school-logo-img {
+  height: 300px!important;
+}
+
+
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .image-group {
+    height: 320px;
+    border-color: red;
+    border: 3px;
+    display: flex;
+
+    .upload-button {
+      align-self: center;
+      justify-self: flex-end;
+    }
+  }
+  .save-btn {
+    align-self: flex-end;
+    justify-self: left;
+  }
+}

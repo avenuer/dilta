@@ -1,0 +1,20 @@
+<header class="row header min-header center liensce-color">
+    Managers Informaton
+  </header>
+<div>
+  <admin-ui-managers-biodata-form (emitter)="saveManagers($event)" ></admin-ui-managers-biodata-form>
+</div>
+<div  *ngIf="err$ | async" class="row alert-row">
+  <!-- notification template -->
+  <div class="alert alert-danger">
+    <div class="alert-items">
+      <div class="alert-item static">
+          <!-- <div class="alert-icon-wrapper">
+          <clr-icon class="alert-icon" shape="check-circle"></clr-icon>
+        </div> -->
+        <span class="alert-text"> {{ err$ | async }} </span>
+      </div>
+    </div>
+  </div>
+  <!-- notification template -->
+</div>

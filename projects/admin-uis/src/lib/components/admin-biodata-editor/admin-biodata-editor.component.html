@@ -1,0 +1,85 @@
+<div>
+    <form class="form-block" [formGroup]="adminForm">
+        <div class="form-group">
+            <img class="sm-img" [src]="img" />
+            <label class="upload-button">
+                <input type="file" ngFileSelect [options]="uploadOptions" (uploadOutput)="fil($event.file)" [uploadInput]="uploadInput">
+                or choose file(s)
+            </label>
+        </div>
+        <div class="form-group">
+          <label class="required" for="name">FullName</label>
+          <input size="75" id="name" formControlName="name" type="text" class="form-control">
+          <span *ngIf="!adminForm.controls['name'].valid && adminForm.controls['name'].touched"
+            class="form-error"> <i class="mi mi-Info "></i> Name is required </span>
+        </div>
+        <div class="form-group">
+          <label class="required" >Primary Single Phone</label>
+          <input formControlName="phoneNo" type="number" class="form-control">
+          <span *ngIf="!adminForm.controls['phoneNo'].valid && adminForm.controls['phoneNo'].touched"
+            class="form-error"> <i class="mi mi-Info "></i> Primary PhoneNo is required </span>
+        </div>
+        <div class="form-group">
+            <label >Email</label>
+            <input formControlName="email" type="email" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="required" >Home Address</label>
+          <textarea formControlName="address" type="text" class="form-control"></textarea>
+          <span *ngIf="!adminForm.controls['address'].valid && adminForm.controls['address'].touched"
+            class="form-error"> <i class="mi mi-Info "></i>   Home Address is required </span>
+        </div>
+        <div class="form-group">
+          <label>Secondary PhoneNos</label>
+          <input formControlName="phoneNos" type="text" class="form-control" >
+        </div>
+
+
+        <div class="form-group row flex-items-xs-between">
+          <div class="col-xs m-left">
+            <label class="required"> Gender </label>
+            <div class="select">
+              <select formControlName="gender" class="form-control">
+                      <option>Female</option>
+                      <option>Male</option>
+              </select>
+              <span *ngIf="!adminForm.controls['gender'].valid && adminForm.controls['gender'].touched" class="form-error"> <i class="mi mi-Info "></i> gender is required </span>
+            </div>
+
+          </div>
+          <div class="col-xs space-left">
+            <label class="required"> Class In Charge </label>
+            <div class="select">
+              <select formControlName="class">
+                      <option *ngFor="let _class of classes" > {{ _class }}</option>
+                  </select>
+              <span *ngIf="!adminForm.controls['class'].valid && adminForm.controls['class'].touched" class="form-error"><i class="mi mi-Info "></i>class in charge of is required </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row flex-items-xs-between">
+          <div class="col-xs m-left">
+            <label class="required"> Subject In Charge </label>
+            <div class="select">
+              <select formControlName="subject" class="form-control">
+                      <option *ngFor="let _subjects of subjects" > {{ _subjects }} </option>
+              </select>
+              <span *ngIf="!adminForm.controls['subject'].valid && adminForm.controls['subject'].touched" class="form-error"> <i class="mi mi-Info "></i> Subject in charge of is required </span>
+            </div>
+          </div>
+          <div class="col-xs space-left">
+            <label class="required"> Level </label>
+            <div class="select">
+              <select formControlName="level">
+                      <option *ngFor="let _level of levels"> {{ _level }} </option>
+                  </select>
+              <span *ngIf="!adminForm.controls['level'].valid && adminForm.controls['level'].touched" class="form-error"><i class="mi mi-Info "></i> employment type required </span>
+            </div>
+          </div>
+        </div>
+        <div class="float-right" >
+            <button id="saver" [disabled]="!adminForm.valid" (click)="emit(adminForm.value)"
+            class="btn btn-primary" ><i class="mi mi-Save "></i> Save</button>
+        </div>
+      </form>
+</div>
