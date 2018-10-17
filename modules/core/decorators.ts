@@ -1,5 +1,7 @@
 import { Provider } from 'injection-js';
 import { flatten, uniq } from 'lodash';
+import 'reflect-metadata';
+
 
 /**
  * Decorator Constantts
