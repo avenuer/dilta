@@ -2,7 +2,8 @@ require('dotenv').config();
 
 import { ProcessIPCTransport, program } from '@dilta/electron';
 import { app, BrowserWindow, ipcMain } from 'electron';
-import { addExtension } from 'modules/electron/extenstion';
+import { devtools } from 'modules/electron/extenstion';
+import { join } from 'path';
 
 //  TODO: make conditional import for environmental variables
 
@@ -18,15 +19,17 @@ function createWindow() {
   win = new BrowserWindow({ width: 503, height: 671, show: false });
   // off toolbars
   win.setMenu(null);
-  // add extenstions
-  addExtension(win);
 
   // and load the index.html of the app.
   // win.loadFile("index.html");
-  win.loadURL(`http://localhost:4200`);
+  win.loadFile(join(__dirname, 'dist', 'setup', 'index.html'));
+  // win.loadURL(`http://localhost:4200`);
+
 
   // Open the DevTools.
   win.webContents.openDevTools();
+  // add dev functions
+  devtools(win);
 
   /** show but hide if page not rendered */
   win.on('ready-to-show', () => {

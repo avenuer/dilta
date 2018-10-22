@@ -1,27 +1,12 @@
-# Dilta
+## ![Dilta](https://raw.githubusercontent.com/avenuer/dilta/master/images/logo.svg 'Dilta')
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
+> **This project for school management system for rural and small/medium scaled schools providing affordable digital solutions across**.  
+> Current implementations shows the setup work flow for the application.
 
-## Development server
+1. Liensce setup page. ![Liensce Key](https://raw.githubusercontent.com/avenuer/dilta/master/images/setup_liensce.png 'Liensce Key')
+2. School information. ![School Form](https://raw.githubusercontent.com/avenuer/dilta/master/images/setup_school_bio.png 'School Form')
+3. Manager information. ![Manager Info](https://raw.githubusercontent.com/avenuer/dilta/master/images/setup_managers.png 'School Info')
+4. Auth signup. ![Auth Signup](https://raw.githubusercontent.com/avenuer/dilta/master/images/setup_auth_user_signup.png 'Auth Signup')
+5. User biodata. ![User Biodata](https://raw.githubusercontent.com/avenuer/dilta/master/images/setup_user_biodata_form.png 'User Biodata')
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Dilta (c) 2018.
