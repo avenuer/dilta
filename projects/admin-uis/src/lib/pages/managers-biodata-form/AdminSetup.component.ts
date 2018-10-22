@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Manager, EntityNames, ModelOperations } from '@dilta/shared';
-import { first } from 'rxjs/operators';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { RouterDirection } from '@dilta/client-shared';
 import { TransportService } from '@dilta/electron-client';
+import { EntityNames, Manager, ModelOperations } from '@dilta/shared';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { exhaustMap, first } from 'rxjs/operators';
 
 /**
  * this components provides ui for setting up the
@@ -29,14 +30,10 @@ export class ManagerDataFormComponent implements OnInit {
    */
   public err$ = new BehaviorSubject(undefined);
 
-  public schoolId: string;
-
-  public localSubscription: Subscription[] = [];
-
   constructor(
-    private _router: Router,
-    private _actR: ActivatedRoute,
-    private transport: TransportService
+    private dir: RouterDirection,
+    private transport: TransportService,
+    private route: ActivatedRoute
   ) {}
 
   /**
@@ -46,13 +43,21 @@ export class ManagerDataFormComponent implements OnInit {
    * @memberof AdminSetupComponent
    */
   saveManagers($event: Manager) {
-    this.transport
-      .modelAction<Manager>(EntityNames.Manager, ModelOperations.Create, {
-        ...$event,
-        id: this.schoolId,
-        school: this.schoolId
-      })
-      .pipe(first())
+    this.route.params
+      .pipe(
+        exhaustMap(({ id }) =>
+          this.transport.modelAction<Manager>(
+            EntityNames.Manager,
+            ModelOperations.Create,
+            {
+              ...$event,
+              id: id,
+              school: id
+            }
+          )
+        ),
+        first()
+      )
       .subscribe(this.changeRoute.bind(this), this.displayError.bind(this));
   }
 
@@ -76,11 +81,9 @@ export class ManagerDataFormComponent implements OnInit {
    */
   changeRoute(manager?: Manager) {
     if (manager) {
-      this._router.navigate(['signup', manager.school]);
+      this.dir.managerForm(manager);
     }
   }
 
-  ngOnInit() {
-    this.schoolId = this._actR.snapshot.params['id'];
-  }
+  ngOnInit() {}
 }

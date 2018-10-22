@@ -1,8 +1,19 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { School, errorInvalid, defaultKeys, fileBase64 } from '@dilta/shared';
-import { UploadInput } from 'ngx-uploader';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output
+  } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  defaultKeys,
+  errorInvalid,
+  fileBase64,
+  School
+  } from '@dilta/shared';
 import { isEmpty } from 'lodash';
+import { UploadInput } from 'ngx-uploader';
 
 export const objSchoolKeys = [
   'name',
@@ -90,7 +101,7 @@ export class SchoolBiodataEditorComponent implements OnInit {
     }
     return this.fb.group({
       name: [school.name, required],
-      email: [school.email],
+      email: [school.email || '' ],
       description: [
         school.description,
         Validators.compose([

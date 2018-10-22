@@ -1,7 +1,7 @@
 import { uniq } from 'lodash';
 import { format, getYear } from 'date-fns';
 import * as uuidRandom from 'uuid/v4';
-import { SettingTypes, SchoolPresetBio, SchoolPreset, Permission, Level, Setting,  } from '@dilta/shared';
+import { SettingTypes, SchoolPresetBio, SchoolPreset, Permission, Level, Setting, SchoolDict,  } from '@dilta/shared';
 
 export const permision: Permission[] = [
   // { name: 'Guest',  value: 1 },
@@ -77,35 +77,7 @@ export const schoolPresetBios: SchoolPreset = {
 /** school categories supported */
 export const schoolCategories = Object.keys(schoolPresetBios);
 
-/**
- * school dictonary interface after transformations
- *
- * @export
- * @interface SchoolDict
- */
-export interface SchoolDict {
-  /**
-   * array of school classes
-   *
-   * @type {string[]}
-   * @memberof SchoolDict
-   */
-  classes: string[];
-  /**
-   * array of subjects offered by schools
-   *
-   * @type {string[]}
-   * @memberof SchoolDict
-   */
-  subjects: string[];
-  /**
-   * an object contaning various permissions for the object
-   *
-   * @type {Object}
-   * @memberof SchoolDict
-   */
-  permisions: Object;
-}
+
 
 /**
  * cheans the school presets information to a nice

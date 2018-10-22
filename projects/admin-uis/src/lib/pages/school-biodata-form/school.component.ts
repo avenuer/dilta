@@ -1,9 +1,15 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { School, EntityNames, ModelOperations } from '@dilta/shared';
-// import { states, schoolCategories, localGovts } from '@dilta/presets';
-import { map, first } from 'rxjs/operators';
+import { ActivatedRoute, Route } from '@angular/router';
+import { RouterDirection } from '@dilta/client-shared';
 import { TransportService } from '@dilta/electron-client';
+import {
+  EntityNames,
+  ModelOperations,
+  PresetAction,
+  School
+  } from '@dilta/shared';
+import { Observable } from 'rxjs';
+import { exhaustMap, first, map } from 'rxjs/operators';
 
 const ErrorDisplayTimeOut = 4000;
 
@@ -30,34 +36,32 @@ export class SchoolDataFormComponent implements OnInit {
    */
   public err: string;
 
-  public schoolId: string;
-
   /**
    * list of nigerian states
    *
    * @public
    * @memberof SchoolComponent
    */
-  public states = []; // states();
+  public states$: Observable<string[]>;
 
   /**
    * list of local Govts in nigeria
    *
    * @memberof SchoolComponent
    */
-  public lgas = []; // localGovts();
+  public lgas$: Observable<string[]>;
 
   /**
    * list of school categories suported
    *
    * @memberof SchoolComponent
    */
-  public schoolCategories = []; // schoolCategories;
+  public schoolCategories$: Observable<string[]>;
 
   constructor(
-    private actRoute: ActivatedRoute,
-    private route: Router,
-    private transport: TransportService
+    private dir: RouterDirection,
+    private transport: TransportService,
+    private route: ActivatedRoute
   ) {}
 
   /**
@@ -72,11 +76,17 @@ export class SchoolDataFormComponent implements OnInit {
       trace: `SchoolComponent::onSubmit`,
       module: 'AdminUiModule'
     });
-    this.transport
-      .modelAction<School>(EntityNames.School, ModelOperations.Create, {
-        ...$event,
-        id: this.schoolId
-      })
+    this.route.params
+      .pipe(
+        map(({ id }) => Object.assign({}, $event, { globalId: id })),
+        exhaustMap((school: School) =>
+          this.transport.modelAction<School>(
+            EntityNames.School,
+            ModelOperations.Create,
+            school
+          )
+        )
+      )
       .pipe(first())
       .subscribe(this.changeRoute.bind(this), this.displayErr.bind(this));
   }
@@ -112,10 +122,14 @@ export class SchoolDataFormComponent implements OnInit {
       trace: `SchoolComponent::changeRoute`,
       module: 'AdminUiModule'
     });
-    this.route.navigate(['admin', school.id]);
+    this.dir.schoolForm(school);
   }
 
   ngOnInit() {
-    this.schoolId = this.actRoute.snapshot.params['id'];
+    this.states$ = this.transport.execute(PresetAction.State);
+    this.lgas$ = this.transport.execute(PresetAction.Lga);
+    this.schoolCategories$ = this.transport.execute(
+      PresetAction.SchoolCategories
+    );
   }
 }

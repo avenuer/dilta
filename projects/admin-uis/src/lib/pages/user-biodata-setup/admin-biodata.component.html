@@ -1,15 +1,6 @@
-<header (click)="saveBiodata($event)" class="row header min-header center liensce-color">
-  Admin Biodata Signup
-</header>
-<div>
-
-  <!-- biodata -->
-  <div>
-    <dilta-user-biodata-form [classes]=" (view$ | async)?.classes"
+<mat-toolbar color="primary">User Biodata </mat-toolbar>
+<mat-card>
+    <admin-ui-user-biodata-form [classes]=" (view$ | async)?.classes"
     [subjects]="(view$ | async)?.subjects"
-    [levels]="(view$ | async)?.permisions" (emitter)="saveBiodata($event)" ></dilta-user-biodata-form>
-  </div>
-
-  <p class="alert-text"> {{ err$ | async }} </p>
-
-</div>
+    [levels]="(view$ | async)?.permisions" (emitter)="saveBiodata($event)" ></admin-ui-user-biodata-form>
+</mat-card>

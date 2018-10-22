@@ -42,7 +42,7 @@ export class UserBiodataProfileComponent implements OnInit {
     return this.store.select(AuthFeature).pipe(
       map(({ details }) => details),
       combineLatest(biodata),
-      map(([auth, user]) => auth.user.id === user.authId)
+      map(([auth, user]) => user.id === user.authId)
     );
   }
 

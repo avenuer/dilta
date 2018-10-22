@@ -1,0 +1,21 @@
+<mat-toolbar color="primary"> Liensce Key </mat-toolbar>
+<div class="container">
+  <div class="item">
+    <img class="svg-container" [src]="logo" alt="">
+  </div>
+  <div class="item">
+    <form class="path-display">
+      <mat-form-field class="">
+        <input accept=".drsk" class="file-styled" type="file" ngFileSelect [options]="uploadOptions" (uploadOutput)="fil($event.file)"
+          name="file" placeholder="Liensce Key" id="">
+        <input readonly matInput  [formControl]="pathFormControl">
+        <mat-error *ngIf="err">
+          {{ err }}
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </div>
+  <div class="item">
+    <button mat-raised-button [disabled]="!pathFormControl.value"  color="primary" (click)="verify(key)">Verify</button>
+  </div>
+</div>

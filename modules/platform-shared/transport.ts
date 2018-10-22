@@ -1,7 +1,74 @@
+
+/**
+ * Channels for communication of Request and Response.
+ *
+ * @export
+ * @enum {number}
+ */
+export enum Transport {
+  Request = 'Transport Request',
+  Response = 'Transport Response'
+}
+
+
+/**
+ * paramaters all response must have
+ *
+ * @export
+ * @interface BaseResponse
+ */
+export interface BaseResponse {
+  time: number;
+  status: API_STATUS_RESPONSE;
+  reqId: string;
+  code: API_STATUS_CODE;
+}
+
+/**
+ * FInd Query Params used for pad=gination or altering
+ * query responses
+ *
+ * @export
+ * @interface FindQueryParam
+ */
 export interface FindQueryParam {
   skip: number;
   limit: number;
   sort: string;
+}
+
+
+/**
+ * Api Formats
+ *
+ * @export
+ * @interface ApiFormat
+ */
+export interface ApiFormat {
+
+  /**
+   * unique Id for the request
+   *
+   * @type {string}
+   * @memberof ApiFormat
+   */
+  id: string;
+
+  /**
+   * Action Name to be executed
+   *
+   * @type {string}
+   * @memberof ApiFormat
+   */
+  action: string;
+
+  /**
+   * functional arguments to be called by the remote function
+   *
+   * @type {any[]}
+   * @memberof ApiFormat
+   */
+  data: any[];
 }
 
 /**
@@ -33,11 +100,9 @@ export enum API_STATUS_RESPONSE {
  * @interface ApiResponse
  * @template T
  */
-export interface ApiResponse<T> {
+export interface ApiResponse<T> extends BaseResponse {
   /** response textual information */
   status: API_STATUS_RESPONSE;
-  /** response code  */
-  code: API_STATUS_CODE;
   /** time of response */
   time: number;
   /** typeof data response */
@@ -54,8 +119,9 @@ export interface ApiResponse<T> {
  * @param {T} details
  * @returns
  */
-export function successResponse<T>(details:  T) {
+export function successResponse<T>(reqId: string, details:  T): ApiResponse<T> {
   return {
+    reqId,
     code: API_STATUS_CODE.Success,
     data: details,
     status: API_STATUS_RESPONSE.Success,
@@ -83,8 +149,9 @@ export interface AuthDataResponse<T> {
  * @param {(Error | string)} err
  * @returns
  */
-export function failureResponse(err: Error | string) {
+export function failureResponse(reqId: string, err: Error | string): ApiResponse<any> {
   return {
+    reqId,
     code: API_STATUS_CODE.Failure,
     error: err.toString(),
     status: API_STATUS_RESPONSE.Failure,

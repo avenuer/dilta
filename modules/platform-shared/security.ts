@@ -70,3 +70,27 @@ export enum USER_AUTH {
   /** Action to verify the user token */
   Verify = '[Security] Auth Verify  ',
 }
+
+/**
+ * interface for user login in to the program
+ *
+ * @export
+ * @interface Login
+ */
+export interface Login {
+  username: string;
+  password: string;
+}
+
+
+/**
+ * Interface for user auth sign up into the program
+ *
+ * @export
+ * @interface Signup
+ */
+export interface Signup {
+  username: string;
+  password: string;
+  level: string;
+}

@@ -1,9 +1,9 @@
+import { AuthBcryptSecurity } from './auth-bcrypt';
+import { Injectable } from '@dilta/core';
+import { AuthService } from '@dilta/database';
+import { Auth } from '@dilta/shared';
 import { autobind } from 'core-decorators';
 import { sign, verify } from 'jsonwebtoken';
-import { Injectable } from '@dilta/core';
-import { Auth } from '@dilta/shared';
-import { AuthService } from '@dilta/database';
-import { AuthBcryptSecurity } from './auth-bcrypt';
 
 const JWT_ALGORITHM = process.env.JWT_ALGORITHM;
 const AUDIENCE = process.env.AUDIENCE;
@@ -36,6 +36,7 @@ export class AuthSecurity {
   /** saves the user authentication */
   async save(auth: Auth) {
     const password = await  this.crypt.hashPassword(auth.password);
+    console.log(password);
     auth.password = password;
     auth = await this.auth.create$(auth);
     return auth;

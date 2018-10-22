@@ -19,13 +19,39 @@ export enum EntityNames {
   Expense = 'expense'
 }
 
+/**
+ * Crud operation that can be carried on various models
+ *
+ * @export
+ * @enum {number}
+ */
+export enum ModelOperations {
+  Create = 'create$',
+  Delete = 'delete$',
+  Find = 'find$',
+  Retrieve = 'retrieve$',
+  Update = 'update$'
+}
+
+
+/**
+ * Formats Action for model operations
+ *
+ * @export
+ * @param {EntityNames} model
+ * @param {ModelOperations} operation
+ * @returns
+ */
+export function modelActionFormat(model: EntityNames, operation: ModelOperations) {
+  return `[Model] ${model} ${operation}`;
+}
 
 export interface BaseModel {
   id: string;
   hash: string;
   createdAt: number;
   updatedAt: number;
-  school: string | Partial<School>;
+  school?: string | Partial<School>;
 }
 
 /**
@@ -100,6 +126,7 @@ export interface School extends Partial<BaseModel> {
   address: string;
   town: string;
   state: string;
+  globalId: string;
 }
 
 /**
@@ -167,7 +194,6 @@ export interface Auth extends Partial<BaseModel> {
   level: string;
 }
 
-
 /**
  * possible interface for graphql response
  *
@@ -178,7 +204,6 @@ export interface Auth extends Partial<BaseModel> {
 export interface AuthGql extends Auth {
   biodata?: User[];
 }
-
 
 /**
  * Interface for Busary Expenses in general
@@ -266,5 +291,3 @@ export interface SettingPreference {
    */
   inputs?: { [k in keyof any]: string }[];
 }
-
-

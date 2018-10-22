@@ -1,4 +1,10 @@
-import { EventEmitter, Input, OnInit, Output, Component } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output
+  } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Manager } from '@dilta/shared';
 
@@ -49,10 +55,10 @@ export class ManagersBiodataEditorComponent implements OnInit {
     return this.fb.group({
       propName: [value.propName, required],
       propPhone: [value.propPhone, required],
-      propEmail: [value.propEmail],
+      propEmail: [value.propEmail || ''],
       sMName: [value.sMName, required],
       sMPhone: [value.sMPhone, required],
-      sMEmail: [value.sMEmail],
+      sMEmail: [value.sMEmail || ''],
       motto: [value.motto, required]
     });
   }

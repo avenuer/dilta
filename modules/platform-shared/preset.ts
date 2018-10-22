@@ -88,3 +88,63 @@ export interface Permission {
    */
   value?: string | number;
 }
+
+/**
+ * school dictonary interface after transformations
+ *
+ * @export
+ * @interface SchoolDict
+ */
+export interface SchoolDict {
+  /**
+   * array of school classes
+   *
+   * @type {string[]}
+   * @memberof SchoolDict
+   */
+  classes: string[];
+  /**
+   * array of subjects offered by schools
+   *
+   * @type {string[]}
+   * @memberof SchoolDict
+   */
+  subjects: string[];
+  /**
+   * an object contaning various permissions for the object
+   *
+   * @type {Object}
+   * @memberof SchoolDict
+   */
+  permisions: Object;
+}
+
+
+/**
+ * Actions for PresetModule
+ *
+ * @export
+ * @enum {number}
+ */
+export enum PresetAction {
+
+  /**
+   * retrieves the local govts in Nigeria
+   */
+  Lga = '[Preset] LOCATION LGA',
+
+  /**
+   * retrieves the States govts in Nigeria
+   */
+  State = '[Preset] LOCATION STATE',
+
+  /**
+   * retrieves the school categories
+   */
+  SchoolCategories = '[Preset] SCHOOL CATEGORIES',
+
+  /**
+   * retrieves the school preseted information by category
+   */
+  SchoolPreset = '[Preset] SCHOOL PRESET',
+}

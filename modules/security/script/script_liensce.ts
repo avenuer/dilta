@@ -1,4 +1,6 @@
 import * as NodeRsa from 'node-rsa';
+import { SchoolEncryptedData } from '@dilta/shared';
+import { format, addYears } from 'date-fns';
 
 export class LiensceGenerator {
   /**
@@ -82,12 +84,14 @@ export class LiensceGenerator {
   }
 
   static generateDemoKey() {
-    const bio = {
+    const bio: SchoolEncryptedData = {
       apikey: 'apikey',
-      globalId: '123random5xyz',
-      schoolId: 'schoolId',
-      schoolName: 'testing school',
-      timestamp: '06-07-17'
+      expiretimestamp: Number(format(addYears(new Date(), 1), 'x')),
+      school: {
+        name: 'DreamStack Nusery and Primary School',
+        category: 'primary',
+        id: 'globalId'
+      } as any
     };
     return LiensceGenerator.privateEncrypt(bio);
   }

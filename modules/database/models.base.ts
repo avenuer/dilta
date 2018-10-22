@@ -1,12 +1,15 @@
-
-import { EmbeddedRxDBError, noIdError } from './errors';
-import { RxCollection, RxError } from 'rxdb';
-import { throwError } from 'rxjs';
-import { to } from 'await-to-js';
-import { BaseModel, FindQueryParam } from '@dilta/shared';
 import { DBModel } from './db-abstract';
-import { defaultPreSave, defaultPreInsert, CollectionMaps, Embededb, } from '@dilta/emdb';
+import { EmbeddedRxDBError, noIdError } from './errors';
+import {
+  CollectionMaps,
+  defaultPreInsert,
+  defaultPreSave,
+  Embededb
+  } from '@dilta/emdb';
+import { BaseModel, FindQueryParam } from '@dilta/shared';
 import { autobind } from 'core-decorators';
+import { RxCollection } from 'rxdb';
+
 
 /** Query Constants for find query */
 enum QUERY_CONSTANTS {
@@ -61,7 +64,7 @@ export class ModelBase<T extends Partial<BaseModel>> implements DBModel<T> {
     if (typeof custom !== 'boolean') {
       const { limit, skip, sort } = custom || ({} as any);
       q = q
-      .sort(sort || QUERY_CONSTANTS.sort)
+        .sort(sort || QUERY_CONSTANTS.sort)
         .skip(skip || QUERY_CONSTANTS.skip)
         .limit(limit || QUERY_CONSTANTS.limit);
     }
@@ -79,13 +82,15 @@ export class ModelBase<T extends Partial<BaseModel>> implements DBModel<T> {
     if (!id) {
       throw noIdError;
     }
-    // important due rxdb lifecycle hooks
-    item = defaultPreSave(item);
-    const [err, newItem] = await to(
-      this.collection.upsert(item).then(res => res.toJSON())
-    );
-    this.cleanError(err);
-    return newItem;
+    try {
+      item = defaultPreSave(item);
+      const newItem = await this.collection
+        .upsert(item)
+        .then(res => res.toJSON());
+      return newItem;
+    } catch (error) {
+      throw new EmbeddedRxDBError(error);
+    }
   }
 
   /**
@@ -97,13 +102,13 @@ export class ModelBase<T extends Partial<BaseModel>> implements DBModel<T> {
    */
   async create$(item: Partial<T>) {
     // important due rxdb lifecycle hooks
-    let err: RxError;
-    item = defaultPreInsert((item as any) as T);
-    [err, item] = await to(
-      this.collection.upsert(item).then(res => res.toJSON())
-    );
-    this.cleanError(err);
-    return (item as any) as T;
+    try {
+      item = defaultPreInsert((item as any) as T);
+      item = await this.collection.upsert(item).then(res => res.toJSON());
+      return (item as any) as T;
+    } catch (error) {
+      throw new EmbeddedRxDBError(error);
+    }
   }
 
   /**
@@ -114,25 +119,14 @@ export class ModelBase<T extends Partial<BaseModel>> implements DBModel<T> {
    * @memberof ModelBase
    */
   async delete$(query: Partial<T>) {
-    const [err, success] = await to(
-      this.collection
+    try {
+      const success = await this.collection
         .findOne(query)
         .exec()
-        .then(e => e.remove())
-    );
-    this.cleanError(err);
-    return success;
-  }
-
-  /**
-   * cleans and throwError
-   *
-   * @param {RxError} err
-   * @memberof ModelBase
-   */
-  cleanError(err: RxError) {
-    if (err) {
-      throwError(err.rxdb ? new EmbeddedRxDBError(err) : err);
+        .then(e => e.remove());
+      return success;
+    } catch (error) {
+      throw new EmbeddedRxDBError(error);
     }
   }
 }

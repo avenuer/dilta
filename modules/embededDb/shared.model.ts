@@ -1,5 +1,5 @@
-import * as uuidRandom from 'uuid/v4';
 import { BaseModel } from '@dilta/shared';
+import * as uuidRandom from 'uuid/v4';
 
 export const baseModel = {
   schema: {
@@ -50,11 +50,11 @@ export function updateBaseModel<T extends BaseModel>(doc: any): T {
 function generateBase<T extends BaseModel>(doc: T): BaseModel {
   const date = Date.now();
   return {
+    ...doc as Object,
     id: doc.id ? doc.id : uuidRandom(),
     createdAt: !doc.createdAt ? date : doc.createdAt,
     hash: doc.hash ? doc.hash : `${date.toString()}::${uuidRandom()}`,
     updatedAt: date,
-    school: doc.school
   };
 }
 

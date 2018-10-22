@@ -1,13 +1,32 @@
-.m-left {
-  padding-left: 40%;
+.school-logo-img {
+  height: 300px!important;
 }
 
-.space-left {
-  padding-left: 20%;
+.svg-container {
+  height: 320px;
+  width: 320px;
+  border-radius: 50%;
 }
 
-.sm-img {
-  // padding-top: 60%;
-  height: 380px;
-  width: 380px;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .image-group {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    align-self: center;
+
+    .upload-button {
+      align-self: center;
+      justify-self: flex-end;
+    }
+  }
+  .save-btn {
+    align-self: flex-end;
+    justify-self: left;
+  }
 }

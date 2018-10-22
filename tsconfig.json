@@ -6,6 +6,7 @@
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
+    "module": "commonjs",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es5",
@@ -19,12 +20,16 @@
     "paths": {
       "@dilta/core": ["modules/core"],
       "@dilta/database": ["modules/database"],
-      "@dilta/elecron": ["modules/electron"],
+      "@dilta/electron": ["modules/electron"],
       "@dilta/emdb": ["modules/embededDb"],
       "@dilta/gen": ["modules/generator"],
       "@dilta/shared": ["modules/platform-shared"],
       "@dilta/security": ["modules/security"],
-      "@dilta/util": ["modules/util"]
+      "@dilta/util": ["modules/util"],
+      "@dilta/admin-uis": ["projects/admin-uis/src/lib"],
+      "@dilta/client-auth": ["projects/auth/src/lib"],
+      "@dilta/client-shared": ["projects/client-shared/src/lib"],
+      "@dilta/electron-client": ["projects/electron/src/lib"]
     }
   }
 }

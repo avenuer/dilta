@@ -1,6 +1,6 @@
-import * as bcrypt from 'bcrypt';
 import { Injectable } from '@dilta/core';
 import { Logger } from '@dilta/util';
+import * as bcrypt from 'bcrypt';
 
 
 
@@ -41,7 +41,7 @@ export class AuthBcryptSecurity {
       trace: 'hashPassword',
       module: 'SecurityModule'
     });
-    if (password !== 'string') {
+    if (typeof password !== 'string') {
       throw invalidPasswordParameter;
     }
     return await bcrypt.hash(password, await this.salt);

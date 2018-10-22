@@ -1,5 +1,5 @@
-import { EntityNames } from '@dilta/shared';
 import { baseModel, CollectionConfig } from './shared.model';
+import { EntityNames } from '@dilta/shared';
 /** key to retrieve the collection form the db intialize object */
 const SCHOOL_NAME = 'school';
 
@@ -39,6 +39,11 @@ export const schoolSchema = {
     },
     logo: {
       type: 'string'
+    },
+    globalId: {
+      type: 'string',
+      final: true,
+      unique: true
     },
     ...others
   },

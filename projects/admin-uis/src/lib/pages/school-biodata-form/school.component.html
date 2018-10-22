@@ -1,26 +1,7 @@
-<header  class="row header min-header center liensce-color">
-  School Setup
-</header>
-<div class="school">
-  <admin-ui-school-biodata-form
-  [categorys]="schoolCategories"
-  [states]="states"
-  [lgas]="lgas"
-  (emitter)="onSubmit($event)">
+<mat-toolbar color="primary">School Information </mat-toolbar>
+<mat-card>
+  <admin-ui-school-biodata-form [categorys]="schoolCategories$ | async" [states]="states$ | async" [lgas]="lgas$ | async"
+    (emitter)="onSubmit($event)">
 
   </admin-ui-school-biodata-form>
-</div>
-<div  *ngIf="err" class="row alert-row">
-  <!-- notification template -->
-  <div class="alert alert-danger">
-    <div class="alert-items">
-      <div class="alert-item static">
-          <!-- <div class="alert-icon-wrapper">
-          <clr-icon class="alert-icon" shape="check-circle"></clr-icon>
-        </div> -->
-        <span class="alert-text"> {{ err }} </span>
-      </div>
-    </div>
-  </div>
-  <!-- notification template -->
-</div>
+</mat-card>

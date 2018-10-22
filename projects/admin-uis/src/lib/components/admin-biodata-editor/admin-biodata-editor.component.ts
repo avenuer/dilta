@@ -1,14 +1,20 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {
-  User,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output
+  } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
   defaultKeys,
+  errorInvalid,
   errorNotAndObject,
   fileBase64,
-  errorInvalid
-} from '@dilta/shared';
-import { UploadInput } from 'ngx-uploader';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+  User
+  } from '@dilta/shared';
 import { isEmpty } from 'lodash';
+import { UploadInput } from 'ngx-uploader';
 
 export const adminKeys = [
   'name',
@@ -58,7 +64,7 @@ export class AdminBiodataEditorComponent implements OnInit {
 
   public adminForm: FormGroup;
 
-  public img = '';
+  public img = '/assets/user-avatar.svg';
 
   constructor(private fb: FormBuilder) {}
 
@@ -74,12 +80,12 @@ export class AdminBiodataEditorComponent implements OnInit {
     return this.fb.group({
       address: [value.address, required],
       class: [value.class || this.classes[0], required],
-      email: [value.email, ''],
+      email: [value.email || '', ''],
       gender: [value.gender, required],
       image: [value.image, required],
       name: [value.name, required],
       phoneNo: [value.phoneNo, required],
-      phoneNos: [value.phoneNos, ''],
+      phoneNos: [value.phoneNos || '', ''],
       subject: [value.subject || this.subjects[0], required]
     });
   }
@@ -157,6 +163,6 @@ export class AdminBiodataEditorComponent implements OnInit {
    */
   ngOnInit() {
     this.adminForm = this.form(this.admin);
-    this.validateInput();
+    // this.validateInput();
   }
 }

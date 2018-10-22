@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
 import {
+  API_STATUS_CODE,
+  API_STATUS_RESPONSE,
   ApiFormat,
   ApiResponse,
-  API_STATUS_CODE,
   BaseResponse,
-  Transport,
-  API_STATUS_RESPONSE,
-  modelActionFormat,
   EntityNames,
+  Log,
+  modelActionFormat,
   ModelOperations,
-  Log
-} from '@dilta/shared';
+  Transport
+  } from '@dilta/shared';
+import { ElectronService } from 'ngx-electron';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as uuid from 'uuid/v4';
@@ -52,7 +52,7 @@ export class TransportService {
   ): Observable<ResponseData> {
     return this.execute.apply(this, [
       modelActionFormat(model, operation),
-      args
+      ...args
     ]);
   }
 
@@ -94,6 +94,7 @@ export class TransportService {
         Transport.Response,
         (event: Event, response: ApiResponse<ResponseType>) => {
           if (response.reqId === ctx.id) {
+            console.log(response);
             return resolve(response);
           }
         }

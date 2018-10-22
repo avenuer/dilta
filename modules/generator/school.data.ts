@@ -1,7 +1,15 @@
+import {
+  BaseModel,
+  Manager,
+  Parent,
+  Receipt,
+  School,
+  Student,
+  User
+  } from '@dilta/shared';
 import { getDate } from 'date-fns';
 import * as faker from 'faker';
 import { pick } from 'shuffle-array';
-import { BaseModel, School, Manager, Student, Parent, Receipt, User } from '@dilta/shared';
 
 /**
  * creates an array with amount-count elements from
@@ -55,6 +63,7 @@ export function school(): School {
     town: faker.address.city(),
     state: faker.address.state(),
     logo: faker.image.dataUri(100, 200),
+    globalId: faker.random.uuid(),
     ...skul
   };
 }

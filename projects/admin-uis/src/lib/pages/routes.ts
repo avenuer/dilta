@@ -1,14 +1,13 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-
+import { ManagerDataFormComponent } from './managers-biodata-form/AdminSetup.component';
 import { ParentBioProfileComponent } from './parent-bio-profile/parent-bio-profile.component';
 import { ParentFormEditorComponent } from './parent-form-editor/parent-form-editor.component';
+import { SchoolDataFormComponent } from './school-biodata-form/school.component';
 import { StudentBioFormEditorComponent } from './student-bio-form-editor/student-bio-form-editor.component';
 import { StudentBioProfileComponent } from './student-bio-profile/student-bio-profile.component';
 import { UserBiodataProfileComponent } from './user-biodata-profile/user-biodata-profile.component';
 import { UserBioDataFormPageComponent } from './user-biodata-setup/admin-biodata.component';
-import { SchoolDataFormComponent } from './school-biodata-form/school.component';
-import { ManagerDataFormComponent } from './managers-biodata-form/AdminSetup.component';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 
 const school: Routes = [
   {
@@ -32,14 +31,22 @@ const school: Routes = [
 })
 export class SchoolRouteModule {}
 
-// const routes: Routes = [];
+const user: Routes = [
+  {
+    path: 'user',
+    children: [
+      { path: 'biodata/:authId', component: UserBioDataFormPageComponent },
+      { path: 'profile/:id', component: UserBiodataProfileComponent }
+    ]
+  }
+];
 
-// @NgModule({
-//   imports: [RouterModule.forChild(routes)],
-//   exports: [],
-//   declarations: []
-// })
-// export class Module {}
+@NgModule({
+  imports: [RouterModule.forChild(user)],
+  exports: [RouterModule]
+})
+export class UserRouteModule {}
+
 // const routes: Routes = [];
 
 // @NgModule({

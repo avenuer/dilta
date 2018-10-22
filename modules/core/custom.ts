@@ -40,9 +40,9 @@ export class EventContext {
    * @returns
    * @memberof EventContext
    */
-  execute(action: string, ...args) {
+  async execute(action: string, ...args) {
     const locMap = this.actions.get(action);
     const provider = this.injector.get(locMap.token);
-    return (provider[locMap.key] as Function).apply(provider, args);
+    return await (provider[locMap.key] as Function).apply(provider, args);
   }
 }

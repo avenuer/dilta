@@ -1,17 +1,19 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { combineLatest, map, exhaustMap, first } from 'rxjs/operators';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { RouterDirection } from '@dilta/client-shared';
 import { TransportService } from '@dilta/electron-client';
 import {
-  SchoolDict,
-  User,
   EntityNames,
   ModelOperations,
-  School
+  PresetAction,
+  School,
+  SchoolDict,
+  User
 } from '@dilta/shared';
-import { Observable, BehaviorSubject, of } from 'rxjs';
+import { Store } from '@ngrx/store';
 import { schoolFeature } from 'projects/client-shared/src/lib/ngrx/school';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { combineLatest, exhaustMap, first, map } from 'rxjs/operators';
 
 export interface BiodataFormPageARQMap {
   authId: string;
@@ -47,15 +49,6 @@ export class UserBioDataFormPageComponent implements OnInit {
   ];
 
   /**
-   * obbservable of mapped school json
-   *
-   * @private
-   * @type {Observable<SchoolDict>}
-   * @memberof UserBioDataFormPageBase
-   */
-  private school$: Observable<SchoolDict>;
-
-  /**
    * err displayed to the view
    *
    * @private
@@ -79,9 +72,9 @@ export class UserBioDataFormPageComponent implements OnInit {
 
   constructor(
     private store: Store<any>,
-    private route: ActivatedRoute,
-    private router: Router,
-    private transport: TransportService
+    private dir: RouterDirection,
+    private transport: TransportService,
+    private route: ActivatedRoute
   ) {}
 
   /**
@@ -94,7 +87,7 @@ export class UserBioDataFormPageComponent implements OnInit {
    */
   remapEvent$($event: any) {
     const event$ = of($event);
-    const authId$ = this.route.queryParams.pipe(
+    const authId$ = this.route.params.pipe(
       map((params: BiodataFormPageARQMap) => params.authId)
     );
     const schoolId$ = this.store
@@ -116,6 +109,7 @@ export class UserBioDataFormPageComponent implements OnInit {
   remap([event, authId, schoolId]: [User, string, string]) {
     event.authId = authId;
     event.school = schoolId;
+    event.phoneNo = event.phoneNo.toString();
     return event;
   }
 
@@ -150,7 +144,7 @@ export class UserBioDataFormPageComponent implements OnInit {
   schoolDetails() {
     return this.store
       .select(schoolFeature)
-      .pipe(map(({ details }) => this.selectView(details)))
+      .pipe(exhaustMap(({ details }) => this.selectView(details)))
       .subscribe((v: SchoolDict) => {
         this.view$.next(v);
       }, this.displayError.bind(this));
@@ -158,10 +152,14 @@ export class UserBioDataFormPageComponent implements OnInit {
 
   /** app view state for different school categories */
   selectView({ category }: School) {
-    // const view = this.util.schoolPreset(category || ('primary' as any));
-    // view.permisions = Object.keys(view.permisions);
-    // return view;
-    return {};
+    return this.transport
+      .execute<SchoolDict>(PresetAction.SchoolPreset, category)
+      .pipe(
+        map(view => {
+          view.permisions = Object.keys(view.permisions);
+          return view;
+        })
+      );
   }
 
   /**
@@ -185,7 +183,7 @@ export class UserBioDataFormPageComponent implements OnInit {
    */
   changeRoute(user: User) {
     if (user) {
-      this.router.navigate(['finished']);
+      this.dir.userForm(user);
     }
   }
 
