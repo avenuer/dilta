@@ -1,0 +1,14 @@
+  <div>
+    <h3 *ngIf="title"> {{ title }} </h3>
+    <button *ngIf="menuOperations" class="btn btn-primary-outline" (click)="addToList()"> Add Menu </button>
+  </div>
+  <div class="clr-form">
+    <div class="clr-form-control clr-row" *ngFor="let setting of settings; let i = index">
+      <div class="clr-control-container" *ngFor="let value of setting | keyvalue">
+          <app-preferences-form [deleteTable]="menuOperations" class="clr-input-wrapper" (emitter)="updateList(i, $event)" [entries]="[value.key, value.value]" [keyEditable]="keyEditable"></app-preferences-form>
+      </div>
+    </div>
+    <div *ngIf="continous" class="clr-row">
+      <button class="btn btn-success" (click)="emit(settings)"> Save </button>
+    </div>
+  </div>

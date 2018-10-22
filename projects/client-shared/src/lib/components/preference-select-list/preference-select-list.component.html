@@ -1,0 +1,19 @@
+<div>
+  <div class="clr-row select">
+    <div *ngFor="let option of options" class="clr-col-6">
+      <div class="form-group">
+        <div class="checkbox">
+          <label for=""> {{ option }} </label>
+          <input (change)="changedValue($event, option)" type="checkbox" [name]="option" [id]="option">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="clr-row">
+    <!-- {{ settings }} -->
+    <div class="clr-col-2"></div>
+    <div class="clr-col-10">
+      <app-preferences-list [continous]="false" (emitter)="emitToParent($event)" [settings]="listInputs | async"></app-preferences-list>
+    </div>
+  </div>
+</div>

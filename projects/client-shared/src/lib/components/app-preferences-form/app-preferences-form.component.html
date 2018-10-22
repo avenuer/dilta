@@ -1,0 +1,11 @@
+<div class="clr-row">
+  <div class="clr-col-9">
+    <input *ngFor="let i of entries; let j = index"
+    [disabled]="(j === 0) && !keyEditable"
+     [value]="i" class="clr-input" (change)="update($event)"
+     type="text" placeholder="Enter value here"/>
+  </div>
+  <div class="clr-col-2">
+      <clr-icon *ngIf="deleteTable" (click)="emitter.emit('delete')" title="Delete" class="is-error space-left"  shape="times"></clr-icon>
+  </div>
+</div>
