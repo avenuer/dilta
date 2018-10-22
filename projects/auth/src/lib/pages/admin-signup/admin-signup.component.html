@@ -1,0 +1,4 @@
+<mat-toolbar color="primary"> Dilta SignUp </mat-toolbar>
+<mat-card>
+  <auth-signup-form [levels]="authLevels" [err]="err$ | async" (emitter)="signUp($event)" ></auth-signup-form>
+</mat-card>

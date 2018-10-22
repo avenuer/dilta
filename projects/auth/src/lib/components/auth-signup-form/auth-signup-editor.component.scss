@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-items: center;
+  flex-direction: column;
+
+  .save-btn {
+    justify-self: center;
+  }
+}
+
+.svg-container {
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+}

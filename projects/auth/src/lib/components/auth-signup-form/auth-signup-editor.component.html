@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="item">
+    <img class="svg-container" src="/assets/user-avatar.svg" alt="">
+  </div>
+  <form [formGroup]="signupForm" class="container">
+    <mat-form-field>
+      <mat-label>PhoneNo</mat-label>
+      <input required matInput formControlName="username" type="text" id="login_username">
+      <mat-error *ngIf="!signupForm.controls['username'].valid && signupForm.controls['username'].touched"> PhoneNO is
+        required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input required matInput formControlName="password" type="password" id="login_password">
+      <mat-error *ngIf="!signupForm.controls['password'].valid && signupForm.controls['password'].touched">
+        Password is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label> Confirm Password </mat-label>
+      <input required matInput formControlName="clogin_password" type="password" id="clogin_password">
+      <mat-error *ngIf="!signupForm.controls['clogin_password'].valid && signupForm.controls['clogin_password'].touched">
+        Password confirmation is required
+      </mat-error>
+      <mat-error *ngIf="(signupForm.controls['password'].touched || signupForm.controls['clogin_password'].touched )&& signupForm.controls['password'].value !== signupForm.controls['clogin_password'].value">
+        password confirmation doesn't match
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Level</mat-label>
+      <mat-select formControlName="level" required placeholder="Level">
+        <mat-option *ngFor="let lvl of levels" [value]="lvl"> {{ lvl }} </mat-option>
+      </mat-select>
+
+      <mat-error *ngIf="!signupForm.controls['level'].valid && signupForm.controls['level'].touched">
+        Access Level is required
+      </mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit" (click)="emit(signupForm.value)" [disabled]="!(signupForm.valid && signupForm.controls['password'].value === signupForm.controls['clogin_password'].value)"
+      class="save-btn">SIGN UP</button>
+  </form>
+</div>

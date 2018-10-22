@@ -1,0 +1,4 @@
+<mat-toolbar color="primary"> Dilta Login </mat-toolbar>
+<mat-card>
+  <auth-login-form [err]="err$ | async" (emitter)="login($event)"></auth-login-form>
+</mat-card>

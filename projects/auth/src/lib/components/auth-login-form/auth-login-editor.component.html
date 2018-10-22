@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="item">
+    <img class="svg-container" src="/assets/user-avatar.svg" alt="">
+  </div>
+  <form [formGroup]="loginForm" class="container">
+    <mat-form-field>
+      <mat-label>PhoneNo</mat-label>
+      <input required matInput formControlName="username" class="username" type="text" id="login_username" placeholder="ID">
+      <mat-error *ngIf="!loginForm.controls['username'].valid && loginForm.controls['username'].touched">
+        PhoneNo is required </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input required matInput formControlName="password" class="password" type="password" id="login_password"
+        placeholder="Password">
+      <mat-error *ngIf="!loginForm.controls['password'].valid && loginForm.controls['password'].touched"> Password is
+        required </mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid" (click)="emit(loginForm.value)"
+      class="save-btn">LOGIN</button>
+  </form>
+</div>
