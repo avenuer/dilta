@@ -7,17 +7,17 @@ import { SchoolPreset } from './preset';
  * @enum {number}
  */
 export enum EntityNames {
-  User = 'user',
-  Manager = 'manager',
-  School = 'school',
-  Auth = 'auth',
-  Parent = 'parent',
-  Subject = 'subject',
-  Student = 'student',
-  Record = 'record',
-  Receipt = 'receipt',
-  Setting = 'preference',
-  Expense = 'expense'
+  User = 'user_model',
+  Manager = 'manager_model',
+  School = 'school_model',
+  Auth = 'auth_model',
+  Parent = 'parent_model',
+  Subject = 'subject_model',
+  Student = 'student_model',
+  Record = 'record_model',
+  Receipt = 'receipt_model',
+  Setting = 'preference_model',
+  Expense = 'expense_model'
 }
 
 /**

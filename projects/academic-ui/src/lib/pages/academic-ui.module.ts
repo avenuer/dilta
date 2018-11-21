@@ -5,11 +5,13 @@ import { StudentGridPageComponent } from './student-grid-page/student-grid-page.
 import { RecordGridPageComponent } from './record-grid-page/record-grid-page.component';
 import { AcademicRecordPageComponent } from './academic-record-page/academic-record-page.component';
 import { AcademicSharedUiModule } from '../components/academic-shared.module';
+import { ElectronTransportModule } from '@dilta/electron-client';
 
 @NgModule({
   imports: [
     MaterialModule,
-    AcademicSharedUiModule
+    AcademicSharedUiModule,
+    ElectronTransportModule
   ],
   declarations: [StudentGridPageComponent, RecordGridPageComponent, AcademicRecordPageComponent],
   exports: [AcademicSharedUiModule]

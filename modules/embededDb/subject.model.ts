@@ -70,6 +70,6 @@ export const subjectSchema = {
 };
 
 export const subjectModel: CollectionConfig<typeof subjectSchema> = {
-  name: EntityNames.Score,
+  name: EntityNames.Subject,
   schema: subjectSchema
 };
