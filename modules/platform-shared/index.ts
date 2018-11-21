@@ -6,3 +6,4 @@ export * from './preset';
 export * from './composer';
 export * from './util';
 export * from './electron';
+export * from './academics';

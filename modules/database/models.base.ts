@@ -5,11 +5,15 @@ import {
   defaultPreInsert,
   defaultPreSave,
   Embededb
-  } from '@dilta/emdb';
-import { BaseModel, FindQueryParam } from '@dilta/shared';
+} from '@dilta/emdb';
+import {
+  BaseModel,
+  FindQueryParam,
+  SearchFindRequest,
+  FindResponse
+} from '@dilta/shared';
 import { autobind } from 'core-decorators';
 import { RxCollection } from 'rxdb';
-
 
 /** Query Constants for find query */
 enum QUERY_CONSTANTS {
@@ -59,16 +63,69 @@ export class ModelBase<T extends Partial<BaseModel>> implements DBModel<T> {
    * @returns
    * @memberof ModelBase
    */
-  find$(query: Partial<T>, custom?: FindQueryParam | boolean) {
-    let q = this.collection.find(query);
-    if (typeof custom !== 'boolean') {
-      const { limit, skip, sort } = custom || ({} as any);
-      q = q
-        .sort(sort || QUERY_CONSTANTS.sort)
-        .skip(skip || QUERY_CONSTANTS.skip)
-        .limit(limit || QUERY_CONSTANTS.limit);
+  find$(query: SearchFindRequest<T>, custom?: FindQueryParam) {
+    let { limit, skip, sort } = QUERY_CONSTANTS as any;
+
+    if (custom) {
+      limit = custom.limit || limit;
+      skip = custom.skip || skip;
+      sort = custom.sort || sort;
     }
-    return q.exec().then(res => res.map(e => e.toJSON()));
+    const queryParams: FindQueryParam = { limit, skip, sort };
+    if (typeof query === 'string') {
+      return this.search(query, queryParams);
+    }
+    return this.find(query, queryParams);
+  }
+
+  /**
+   * executes the search query
+   *
+   * @param {string} query
+   * @param {FindQueryParam} { skip, limit }
+   * @returns {FindResponse<T>}
+   * @memberof ModelBase
+   */
+  async search(
+    query: string,
+    { skip, limit }: FindQueryParam
+  ): Promise<FindResponse<T>> {
+    const regx = new RegExp(`${query}`, 'i');
+    const allDocs = await this.collection
+      .find({})
+      .exec()
+      .then(res => res.map(e => e.toJSON()));
+    const matchDocs = allDocs.filter(e => regx.test(JSON.stringify(e)));
+    return {
+      skip,
+      limit,
+      data: matchDocs.slice(skip, limit + skip),
+      total: matchDocs.length
+    };
+  }
+
+  /**
+   * executes the find query
+   *
+   * @param {Partial<T>} query
+   * @param {FindQueryParam} { skip, limit }
+   * @returns {FindResponse<T>}
+   * @memberof ModelBase
+   */
+  async find(
+    query: Partial<T>,
+    { skip, limit }: FindQueryParam
+  ): Promise<FindResponse<T>> {
+    const matchDocs = await this.collection
+      .find(query)
+      .exec()
+      .then(res => res.map(e => e.toJSON()));
+    return {
+      skip,
+      limit,
+      data: matchDocs.slice(skip, limit + skip),
+      total: matchDocs.length
+    };
   }
 
   /**

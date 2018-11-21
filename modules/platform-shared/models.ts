@@ -12,8 +12,9 @@ export enum EntityNames {
   School = 'school',
   Auth = 'auth',
   Parent = 'parent',
-  Score = 'score',
+  Subject = 'subject',
   Student = 'student',
+  Record = 'record',
   Receipt = 'receipt',
   Setting = 'preference',
   Expense = 'expense'
@@ -145,18 +146,29 @@ export interface Student extends Partial<BaseModel> {
   parentPhone: number | string;
 }
 
+
 /**
- * subject records information recored stored in the database's interface
+ * record of subjects and students
  *
  * @export
- * @interface Score
+ * @interface Record
+ * @extends {Partial<BaseModel>}
  */
-export interface Score extends Partial<BaseModel> {
+export interface Record extends Partial<BaseModel> {
   subject: string;
   teacherId: string;
   class: string;
   session: string;
   term: string;
+}
+
+/**
+ * subject records information recored stored in the database's interface
+ *
+ * @export
+ * @interface Subject
+ */
+export interface Subject extends Record {
   firstCa: number;
   secondCa: number;
   exam: number;

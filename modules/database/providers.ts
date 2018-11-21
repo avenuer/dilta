@@ -11,7 +11,8 @@ import {
   User,
   Setting,
   Expense,
-  Score
+  Subject,
+  Record
 } from '@dilta/shared';
 import { Embededb, electronDatabase } from '@dilta/emdb';
 
@@ -117,11 +118,11 @@ export class SchoolService extends ModelBase<School> {
  * @extends {ModelBase<Score>}
  */
 @Injectable()
-export class ScoreService extends ModelBase<Score> {
+export class SubjectService extends ModelBase<Subject> {
   constructor(
     @Inject(EmbededDatabaseToken) public database: Promise<Embededb>
   ) {
-    super(EntityNames.Score, database);
+    super(EntityNames.Subject, database);
   }
 }
 
@@ -189,6 +190,22 @@ export class ExpenseService extends ModelBase<Expense> {
   }
 }
 
+/**
+ * responsible teachers own records for database.
+ *
+ * @export
+ * @class RecordService
+ * @extends {ModelBase<Record>}
+ */
+@Injectable()
+export class RecordService extends ModelBase<Record> {
+  constructor(
+    @Inject(EmbededDatabaseToken) public database: Promise<Embededb>
+  ) {
+    super(EntityNames.Record, database);
+  }
+}
+
 /** Provider Token Mapping  */
 const embededDBProvider: FactoryProvider = {
   provide: EmbededDatabaseToken,
@@ -202,9 +219,10 @@ export const databaseServices = [
   ParentService,
   ReceiptService,
   SchoolService,
-  ScoreService,
+  SubjectService,
   StudentService,
   UserService,
   SettingService,
-  ExpenseService
+  ExpenseService,
+  RecordService,
 ];

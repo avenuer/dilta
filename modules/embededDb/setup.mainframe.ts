@@ -9,6 +9,7 @@ import { CollectionConfig, defaultModelMiddleWare } from './shared.model';
 import { studentModel } from './student.model';
 import { subjectModel } from './subject.model';
 import { userModel } from './user.model';
+import { recordModel } from './record.model';
 import * as RxDB from 'rxdb';
 import { RxDatabase } from 'rxdb';
 import { Logger } from 'modules/util';
@@ -28,7 +29,8 @@ export const Kollections = [
   subjectModel,
   userModel,
   SettingModel,
-  ExpenseModel
+  ExpenseModel,
+  recordModel
 ];
 
 /**
