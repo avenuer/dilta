@@ -1,0 +1,31 @@
+<div class="container">
+  <form [formGroup]="recordForm" class="container">
+    <mat-form-field>
+      <mat-label>Class</mat-label>
+      <input required matInput formControlName="class" type="text">
+      <mat-error *ngIf="!recordForm.controls['class'].valid && recordForm.controls['class'].touched">
+        Class is required </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Subject</mat-label>
+      <input required matInput formControlName="subject" type="text">
+      <mat-error *ngIf="!recordForm.controls['subject'].valid && recordForm.controls['subject'].touched">
+        Subject is required </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Term</mat-label>
+      <input required matInput formControlName="term" type="text">
+      <mat-error *ngIf="!recordForm.controls['term'].valid && recordForm.controls['term'].touched">
+        Term is required </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Session</mat-label>
+      <input required matInput formControlName="session" type="text">
+      <mat-error *ngIf="!recordForm.controls['session'].valid && recordForm.controls['session'].touched">
+        Session is required </mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="!recordForm.valid" (click)="emitter.emit(recordForm.value)"
+      class="save-btn">Load</button>
+  </form>
+</div>

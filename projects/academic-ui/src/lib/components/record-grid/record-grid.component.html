@@ -1,0 +1,45 @@
+<mat-form-field *ngIf="config && config.filter">
+  <input matInput (keyup)="filter.emit($event.target.value)" placeholder="search">
+</mat-form-field>
+
+<table mat-table  [dataSource]="records" class="mat-elevation-z8">
+  <!-- (matSortChange)="sort.emit($event)" -->
+  <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Position Column -->
+  <ng-container matColumnDef="no">
+    <th mat-header-cell *matHeaderCellDef> No. </th>
+    <td mat-cell *matCellDef="let element; let i = index;"> {{ i}} </td>
+  </ng-container>
+  <!-- Class Column -->
+  <ng-container matColumnDef="class">
+    <th mat-header-cell *matHeaderCellDef> Class </th>
+    <td mat-cell *matCellDef="let element"> {{element.class}} </td>
+  </ng-container>
+
+  <!-- Subject Column -->
+  <ng-container matColumnDef="subject">
+    <th mat-header-cell *matHeaderCellDef> Subject </th>
+    <td mat-cell *matCellDef="let element"> {{element.subject}} </td>
+  </ng-container>
+
+  <!-- Term Column -->
+  <ng-container matColumnDef="term">
+    <th mat-header-cell *matHeaderCellDef> Term </th>
+    <td mat-cell *matCellDef="let element"> {{element.term}} </td>
+  </ng-container>
+
+  <!-- Session Column -->
+  <ng-container matColumnDef="session">
+    <th mat-header-cell *matHeaderCellDef> Session </th>
+    <td mat-cell *matCellDef="let element"> {{element.session}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+<mat-paginator (page)="paginator.emit($event)" *ngIf="config && config.paginator" [length]="config.paginator.length"
+              [pageSize]="config.paginator.count"
+              [pageSizeOptions]="config.paginator.options">
+</mat-paginator>

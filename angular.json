@@ -455,6 +455,86 @@
           }
         }
       }
+    },
+    "academic-ui": {
+      "root": "projects/academic-ui",
+      "sourceRoot": "projects/academic-ui/src",
+      "projectType": "library",
+      "prefix": "acada",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/academic-ui/tsconfig.lib.json",
+            "project": "projects/academic-ui/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "projects/academic-ui/ng-package.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/academic-ui/src/test.ts",
+            "tsConfig": "projects/academic-ui/tsconfig.spec.json",
+            "karmaConfig": "projects/academic-ui/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/academic-ui/tsconfig.lib.json",
+              "projects/academic-ui/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "datagrid": {
+      "root": "projects/datagrid",
+      "sourceRoot": "projects/datagrid/src",
+      "projectType": "library",
+      "prefix": "acada",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/datagrid/tsconfig.lib.json",
+            "project": "projects/datagrid/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "projects/datagrid/ng-package.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/datagrid/src/test.ts",
+            "tsConfig": "projects/datagrid/tsconfig.spec.json",
+            "karmaConfig": "projects/datagrid/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/datagrid/tsconfig.lib.json",
+              "projects/datagrid/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "dilta"
