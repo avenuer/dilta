@@ -12,10 +12,11 @@ import { EntityNames, Auth, FindQueryParam } from '@dilta/shared';
 const auth: Partial<Auth> = { ... };
 app.execute(`[Model] ${EntityNames.Auth} create$`, auth);
 
-/** Query Auth has find query **/
+/** Query Auth has find query  also automatically does a search if query is a string **/
 const query: Partial<Auth> = {};
 const findParams: Partial<FindQueryParam> = {};
 app.execute(`[Model] ${EntityNames.Auth} find$`, query, findParams);
+app.execute(`[Model] ${EntityNames.Auth} find$`, 'search-query', findParams);
 
 /** Retrieve an Auth  like findOne **/
 const auth: Partial<Auth> = { id: 'randomId' };
