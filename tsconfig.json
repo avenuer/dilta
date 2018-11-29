@@ -26,6 +26,7 @@
       "@dilta/shared": ["modules/platform-shared"],
       "@dilta/security": ["modules/security"],
       "@dilta/util": ["modules/util"],
+      "@dilta/academic-ui": ["projects/academic-ui/src"],
       "@dilta/admin-uis": ["projects/admin-uis/src/lib"],
       "@dilta/client-auth": ["projects/auth/src/lib"],
       "@dilta/client-shared": ["projects/client-shared/src/lib"],

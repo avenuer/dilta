@@ -8,7 +8,10 @@ export interface SchoolStore {
 }
 
 const initalState: SchoolStore = {
-  details: { ...school() }
+  // TODO: Remove hack below
+  details: {
+    id: 'my_random_school_id'
+   } as any
 };
 
 export function schoolReducer(state = initalState, action: schoolActions) {

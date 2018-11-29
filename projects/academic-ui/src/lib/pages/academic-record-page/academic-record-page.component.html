@@ -1,2 +1,6 @@
-<acada-academic-record (emitter)="load($event)" ></acada-academic-record>
+<div class="container">
+    <mat-card>
+      <acada-academic-record (load)="load($event)" (create)="create($event)" ></acada-academic-record>
+    </mat-card>
+</div>
 <!-- TODO: Create Modal to create -->

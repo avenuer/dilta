@@ -1,5 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Record, GridConfig } from '@dilta/shared';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output
+  } from '@angular/core';
+import { GridConfig, Record } from '@dilta/shared';
 
 @Component({
   selector: 'acada-record-grid',
@@ -8,7 +14,7 @@ import { Record, GridConfig } from '@dilta/shared';
 })
 export class RecordGridComponent implements OnInit {
 
-  displayedColumns: string[] = ['no', 'class', 'subject', 'term', 'session'];
+  displayedColumns: string[] = ['no', 'class', 'subject', 'term', 'session', 'action'];
 
   @Input() records: Record[] = [];
   @Input() config: GridConfig = {};

@@ -36,7 +36,11 @@ export interface Authsuccess extends Partial<AuthTokenUser> {
 export const authInitialState: Authsuccess = {
   status: Status.Pending,
   timeStamp: Date(),
-  error: null
+  error: null,
+  // TODO: remove hack
+  details: {
+    id: 'my_random_teacher_id'
+  } as any
 };
 
 /**

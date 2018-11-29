@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ClarityModule } from '@clr/angular';
+import { MatTableModule, MatInputModule } from '@angular/material';
 import { DynamicDataGridComponent } from './dynamic-datagrid.component';
 
 @NgModule({
-  imports: [CommonModule, ClarityModule],
+  imports: [CommonModule, MatTableModule, MatInputModule ],
   exports: [DynamicDataGridComponent],
   declarations: [DynamicDataGridComponent],
   providers: []

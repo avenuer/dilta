@@ -1,6 +1,7 @@
 <acada-record-grid
   [records]="records"
   [config]="config"
+  (record)="acada.viewRecord($event)"
   (filter)="search($event)"
   (paginator)="paginator($event)"
 ></acada-record-grid>

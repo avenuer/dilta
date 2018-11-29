@@ -1,4 +1,9 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output
+  } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -9,11 +14,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class AcademicRecordComponent implements OnInit {
   recordForm: FormGroup;
 
-  @Output() emitter = new EventEmitter();
+  @Output() create = new EventEmitter();
+  @Output() load = new EventEmitter();
 
   constructor(private fb: FormBuilder) {}
 
-  create() {
+  createForm() {
     return this.fb.group({
       class: ['', Validators.required],
       subject: ['', Validators.required],
@@ -23,6 +29,6 @@ export class AcademicRecordComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.recordForm = this.create();
+    this.recordForm = this.createForm();
   }
 }

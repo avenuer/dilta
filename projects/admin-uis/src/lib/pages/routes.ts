@@ -47,6 +47,21 @@ const user: Routes = [
 })
 export class UserRouteModule {}
 
+const student: Routes = [
+  { path: 'admin', children: [
+    { path: 'student', component:  StudentBioFormEditorComponent},
+    { path: 'students/:id', component: StudentBioProfileComponent }
+  ] }
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(student)],
+  exports: [RouterModule],
+  declarations: []
+})
+export class StudentRouteModule {}
+
+
 // const routes: Routes = [];
 
 // @NgModule({

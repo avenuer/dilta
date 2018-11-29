@@ -1,9 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { Record, EntityNames, ModelOperations } from '@dilta/shared';
-import { TransportService } from '@dilta/electron-client';
-import { first, exhaustMap } from 'rxjs/operators';
-import { of } from 'rxjs';
 import { Router } from '@angular/router';
+import { schoolFeature } from '@dilta/client-shared';
+import { TransportService } from '@dilta/electron-client';
+import { EntityNames, ModelOperations, Record } from '@dilta/shared';
+import { Store } from '@ngrx/store';
+import { AuthFeature } from 'projects/auth/src/lib/ngrx';
+import {
+  combineLatest,
+  exhaustMap,
+  first,
+  map
+  } from 'rxjs/operators';
 
 @Component({
   selector: 'acada-academic-record-page',
@@ -11,8 +18,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./academic-record-page.component.scss']
 })
 export class AcademicRecordPageComponent implements OnInit {
-  constructor(private transport: TransportService, private router: Router) {}
-
+  constructor(
+    private transport: TransportService,
+    private router: Router,
+    private store: Store<any>
+  ) {}
 
   /**
    * loads the teachers academic records
@@ -21,12 +31,35 @@ export class AcademicRecordPageComponent implements OnInit {
    * @memberof AcademicRecordPageComponent
    */
   load(record: Record) {
-    this.transport
-      .modelAction<Record>(EntityNames.Record, ModelOperations.Retrieve, record)
-      .pipe(first())
-      .subscribe(val => this.changeOrPromptRoute(val));
+    this.store
+      .select(schoolFeature)
+      .pipe(combineLatest(this.store.select(AuthFeature)))
+      .pipe(
+        exhaustMap(([school, auth]) => {
+          record = {
+            ...record,
+            teacherId: auth.details.id,
+            school: school.details.id
+          };
+          return this.transport
+            .modelAction<Record>(
+              EntityNames.Record,
+              ModelOperations.Retrieve,
+              record
+            )
+            .pipe(first());
+        })
+      )
+      .pipe(
+        map(val => {
+          if (!val) {
+            throw noRecordError;
+          }
+          return val;
+        })
+      )
+      .subscribe(val => this.changeRoute(val));
   }
-
 
   /**
    * create the teachers academic records
@@ -35,12 +68,26 @@ export class AcademicRecordPageComponent implements OnInit {
    * @memberof AcademicRecordPageComponent
    */
   create(rec: Record) {
-    this.transport
-      .modelAction<Record>(EntityNames.Record, ModelOperations.Create, rec)
+    this.store
+      .select(schoolFeature)
+      .pipe(combineLatest(this.store.select(AuthFeature)))
+      .pipe(
+        exhaustMap(([school, auth]) => {
+          rec = {
+            ...rec,
+            teacherId: auth.details.id,
+            school: school.details.id
+          };
+          return this.transport.modelAction<Record>(
+            EntityNames.Record,
+            ModelOperations.Create,
+            rec
+          );
+        })
+      )
       .pipe(first())
-      .subscribe(val => this.changeOrPromptRoute(val));
+      .subscribe(val => this.changeRoute(val));
   }
-
 
   /**
    * changes or promot for creation of view
@@ -49,12 +96,11 @@ export class AcademicRecordPageComponent implements OnInit {
    * @returns
    * @memberof AcademicRecordPageComponent
    */
-  changeOrPromptRoute(rec: Record) {
-    if (!rec) {
-      return;
-    }
-    this.router.navigate(['academics', 'record', rec.id]);
+  changeRoute(rec: Record) {
+    this.router.navigate(['academics', 'subjects', rec.id]);
   }
 
   ngOnInit() {}
 }
+
+const noRecordError = new Error('No Record Found');

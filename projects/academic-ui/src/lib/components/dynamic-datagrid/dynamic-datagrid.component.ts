@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -6,10 +7,11 @@ import {
   OnInit,
   Output,
   ViewEncapsulation
-} from '@angular/core';
-import { errorInvalid } from '@dilta/screwbox';
+  } from '@angular/core';
+import { errorInvalid } from '@dilta/shared';
 import { isEmpty } from 'lodash';
 import * as math from 'mathjs';
+import { BehaviorSubject } from 'rxjs';
 
 /**
  * confiiguration of keys to display and allowed
@@ -21,6 +23,7 @@ import * as math from 'mathjs';
 export interface KeysConfig {
   key: string;
   title?: string;
+  evaluated?: true;
   editable: boolean;
   type: string;
   send?: boolean; // used instead of changing used to send grid data out
@@ -41,27 +44,16 @@ export interface KeysConfig {
  */
 export type MathExp = string;
 
-/**
- * event object emitted for updated values
- *
- * @export
- * @interface ChangeEvnt
- */
-export interface ChangeEvnt {
-  data: any; // the update object
-  key: string; // the key to track changes
-  tracker: string; // the unique object tracting id
-}
-
 export interface Map {
-  x: number;
-  y: number;
+  key: KeysConfig;
+  index: number;
 }
 
 @Component({
-  selector: 'common-ui-dynamic-table',
+  selector: 'acada-dynamic-table',
   templateUrl: './dynamic-datgrid.component.html',
   styleUrls: ['./dynamic-datagrid.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
 export class DynamicDataGridComponent implements OnInit, OnDestroy {
@@ -74,7 +66,7 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    */
   public static EmptyKeysError = new Error(`empty keylists Input
     array provided for DynamicDataGridComponent:
-    <app-dynamic-table> </app-dynamic-table>`);
+    <acada-dynamic-table> </acada-dynamic-table>`);
 
   /**
    * Throw mostly for numeric objects when the dont fall
@@ -85,18 +77,8 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    */
   public static GridValueInputError = new Error(`inputed value exceed range
   allowed for column DynamicDataGridComponent:
-  <app-dynamic-table> </app-dynamic-table>`);
+  <acada-dynamic-table> </acada-dynamic-table>`);
 
-  /**
-   * TrackerKeyError is throw when an empty unique key identifier
-   * is not provided
-   *
-   * @static
-   * @memberof DynamicDataGridComponent
-   */
-  public static TrackerKeyError = new Error(`empty tracker provided
-    for Tracker Key Input DynamicDataGridComponent:
-    <app-dynamic-table> </app-dynamic-table> `);
 
   /**
    * expected keys and how they are to be displayed
@@ -105,7 +87,8 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    * @type {KeysConfig[]}
    * @memberof DynamicDataGridComponent
    */
-  @Input() public keys: KeysConfig[] = [];
+  @Input()
+  public keys: KeysConfig[] = [];
 
   /**
    * array of data expected to be displayed under keys
@@ -113,23 +96,9 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    *
    * @memberof DynamicDataGridComponent
    */
-  @Input() public datagrid = [];
+  @Input()
+  public datagrid = [];
 
-  /**
-   * the title or name that is discriptive of the data
-   *
-   * @memberof DynamicDataGridComponent
-   */
-  @Input() public title;
-
-  /**
-   * a unique key use to identify each data
-   *
-   * @private
-   * @type {string}
-   * @memberof DynamicDataGridComponent
-   */
-  @Input() public tracker: string;
 
   /**
    * mathematical expression to be evalutade for calculaions
@@ -138,23 +107,8 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    * @type {MathExp}
    * @memberof DynamicDataGridComponent
    */
-  @Input() public mathExp: MathExp;
-
-  /**
-   * the width that the datagrid show extend to in pixels
-   *
-   * @type {number}
-   * @memberof DynamicDataGridComponent
-   */
-  @Input() public width = '700';
-
-  /**
-   * the height that the datagrid show extend to in pixels
-   *
-   * @type {number}
-   * @memberof DynamicDataGridComponent
-   */
-  @Input() public height = '600';
+  @Input()
+  public mathExp: MathExp;
 
   /**
    * bindable emitter that emits events and corresponding data on change event
@@ -162,7 +116,8 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    * @type {number}
    * @memberof DynamicDataGridComponent
    */
-  @Output() public sender = new EventEmitter();
+  @Output()
+  public sender = new EventEmitter();
 
   /**
    * bindable emitter that emits events and corresponding data on change event
@@ -170,7 +125,8 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    * @type {number}
    * @memberof DynamicDataGridComponent
    */
-  @Output() public changedData = new EventEmitter();
+  @Output()
+  public changedData = new EventEmitter();
 
   constructor() {}
 
@@ -179,20 +135,17 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    * or edits if the key is enabled when double clicked from
    * view.
    *
-   * @param {Map} map positon x, y of the cell
-   * @param {*} data mapped data from the grid
-   * @param {string} key key of input clicked
    * @memberof DynamicDataGridComponent
    */
-  activate(map: Map, data: any, key: string) {
-    if (this.keys[map.x].send) {
-      this.sender.emit({ data, key });
+  activate(map: Map, data: any) {
+    if (map.key.send) {
+      this.sender.emit(data);
       return;
     }
-    if (!this.keys[map.x].editable) {
+    if (!map.key.editable) {
       return;
     }
-    this.activateInput(map, data, key);
+    this.activateInput(map, data);
   }
 
   /**
@@ -204,12 +157,10 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    * @param {string} key key of input clicked
    * @memberof DynamicDataGridComponent
    */
-  activateInput(map: Map, data: any, key: string) {
-    const { x, y } = map;
-    if (this.keys[x].editable) {
-      const elem: HTMLInputElement = document.getElementById(
-        `${x.toString()}_${y.toString()}_${key}`
-      ) as any;
+  activateInput({ index, key }: Map, data: any) {
+    const input_id = key.key + '_' + index + 'input';
+    if (key.editable) {
+      const elem: HTMLInputElement = document.getElementById(input_id) as any;
       elem.hidden = false;
     }
   }
@@ -225,18 +176,16 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    * @param {T} data data object from the grid
    * @memberof DynamicDataGridComponent
    */
-  edited<T>($event: Event, map: Map, key: string, data: T) {
+  edited<T>($event: Event, map: Map) {
     try {
       const elem = $event.srcElement as HTMLInputElement;
-      this.validateKeyInput(elem, map, key);
-      this.datagrid = this.datagrid.map(e => {
-        if (e[this.tracker] === data[this.tracker]) {
-          e = this.updateGrid(e, map, elem, key, data);
-          elem.hidden = true;
-        }
-        return e;
-      });
-      elem.hidden = true;
+      document.getElementById(map.key.key + '_' + map.index + 'input').hidden = true;
+      this.datagrid[map.index] = this.updateGrid(
+        this.datagrid[map.index],
+        map,
+        elem.value
+      );
+      this.changedData.emit({ data: this.datagrid[map.index], index: map.index });
     } catch (error) {
       this.errorHandler(map, `expect input value to be between valid range`);
     }
@@ -245,71 +194,45 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
   /**
    * checking if the value is within the acceptable range
    *
-   * @param {HTMLInputElement} elem html input source
-   * @param {Map} map map address to the cell
-   * @param {string} key the key to be updated
    * @memberof DynamicDataGridComponent
    */
-  validateKeyInput(elem: HTMLInputElement, map: Map, key: string) {
-    const value = parseInt(elem.value, 10);
-    this.keys.forEach(e => {
-      if (e.key === key && e.type === 'number' && e.config) {
-        if (value > e.config.max || e.config.min > value) {
-          throw DynamicDataGridComponent.GridValueInputError;
-        }
+  validateKeyInput(input: number, { key }: Map) {
+    const value = Math.floor(input);
+    console.log('called', key.type, key.config);
+    if (key.type === 'number' && key.config) {
+      console.log(value > key.config.max, key.config.min > value, value > key.config.max || key.config.min > value);
+      if (value > key.config.max || key.config.min > value) {
+        throw DynamicDataGridComponent.GridValueInputError;
       }
-    });
+    }
   }
 
   /**
    * updates the grid by calculating, validating and emitting
    * corresponding events
    *
-   * @template T data grid item data type
-   * @param {T} e  original item object
-   * @param {Map} map location of the grid cell
-   * @param {HTMLInputElement} elem input elem that updated the view
-   * @param {string} key the object key to update
-   * @param {T} data view grid object copy of e
-   * @returns updated already emitted item
    * @memberof DynamicDataGridComponent
    */
-  updateGrid<T>(e: T, map: Map, elem: HTMLInputElement, key: string, data: T) {
-    e = this.updateItem(map, { elem, e, key }, data);
+  updateGrid<T>(item: T, map: Map, value: string) {
+    item = this.updateItem(map, item, value);
     if (this.mathExp) {
-      e = this.evalExpress(e, map);
+      item = this.evalExpress(item, map);
     }
-    this.changedData.emit(<ChangeEvnt>{
-      data: e,
-      key,
-      tracker: this.tracker
-    });
-    return e;
+    return item;
   }
 
   /**
    * updates the grid cell and returns the update grid input
    *
-   * @template T generic type of data being passed
-   * @param {Map} map location of grid cell
-   * @param {{ elem: HTMLInputElement, e: T, key: string }} source object map containg source input,item,update key
-   * @param {T} data grid view object
-   * @returns updated item
    * @memberof DynamicDataGridComponent
    */
-  updateItem<T>(
-    map: Map,
-    source: { elem: HTMLInputElement; e: T; key: string },
-    data: T
-  ) {
-    const { elem, e, key } = source;
-    const { x, y } = map;
-    const value = elem.value;
-    e[key] =
-      this.keys[x].type === 'number'
-        ? this.mathEval(value, e[key], map)
-        : value;
-    return e;
+  updateItem<T>({ key, index }: Map, item: T, value: string) {
+    let newValue = { ...(item as any) };
+    newValue[key.key] = value;
+    if (key.type === 'number') {
+      newValue = this.mathEval({ key, index }, value, newValue);
+    }
+    return newValue;
   }
 
   /**
@@ -317,22 +240,17 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    * error also showing a temporary span element containing
    * the error
    *
-   * @template T generic data type being passed mostly as prefered type
-   * @param {string} value the value or expression to be evaluated
-   * @param {T} preValue the intial value to be overiden
-   * @param {Map} map the positon x, y of the cell grid
-   * @returns a valid value
    * @memberof DynamicDataGridComponent
    */
-  mathEval<T>(value: string, preValue: T, map: Map) {
+  mathEval<T>(map: Map, preValue: T, value: T) {
     try {
-      if (value === '') {
+      if (value[map.key.key] === '') {
         throw DynamicDataGridComponent.GridValueInputError;
       }
-      value = math.eval(value);
+      value[map.key.key] = math.eval(value[map.key.key]);
     } catch (error) {
       this.errorHandler(map, `invalid math expression`);
-      value = (preValue as any) as string;
+      value = preValue;
     }
     return value;
   }
@@ -349,9 +267,15 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    */
   evalExpress<T>(item: T, map: Map): T {
     try {
-      math.eval(this.mathExp, item);
+      this.keys.forEach(key => {
+        if (key.evaluated) {
+          item[key.key] = math.eval(this.mathExp, item);
+          this.validateKeyInput(item[key.key], map);
+        }
+      });
       return item;
     } catch (error) {
+      console.log(map);
       this.errorHandler(map, `invalid math expression`);
     }
   }
@@ -360,21 +284,21 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    * displays error in an hidden span element
    * made visible and error text appended to it;
    *
-   * @param {Map} map position x, y of cell
-   * @param {string} mgs custom error message
    * @memberof DynamicDataGridComponent
    */
-  errorHandler(map: Map, mgs: string) {
-    const { x, y } = map;
-    const elem: HTMLSpanElement = document.getElementById(
-      `${x}_${y}_err`
-    ) as any;
+  errorHandler({ key, index }: Map, mgs: string) {
+    const error_id = key.key + '_' + index + 'error';
+    console.log(error_id);
+    const elem: HTMLSpanElement = document.getElementById(error_id);
     elem.innerText = mgs;
     elem.hidden = false;
-    elem.style.color = 'red';
     setTimeout(() => {
       elem.hidden = true;
     }, 2000);
+  }
+
+  get displayedColumns() {
+    return this.keys.map(e => e.key);
   }
 
   /**
@@ -385,8 +309,12 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    */
   ngOnInit() {
     errorInvalid(!isEmpty(this.keys), DynamicDataGridComponent.EmptyKeysError);
-    errorInvalid(!!this.tracker, DynamicDataGridComponent.TrackerKeyError);
   }
+
+  mapValue({ index, key }: Map) {
+    return this.datagrid[index][key.key];
+  }
+
 
   ngOnDestroy() {
     // Called once, before the instance is destroyed.

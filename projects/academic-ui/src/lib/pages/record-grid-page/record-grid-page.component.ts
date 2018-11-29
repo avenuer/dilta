@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
 import { AcademicService } from '../../services/academic.service';
-import {
-  SearchFindRequest,
-  Student,
-  FindQueryParam,
-  Record,
-  GridConfig
-} from '@dilta/shared';
+import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
+import {
+  FindQueryParam,
+  GridConfig,
+  Record,
+  SearchFindRequest,
+  Student
+  } from '@dilta/shared';
 
 @Component({
   selector: 'acada-record-grid-page',
@@ -31,7 +31,7 @@ export class RecordGridPageComponent implements OnInit {
 
   private queryObj: SearchFindRequest<Student> = {} as any;
 
-  constructor(private acada: AcademicService) {}
+  constructor(public acada: AcademicService) {}
 
   search(query: SearchFindRequest<Student>) {
     this.acada.findRecords(query, this._params).subscribe(res => {
@@ -46,10 +46,13 @@ export class RecordGridPageComponent implements OnInit {
     this.search(this.queryObj);
   }
 
+
   query(query: SearchFindRequest<Student>) {
       this.queryObj = query === '' ? query : {};
       return this.search(this.queryObj);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.query({});
+  }
 }

@@ -25,7 +25,13 @@
         Session is required </mat-error>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit" [disabled]="!recordForm.valid" (click)="emitter.emit(recordForm.value)"
-      class="save-btn">Load</button>
+    <div class="action-btns">
+      <button mat-raised-button color="primary" type="submit" [disabled]="!recordForm.valid" (click)="create.emit(recordForm.value)"
+        >Create</button>
+        <span class="spacer-full"></span>
+      <button mat-raised-button color="secondary" type="submit" [disabled]="!recordForm.valid" (click)="load.emit(recordForm.value)"
+        >Load</button>
+
+    </div>
   </form>
 </div>

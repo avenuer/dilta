@@ -1,9 +1,11 @@
-require('dotenv').config();
-
+import 'reflect-metadata';
 import { ProcessIPCTransport, program } from '@dilta/electron';
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { devtools } from 'modules/electron/extenstion';
 import { join } from 'path';
+
+require('dotenv').config();
+
 
 //  TODO: make conditional import for environmental variables
 
@@ -52,8 +54,10 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+  setTimeout(() => {
+    createWindow();
+  }, 1000 * 5);
   ProcessIPCTransport(program, ipcMain);
-  createWindow();
 });
 
 // Quit when all windows are closed.

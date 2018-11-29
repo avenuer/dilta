@@ -23,7 +23,7 @@
               "apps/dilta/src/assets"
             ],
             "styles": [
-              "apps/dilta/src/styles.css"
+              "apps/dilta/src/styles.scss"
             ],
             "scripts": []
           },

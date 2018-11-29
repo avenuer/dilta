@@ -9,7 +9,6 @@ import { PageEvent } from '@angular/material';
   styleUrls: ['./student-grid-page.component.scss']
 })
 export class StudentGridPageComponent implements OnInit {
-
   public students: Student[] = [];
 
   public config: GridConfig = {
@@ -30,8 +29,8 @@ export class StudentGridPageComponent implements OnInit {
   search(query: SearchFindRequest<Student>) {
     this.acada.findStudents(query, this._params).subscribe(res => {
       this.students = res.data;
-      this.config.paginator.count = res.total;
-      this.config.paginator.length = res.limit;
+      this.config.paginator.count = res.limit;
+      this.config.paginator.length = res.total;
     });
   }
 
@@ -41,9 +40,12 @@ export class StudentGridPageComponent implements OnInit {
   }
 
   query(query: SearchFindRequest<Student>) {
-      this.queryObj = query === '' ? query : {};
-      return this.search(this.queryObj);
+    this.queryObj = query === '' ? query : {};
+    return this.search(this.queryObj);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.search({});
+    // this.acada.count(88);
+  }
 }

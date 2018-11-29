@@ -168,11 +168,13 @@ export interface Record extends Partial<BaseModel> {
  * @export
  * @interface Subject
  */
-export interface Subject extends Record {
+export interface Subject extends Partial<BaseModel> {
   firstCa: number;
   secondCa: number;
   exam: number;
+  total: number;
   studentId: string;
+  recordId: string;
 }
 
 /**

@@ -1,39 +1,52 @@
-<mat-form-field *ngIf="config && config.filter">
-  <input matInput (keyup)="filter.emit($event.target.value)" placeholder="search">
-</mat-form-field>
+<div class="container">
+  <mat-form-field *ngIf="config && config.filter">
+    <input
+      matInput
+      (keyup)="filter.emit($event.target.value)"
+      placeholder="search"
+    />
+  </mat-form-field>
 
-<table mat-table  [dataSource]="students" class="mat-elevation-z8">
-  <!-- (matSortChange)="sort.emit($event)" -->
-  <!--- Note that these columns can be defined in any order.
-        The actual rendered columns are set as a property on the row definition" -->
+  <table mat-table [dataSource]="students" class="mat-elevation-z8">
+    <!-- (matSortChange)="sort.emit($event)" -->
+    <!--
+      - Note that these columns can be defined in any order.
+      The actual rendered columns are set as a property on the row definition"
+    -->
 
-  <!-- Position Column -->
-  <ng-container matColumnDef="no">
-    <th mat-header-cell *matHeaderCellDef> No. </th>
-    <td mat-cell *matCellDef="let element; let i = index;"> {{ i}} </td>
-  </ng-container>
-  <!-- Name Column -->
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef> Name </th>
-    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-  </ng-container>
+    <!-- Position Column -->
+    <ng-container matColumnDef="no">
+      <th mat-header-cell *matHeaderCellDef>No.</th>
+      <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+    </ng-container>
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+    </ng-container>
 
-  <!-- Gender Column -->
-  <ng-container matColumnDef="gender">
-    <th mat-header-cell *matHeaderCellDef> Gender </th>
-    <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
-  </ng-container>
+    <!-- Gender Column -->
+    <ng-container matColumnDef="gender">
+      <th mat-header-cell *matHeaderCellDef>Gender</th>
+      <td mat-cell *matCellDef="let element">{{ element.gender }}</td>
+    </ng-container>
 
-  <!-- Parent No Column -->
-  <ng-container matColumnDef="parentNo">
-    <th mat-header-cell *matHeaderCellDef> Parent No </th>
-    <td mat-cell *matCellDef="let element"> {{element.parentNo}} </td>
-  </ng-container>
+    <!-- Parent No Column -->
+    <ng-container matColumnDef="parentNo">
+      <th mat-header-cell *matHeaderCellDef>Parent No</th>
+      <td mat-cell *matCellDef="let element">{{ element.parentPhone }}</td>
+    </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
-<mat-paginator *ngIf="config && config.paginator" [length]="config.paginator.length"
-              [pageSize]="config.paginator.count"
-              [pageSizeOptions]="config.paginator.options">
-</mat-paginator>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <mat-paginator
+    *ngIf="config && config.paginator"
+    [length]="config.paginator.length"
+    [pageSize]="config.paginator.count"
+    [pageSizeOptions]="config.paginator.options"
+    (page)="paginator.next($event)"
+  >
+  </mat-paginator>
+</div>

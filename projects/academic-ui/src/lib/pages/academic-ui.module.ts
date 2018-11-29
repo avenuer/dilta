@@ -1,19 +1,39 @@
-import { NgModule } from '@angular/core';
-import { MaterialModule } from '@dilta/client-shared';
-
-import { StudentGridPageComponent } from './student-grid-page/student-grid-page.component';
-import { RecordGridPageComponent } from './record-grid-page/record-grid-page.component';
+import { AcademicHomeComponent } from './academic-home/academic-home.component';
 import { AcademicRecordPageComponent } from './academic-record-page/academic-record-page.component';
+import { AcademicRoutingModule } from './academic-ui.routing';
+import { RecordGridPageComponent } from './record-grid-page/record-grid-page.component';
+import { StudentGridPageComponent } from './student-grid-page/student-grid-page.component';
+import { SubjectGridPageComponent } from './subject-grid-page/subject-grid-page.component';
+import { UsersHomeDashboardComponent } from './users-home-dashboard/users-home-dashboard.component';
 import { AcademicSharedUiModule } from '../components/academic-shared.module';
+import { AcademicService } from '../services/academic.service';
+import { NgModule } from '@angular/core';
+import { StudentPageModule } from '@dilta/admin-uis';
+import { AuthenticationFeatureModule } from '@dilta/client-auth';
+import { MaterialModule, SchoolFeatureNgrxModule } from '@dilta/client-shared';
 import { ElectronTransportModule } from '@dilta/electron-client';
+import { ProcessNgrxModule } from 'projects/setup/src/app/process/process.module';
 
 @NgModule({
   imports: [
     MaterialModule,
     AcademicSharedUiModule,
-    ElectronTransportModule
+    AcademicRoutingModule,
+    ElectronTransportModule,
+    StudentPageModule,
+    SchoolFeatureNgrxModule,
+    ProcessNgrxModule,
+    AuthenticationFeatureModule,
   ],
-  declarations: [StudentGridPageComponent, RecordGridPageComponent, AcademicRecordPageComponent],
-  exports: [AcademicSharedUiModule]
+  declarations: [
+    AcademicHomeComponent,
+    StudentGridPageComponent,
+    RecordGridPageComponent,
+    AcademicRecordPageComponent,
+    UsersHomeDashboardComponent,
+    SubjectGridPageComponent
+  ],
+  exports: [AcademicSharedUiModule],
+  providers: [AcademicService],
 })
-export class AcademicPageModule { }
+export class AcademicPageModule {}

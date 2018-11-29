@@ -7,10 +7,9 @@ import { StudentBioFormEditorComponent } from './student-bio-form-editor/student
 import { StudentBioProfileComponent } from './student-bio-profile/student-bio-profile.component';
 import { UserBiodataProfileComponent } from './user-biodata-profile/user-biodata-profile.component';
 import { UserBioDataFormPageComponent } from './user-biodata-setup/admin-biodata.component';
-import { AdminUiSharedModule, ParentUiSharedModule, SchoolUiSharedModule } from '../components/modules';
-import { CommonModule } from '@angular/common';
+import { AdminUiSharedModule, ParentUiSharedModule, SchoolUiSharedModule, StudentUiSharedModule } from '../components/modules';
 import { NgModule } from '@angular/core';
-import { ClientSharedModule } from '@dilta/client-shared';
+import { ClientSharedModule, MaterialModule } from '@dilta/client-shared';
 
 
 const parents = [ParentBioProfileComponent, ParentFormEditorComponent];
@@ -24,7 +23,7 @@ export class ParentPageModule {}
 
 const students = [StudentBioFormEditorComponent, StudentBioProfileComponent];
 @NgModule({
-  imports: [],
+  imports: [StudentUiSharedModule, ClientSharedModule, MaterialModule],
   exports: students,
   declarations: students
 })
@@ -32,7 +31,7 @@ export class StudentPageModule {}
 
 const users = [UserBioDataFormPageComponent, UserBiodataProfileComponent];
 @NgModule({
-  imports: [AdminUiSharedModule, ClientSharedModule, UserRouteModule, CommonModule],
+  imports: [AdminUiSharedModule, ClientSharedModule, UserRouteModule, MaterialModule],
   exports: users,
   declarations: users
 })
@@ -40,7 +39,7 @@ export class UserPageModule {}
 
 const schools = [SchoolDataFormComponent, ManagerDataFormComponent];
 @NgModule({
-  imports: [SchoolUiSharedModule, SchoolRouteModule, CommonModule, ClientSharedModule],
+  imports: [SchoolUiSharedModule, SchoolRouteModule, MaterialModule, ClientSharedModule],
   exports: [...schools, SchoolUiSharedModule],
   declarations: schools
 })

@@ -53,7 +53,7 @@ export class ProcessEffects {
     .ofType<RetrieveLiensceKey>(ProcessAction.RETRIEVE_LIENSCE_KEY)
     .pipe(
       exhaustMap(action =>
-        this.streamMap(this.transport.execute<SchoolEncryptedData>(''))
+        this.streamMap(this.transport.execute<SchoolEncryptedData>(LIENSCE_KEY.Retrieve))
       )
     );
 
@@ -67,7 +67,7 @@ export class ProcessEffects {
     .ofType<UpdateLiensceKey>(ProcessAction.UPDATE_LIENSCE_KEY)
     .pipe(
       exhaustMap(action =>
-        this.streamMap(this.transport.execute('', action.payload))
+        this.streamMap(this.transport.execute(LIENSCE_KEY.Update, action.payload))
       )
     );
 
@@ -77,7 +77,7 @@ export class ProcessEffects {
     .pipe(
       exhaustMap(action =>
         this.transport
-          .execute<boolean>('')
+          .execute<boolean>(LIENSCE_KEY.Delete)
           .pipe(
             map(
               status =>
