@@ -3,8 +3,9 @@ import { ProcessIPCTransport, program } from '@dilta/electron';
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { devtools } from 'modules/electron/extenstion';
 import { join } from 'path';
-
 require('dotenv').config();
+
+
 
 
 //  TODO: make conditional import for environmental variables
@@ -56,7 +57,7 @@ function createWindow() {
 app.on('ready', () => {
   setTimeout(() => {
     createWindow();
-  }, 1000 * 5);
+  }, 1000 * 10);
   ProcessIPCTransport(program, ipcMain);
 });
 

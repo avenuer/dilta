@@ -187,7 +187,7 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
       );
       this.changedData.emit({ data: this.datagrid[map.index], index: map.index });
     } catch (error) {
-      this.errorHandler(map, `expect input value to be between valid range`);
+      this.errorHandler(map, (error as Error).message);
     }
   }
 
@@ -214,11 +214,11 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    * @memberof DynamicDataGridComponent
    */
   updateGrid<T>(item: T, map: Map, value: string) {
-    item = this.updateItem(map, item, value);
+    let updateditem = this.updateItem(map, item, value);
     if (this.mathExp) {
-      item = this.evalExpress(item, map);
+      updateditem = this.evalExpress(item, updateditem, map);
     }
-    return item;
+    return updateditem;
   }
 
   /**
@@ -249,7 +249,7 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
       }
       value[map.key.key] = math.eval(value[map.key.key]);
     } catch (error) {
-      this.errorHandler(map, `invalid math expression`);
+      this.errorHandler(map, (error as Error).message);
       value = preValue;
     }
     return value;
@@ -265,18 +265,19 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    * @returns {T} item evaluated object scope
    * @memberof DynamicDataGridComponent
    */
-  evalExpress<T>(item: T, map: Map): T {
+  evalExpress<T>(previous: T, updated: T,  map: Map): T {
     try {
       this.keys.forEach(key => {
         if (key.evaluated) {
-          item[key.key] = math.eval(this.mathExp, item);
-          this.validateKeyInput(item[key.key], map);
+          updated[key.key] = math.eval(this.mathExp, updated);
         }
       });
-      return item;
+      this.validateKeyInput(updated[map.key.key], map);
+      return updated;
     } catch (error) {
       console.log(map);
-      this.errorHandler(map, `invalid math expression`);
+      this.errorHandler(map, (error as Error).message);
+      return previous;
     }
   }
 

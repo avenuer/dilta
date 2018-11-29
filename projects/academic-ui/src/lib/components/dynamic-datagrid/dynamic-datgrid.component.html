@@ -1,6 +1,5 @@
 <div class="container">
 
-
   <table mat-table [dataSource]="datagrid" class="mat-elevation-z8">
     <!--
       - Note that these columns can be defined in any order.
@@ -27,7 +26,7 @@
       <span [id]="key.key + '_' + i + 'error'" hidden> {{ key.key + '_' + i + 'error'}} </span>
       <div  [id]="key.key + '_' + i + 'input'" hidden>
         <mat-form-field>
-          <input (change)="edited($event, { key: key, index: i })"  matInput required type="text" />
+          <input  (change)="edited($event, { key: key, index: i })"  matInput required type="text" />
           </mat-form-field>
       </div>
       </td>

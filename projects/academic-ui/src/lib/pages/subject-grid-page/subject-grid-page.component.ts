@@ -48,10 +48,43 @@ export class SubjectGridPageComponent implements OnInit {
    */
   public keys: KeysConfig[] = [
     { key: 'name', send: true, editable: false, type: 'string' },
-    { key: 'firstCa', send: false, editable: true, type: 'number' },
-    { key: 'secondCa', send: false, editable: true, type: 'number' },
-    { key: 'exam', send: false, editable: true, type: 'number' },
-    { key: 'total', send: false, editable: false, type: 'number', evaluated: true }
+    {
+      key: 'firstCa',
+      send: false,
+      editable: true,
+      type: 'number',
+      config: {
+        max: 15,
+        min: 0
+      }
+    },
+    {
+      key: 'secondCa',
+      send: false,
+      editable: true,
+      type: 'number',
+      config: {
+        max: 15,
+        min: 0
+      }
+    },
+    {
+      key: 'exam',
+      send: false,
+      editable: true,
+      type: 'number',
+      config: {
+        max: 70,
+        min: 0
+      }
+    },
+    {
+      key: 'total',
+      send: false,
+      editable: false,
+      type: 'number',
+      evaluated: true
+    }
   ];
 
   constructor(
@@ -72,7 +105,7 @@ export class SubjectGridPageComponent implements OnInit {
     data: AcademicSubject;
     index: number;
   }) {
-        this.data[index] = data;
+    this.data[index] = data;
     // this.transport
     //   .execute<AcademicSubject>(AcademicActions.UpdateSubjectRecord, data)
     //   .pipe(first())
