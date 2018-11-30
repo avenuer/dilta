@@ -2,7 +2,9 @@
   <form [formGroup]="recordForm" class="container">
     <mat-form-field>
       <mat-label>Class</mat-label>
-      <input required matInput formControlName="class" type="text">
+      <mat-select formControlName="class" required placeholder="Class">
+        <mat-option *ngFor="let schClass of schoolClasses" [value]="schClass" > {{ schClass }} </mat-option>
+      </mat-select>
       <mat-error *ngIf="!recordForm.controls['class'].valid && recordForm.controls['class'].touched">
         Class is required </mat-error>
     </mat-form-field>
@@ -14,7 +16,9 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label>Term</mat-label>
-      <input required matInput formControlName="term" type="text">
+      <mat-select formControlName="term" required placeholder="Term">
+        <mat-option *ngFor="let schTerm of schoolTerms" [value]="schTerm" > {{ schTerm }} </mat-option>
+      </mat-select>
       <mat-error *ngIf="!recordForm.controls['term'].valid && recordForm.controls['term'].touched">
         Term is required </mat-error>
     </mat-form-field>
@@ -26,10 +30,10 @@
     </mat-form-field>
 
     <div class="action-btns">
-      <button mat-raised-button color="primary" type="submit" [disabled]="!recordForm.valid" (click)="create.emit(recordForm.value)"
+      <button mat-raised-button color="primary" type="submit" [disabled]="!recordForm.valid" (click)="create.emit(remapAndClean(recordForm.value))"
         >Create</button>
         <span class="spacer-full"></span>
-      <button mat-raised-button color="secondary" type="submit" [disabled]="!recordForm.valid" (click)="load.emit(recordForm.value)"
+      <button mat-raised-button color="secondary" type="submit" [disabled]="!recordForm.valid" (click)="load.emit(remapAndClean(recordForm.value))"
         >Load</button>
 
     </div>

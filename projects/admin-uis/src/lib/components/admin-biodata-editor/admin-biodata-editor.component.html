@@ -43,10 +43,9 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label> Class</mat-label>
-      <!-- <mat-select formControlName="class" required placeholder="LGA">
+      <mat-select formControlName="class" required placeholder="LGA">
         <mat-option *ngFor="let _class of classes"> {{ _class }} </mat-option>
-      </mat-select> -->
-      <input matInput formControlName="class" required type="text">
+      </mat-select>
       <mat-error *ngIf="!adminForm.controls['class'].valid && adminForm.controls['class'].touched">class in charge of
         is required</mat-error>
     </mat-form-field>

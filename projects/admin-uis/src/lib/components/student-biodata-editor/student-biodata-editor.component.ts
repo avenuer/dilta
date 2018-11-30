@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Student, defaultKeys } from '@dilta/shared';
+import { Student, defaultKeys, schoolClasses, schoolClassValue } from '@dilta/shared';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 export const objStudentKeys = [
@@ -27,6 +27,9 @@ export class StudentBiodataEditorComponent {
   public emitter = new EventEmitter();
 
   public studentForm: FormGroup;
+
+  public classes: string[] = schoolClasses;
+
 
   constructor(private fb: FormBuilder) {
     this.studentForm = this.form(this.student);
@@ -60,6 +63,7 @@ export class StudentBiodataEditorComponent {
    * @param value student form value
    */
   public emit(value: Student) {
+    (value as any).class = schoolClassValue(value.class);
     this.emitter.emit(value);
   }
 }

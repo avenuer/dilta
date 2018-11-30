@@ -6,7 +6,9 @@
     </mat-form-field>
     <mat-form-field>
         <mat-label> Class </mat-label>
-        <input matInput required size="75" id="name" formControlName="class" type="text">
+        <mat-select formControlName="class" required placeholder="Class">
+          <mat-option *ngFor="let schClass of classes" [value]="schClass" > {{ schClass }} </mat-option>
+        </mat-select>
         <mat-error *ngIf="!studentForm.controls['class'].valid && studentForm.controls['class'].touched"> Class is required </mat-error>
     </mat-form-field>
     <mat-form-field>
