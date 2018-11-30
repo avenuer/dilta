@@ -1,5 +1,5 @@
 import { Record, Student, Subject } from './models';
-import { TermPreset, GradeSheet } from './preset';
+import { TermPreset, GradeSheet, SchoolClass } from './preset';
 
 export interface GridConfig {
   filter?: boolean;
@@ -35,7 +35,7 @@ export enum AcademicActions {
 
 
 export interface AcadmicRecordSheet {
-  level: string;
+  level: SchoolClass;
   session: string;
   term: TermPreset;
 }

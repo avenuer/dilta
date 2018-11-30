@@ -26,7 +26,7 @@ import { gradePreset, classPositionPreset } from 'modules/presets';
  */
 
 @Injectable()
-class ScoreSheet {
+export class ScoreSheet {
   constructor(
     private record: RecordService,
     private subject: SubjectService,
