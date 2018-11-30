@@ -22,7 +22,7 @@ export const recordSchema = {
       final: true
     },
     class: {
-      type: 'string',
+      type: 'number',
       final: true
     },
     session: {
@@ -30,7 +30,7 @@ export const recordSchema = {
       final: true
     },
     term: {
-      type: 'string',
+      type: 'number',
       final: true
     },
     ...baseModel.schema

@@ -16,7 +16,7 @@ export const studentSchema = {
       type: 'string'
     },
     class: {
-      type: 'string'
+      type: 'number'
     },
     gender: {
       type: 'string'

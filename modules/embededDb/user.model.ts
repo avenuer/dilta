@@ -22,8 +22,8 @@ export const userSchema = {
       type: 'string'
     },
     class: {
-      type: 'string',
-      default: 'none'
+      type: 'number',
+      default: 0
     },
     subject: {
       type: 'string',

@@ -34,11 +34,11 @@ export const receiptSchema = {
       final: true
     },
     term: {
-      type: 'string',
+      type: 'number',
       final: true
     },
     class: {
-      type: 'string',
+      type: 'number',
       final: true
     },
     ...baseModel.schema

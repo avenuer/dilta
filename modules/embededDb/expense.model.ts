@@ -44,7 +44,7 @@ export const ExpenseSchema = {
       final: true
     },
     term: {
-      type: 'string',
+      type: 'number',
       final: true
     },
     createdAt: {
