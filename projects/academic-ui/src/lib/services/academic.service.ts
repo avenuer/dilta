@@ -9,8 +9,11 @@ import {
   ModelOperations,
   Record,
   SearchFindRequest,
-  Student
-  } from '@dilta/shared';
+  Student,
+  StudentSheet,
+  AcademicActions,
+  StudentReportSheet
+} from '@dilta/shared';
 import { first } from 'rxjs/operators';
 
 @Injectable()
@@ -36,13 +39,24 @@ export class AcademicService {
   }
 
   viewRecord(rec: Record) {
-    console.log(rec);
     this.router.navigate(['academics', 'subjects', rec.id]);
+  }
+
+  studentReportSheet(sheet: StudentSheet) {
+    return this.transport.execute<StudentReportSheet>(
+      AcademicActions.StudentReportSheet,
+      sheet
+    );
   }
 
   count(no: number) {
     for (let i = 0; i < no; i++) {
-      this.transport.modelAction<Student>(EntityNames.Student, ModelOperations.Create, student())
+      this.transport
+        .modelAction<Student>(
+          EntityNames.Student,
+          ModelOperations.Create,
+          student()
+        )
         .pipe(first())
         .subscribe(console.log);
     }

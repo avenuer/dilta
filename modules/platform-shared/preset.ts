@@ -202,7 +202,88 @@ export interface GradeSheet {
  * @enum TermPreset
  */
 export enum TermPreset {
-  First = 'First',
-  Second = 'Second',
-  Third = 'Third',
+  Lesson = 0,
+  First,
+  Second,
+  Third,
+}
+
+export enum NuseryPrimarySchoolClassPreset {
+  Crech = 0,
+  KG1,
+  KG2,
+  KG3,
+  'Nusery One',
+  'Nusery Two',
+  'Nusery Three',
+  'Primary One',
+  'Primary Two',
+  'Primary Three',
+  'Primary Four',
+  'Primary Five',
+  'Primary Six',
+}
+
+export enum SecondarySchoolClassPreset {
+  'JSS One' = 211,
+  'JSS Two',
+  'JSS Three',
+  'SSS One A' = 311,
+  'SSS One B',
+  'SSS One c',
+  'SSS One D',
+  'SSS Two A' = 411,
+  'SSS Two B',
+  'SSS Two C',
+  'SSS Two D',
+  'SSS Three A' = 511,
+  'SSS Three B',
+  'SSS Three C',
+  'SSS Three D',
+}
+
+// type for student class.
+export type SchoolClass = NuseryPrimarySchoolClassPreset & SecondarySchoolClassPreset;
+
+/** all school classes available */
+export const schoolClasses = Object.keys({ ...NuseryPrimarySchoolClassPreset, ...SecondarySchoolClassPreset  });
+/** all school terms available */
+export const schoolTerms = Object.keys(TermPreset);
+
+/**
+ * maps the school Name to the corresponding value
+ *
+ * @export
+ * @param {string} className
+ * @returns
+ */
+export function schoolClassValue(className: string): number {
+  if (Object.keys(NuseryPrimarySchoolClassPreset).includes(className)) {
+    return NuseryPrimarySchoolClassPreset[className];
+  }
+  if (Object.keys(SecondarySchoolClassPreset).includes(className)) {
+    return SecondarySchoolClassPreset[className];
+  }
+  throw noClassError;
+}
+
+// Error thrown when class not found
+const noClassError = new Error('class requested doesn\'t exist');
+
+/**
+ * maps the school term value to its keys
+ *
+ * @export
+ * @param {number} termValue
+ * @returns
+ */
+export function schoolTermValueToKey(termValue: number) {
+  let termKey: string;
+  Object.entries({ ...NuseryPrimarySchoolClassPreset, ...SecondarySchoolClassPreset })
+    .forEach(([key, value]) => {
+      if (value === termValue) {
+        termKey = key;
+      }
+    });
+  return termKey;
 }

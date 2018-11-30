@@ -1,4 +1,4 @@
-import { SchoolPreset, TermPreset } from './preset';
+import { SchoolPreset, TermPreset, SchoolClass } from './preset';
 
 /**
  * entity name mapping to avoid magical variables
@@ -34,7 +34,6 @@ export enum ModelOperations {
   Update = 'update$'
 }
 
-
 /**
  * Formats Action for model operations
  *
@@ -43,7 +42,10 @@ export enum ModelOperations {
  * @param {ModelOperations} operation
  * @returns
  */
-export function modelActionFormat(model: EntityNames, operation: ModelOperations) {
+export function modelActionFormat(
+  model: EntityNames,
+  operation: ModelOperations
+) {
   return `[Model] ${model} ${operation}`;
 }
 
@@ -104,7 +106,7 @@ export interface Receipt extends Partial<BaseModel> {
   studentId: string | Student;
   session: string;
   term: string;
-  class: string;
+  class: SchoolClass;
 }
 
 interface Item {
@@ -138,14 +140,13 @@ export interface School extends Partial<BaseModel> {
  */
 export interface Student extends Partial<BaseModel> {
   name: string;
-  class: string;
+  class: SchoolClass;
   gender: string;
   dob: number;
   bloodgroup?: string;
   prevschool?: string;
   parentPhone: number | string;
 }
-
 
 /**
  * record of subjects and students
@@ -157,7 +158,7 @@ export interface Student extends Partial<BaseModel> {
 export interface Record extends Partial<BaseModel> {
   subject: string;
   teacherId: string;
-  class: string;
+  class: SchoolClass;
   session: string;
   term: TermPreset;
 }
@@ -190,7 +191,7 @@ export interface User extends Partial<BaseModel> {
   address: string;
   image: File | string;
   authId: string | Auth;
-  class?: string;
+  class?: SchoolClass;
   subject?: string;
   phoneNos?: string;
   email?: string;
