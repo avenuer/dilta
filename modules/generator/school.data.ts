@@ -5,7 +5,9 @@ import {
   Receipt,
   School,
   Student,
-  User
+  User,
+  NuseryPrimarySchoolClassPreset,
+  Subject
   } from '@dilta/shared';
 import { getDate } from 'date-fns';
 import * as faker from 'faker';
@@ -86,17 +88,7 @@ export function manager(): Manager {
 
 export const managerList = (amount?: number) => list<Manager>(manager, amount);
 
-export const classes = [
-  'pry1',
-  'pry2',
-  'pry3',
-  'pry4',
-  'pry5',
-  'pry6',
-  'nus1',
-  'nus2',
-  'nus3'
-];
+export const classes = Object.keys(NuseryPrimarySchoolClassPreset);
 export const genders = ['Male', 'Female'];
 export const bloodgroups = ['A', 'B', 'AB', 'O'];
 
@@ -104,14 +96,14 @@ export function student(): Student {
   return {
     dob: getDate(faker.date.past(3)),
     school: faker.random.uuid(),
-    class: select(classes),
+    class: NuseryPrimarySchoolClassPreset[select(classes)],
     bloodgroup: select(bloodgroups),
     gender: select(genders),
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
     parentPhone: faker.phone.phoneNumber(),
     prevschool: faker.company.companyName(),
     ...baseModel()
-  };
+  } as any;
 }
 
 export const studentList = (amount?: number) => list<Student>(student, amount);
@@ -144,7 +136,7 @@ export function receipt(): Receipt {
   return {
     school: faker.random.uuid(),
     name: faker.name.findName(),
-    class: select(classes) as any,
+    class: NuseryPrimarySchoolClassPreset[select(classes)] as any,
     createdAt: getDate(Date()),
     date: getDate(Date()),
     session: select(sessions) as any,
@@ -163,7 +155,7 @@ export function receipt(): Receipt {
       }
     ],
     ...baseModel()
-  };
+  } as any;
 }
 
 export const receiptList = (amount = 5) => list<Receipt>(receipt, amount);
@@ -186,7 +178,7 @@ export function admin(): User {
     authId: faker.internet.userName(),
     school: faker.random.uuid(),
     address: faker.address.streetAddress(),
-    class: select(classes) as any,
+    class: NuseryPrimarySchoolClassPreset[select(classes)] as any,
     subject: select(subjects) as any,
     email: faker.internet.email(),
     gender: faker.helpers.randomize(genders)[0],
@@ -195,39 +187,25 @@ export function admin(): User {
     phoneNo: faker.phone.phoneNumber(),
     phoneNos: faker.phone.phoneNumber(),
     ...baseModel()
-  };
+  } as any;
 }
 
 export const adminsList = (amount = 5) => list<User>(admin, amount);
 
-export interface Score extends Partial<BaseModel> {
-  student: string;
-  fa: number;
-  sa: number;
-  exam: number;
-  id: string;
-  session: string;
-  subject: string;
-  class: string;
-  term: string;
-}
-
-export function scoreGen(): Score {
+export function scoreGen(): Subject {
   return {
-    class: select(classes) as any,
-    subject: select(subjects) as any,
-    student: faker.random.uuid(),
-    fa: faker.random.number({ min: 0, max: 15 }),
-    sa: faker.random.number({ min: 0, max: 15 }),
+    studentId: faker.random.uuid(),
+    firstCa: faker.random.number({ min: 0, max: 15 }),
+    secondCa: faker.random.number({ min: 0, max: 15 }),
     exam: faker.random.number({ min: 0, max: 70 }),
-    session: select(sessions) as any,
-    term: select(terms) as any,
+    total: faker.random.number({ min: 0, max: 70 }),
+    recordId: faker.random.uuid(),
     ...baseModel()
   };
 }
 // ...baseModel()
 
-export const examList = (no = 5) => list<Score>(scoreGen, no);
+export const examList = (no = 5) => list<Subject>(scoreGen, no);
 // accounts doesnt use erasers...methodlogy
 interface SchoolMetaData {
   personal_ID: string;
@@ -247,8 +225,8 @@ export function teacher() {
 //   return <BusarRevenueSummary>{
 //     currentMonthHighestCategory: faker.commerce.product(),
 //     currentMonthHighestCategoryRevenue: faker.random.number(500000),
-//     currentMonthHighestClass: select(classes) as any,
-//     currentMonthLowestClass: select(classes) as any,
+//     currentMonthHighestClass: NuseryPrimarySchoolClassPreset[select(classes)] as any,
+//     currentMonthLowestClass: NuseryPrimarySchoolClassPreset[select(classes)] as any,
 //     currentMonthHighestRevenue: faker.random.number(2000000),
 //     currentMonthLowestRevenue: faker.random.number(20000),
 //     currentMonthPercentage: faker.random.number(90),
