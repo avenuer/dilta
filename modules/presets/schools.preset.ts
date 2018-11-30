@@ -1,7 +1,18 @@
 import { uniq } from 'lodash';
 import { format, getYear } from 'date-fns';
 import * as uuidRandom from 'uuid/v4';
-import { SettingTypes, SchoolPresetBio, SchoolPreset, Permission, Level, Setting, SchoolDict,  } from '@dilta/shared';
+import {
+  SettingTypes,
+  SchoolPresetBio,
+  SchoolPreset,
+  Permission,
+  Level,
+  Setting,
+  SchoolDict,
+  GradeSheet,
+  GradesComment,
+  Grades
+} from '@dilta/shared';
 
 export const permision: Permission[] = [
   // { name: 'Guest',  value: 1 },
@@ -66,7 +77,6 @@ export const nuseryPrimarySchool: SchoolPresetBio = {
   permision: permision
 };
 
-
 /** full export of all the presets */
 export const schoolPresetBios: SchoolPreset = {
   nusery: nuserySchool,
@@ -76,8 +86,6 @@ export const schoolPresetBios: SchoolPreset = {
 
 /** school categories supported */
 export const schoolCategories = Object.keys(schoolPresetBios);
-
-
 
 /**
  * cheans the school presets information to a nice
@@ -120,7 +128,6 @@ export function dictPermision(permsions: Permission[] = []) {
   permsions.forEach(p => (_dict[p.name] = p.value));
   return _dict;
 }
-
 
 /**
  * Creates an inital presets dynamically for the school
@@ -221,11 +228,75 @@ function busarySetting({ memberclassesInputs }) {
               name: `${currentYear - 2}\\${currentYear - 1}`
             },
             {
-              name: `${currentYear - 3}\\${currentYear - 2 }`
+              name: `${currentYear - 3}\\${currentYear - 2}`
             }
           ]
         }
       }
     }
   };
+}
+
+interface ScoreMax {
+  max: number;
+  symbol: string;
+}
+
+// scores max grades
+const scores: ScoreMax[] = [
+  { max: 39, symbol: 'F' },
+  { max: 44, symbol: 'E' },
+  { max: 49, symbol: 'D' },
+  { max: 59, symbol: 'c' },
+  { max: 64, symbol: 'B' },
+  { max: 100, symbol: 'A' }
+];
+
+/**
+ * grade preset returns the comment on the student score.
+ *
+ * @export
+ * @param {number} score
+ * @returns {string}
+ */
+export function gradePreset(score: number): GradeSheet {
+  let gradeSheet: GradeSheet;
+
+  for (let i = 0; i < scores.length; i++) {
+    const preset = scores[i];
+    // shortcut full loop with break statment
+    if (score >= preset.max) {
+      gradeSheet = {
+        comment: GradesComment[preset.symbol],
+        grade: Grades[preset.symbol]
+      };
+      break;
+    }
+  }
+  return gradeSheet;
+}
+
+
+/**
+ * maps student poistion in the class to comment
+ *
+ * @export
+ * @param {number} index
+ * @returns
+ */
+export function classPositionPreset(index: number) {
+  index += 1;
+  if (index === 0) {
+    return 'Not available';
+  }
+  if (index === 1) {
+    return '1st';
+  }
+  if (index === 2) {
+    return '2nd';
+  }
+  if (index === 3) {
+    return '3rd';
+  }
+  return `${index}th`;
 }

@@ -1,4 +1,4 @@
-import { SchoolPreset } from './preset';
+import { SchoolPreset, TermPreset } from './preset';
 
 /**
  * entity name mapping to avoid magical variables
@@ -159,7 +159,7 @@ export interface Record extends Partial<BaseModel> {
   teacherId: string;
   class: string;
   session: string;
-  term: string;
+  term: TermPreset;
 }
 
 /**

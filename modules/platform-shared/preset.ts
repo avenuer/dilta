@@ -148,3 +148,61 @@ export enum PresetAction {
    */
   SchoolPreset = '[Preset] SCHOOL PRESET',
 }
+
+
+
+/**
+ * grades shortcut
+ *
+ * @export
+ * @enum {number}
+ */
+export enum Grades {
+  A = 'A',
+  B = 'B',
+  C = 'C',
+  D = 'D',
+  E = 'E',
+  F = 'F',
+}
+
+
+/**
+ * grades full comment
+ *
+ * @export
+ * @enum {number}
+ */
+export enum GradesComment {
+  A = 'Excellent',
+  B = 'Very Good',
+  C = 'Good',
+  D = 'Pass',
+  E = 'Fair',
+  F = 'Fail',
+}
+
+
+/**
+ * GradeSheet constiting of the short and full symbols
+ *
+ * @export
+ * @interface GradeSheet
+ */
+export interface GradeSheet {
+  grade: Grades;
+  comment: GradesComment;
+}
+
+
+/**
+ * term preset shows various terms available
+ *
+ * @export
+ * @enum TermPreset
+ */
+export enum TermPreset {
+  First = 'First',
+  Second = 'Second',
+  Third = 'Third',
+}
