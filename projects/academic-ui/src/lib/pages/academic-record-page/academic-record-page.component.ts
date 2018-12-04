@@ -1,16 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { schoolFeature } from '@dilta/client-shared';
 import { TransportService } from '@dilta/electron-client';
 import { EntityNames, ModelOperations, Record } from '@dilta/shared';
-import { Store } from '@ngrx/store';
-import { AuthFeature } from 'projects/auth/src/lib/ngrx';
-import {
-  combineLatest,
-  exhaustMap,
-  first,
-  map
-  } from 'rxjs/operators';
+import { exhaustMap, first, map } from 'rxjs/operators';
+import { AcademicService } from '../../services/academic.service';
 
 @Component({
   selector: 'acada-academic-record-page',
@@ -21,7 +14,7 @@ export class AcademicRecordPageComponent implements OnInit {
   constructor(
     private transport: TransportService,
     private router: Router,
-    private store: Store<any>
+    private acada: AcademicService
   ) {}
 
   /**
@@ -31,26 +24,22 @@ export class AcademicRecordPageComponent implements OnInit {
    * @memberof AcademicRecordPageComponent
    */
   load(record: Record) {
-    this.store
-      .select(schoolFeature)
-      .pipe(combineLatest(this.store.select(AuthFeature)))
+    this.acada
+      .teacherAndSchoolId()
       .pipe(
-        exhaustMap(([school, auth]) => {
-          record = {
-            ...record,
-            teacherId: auth.details.id,
-            school: school.details.id
-          };
-          return this.transport
-            .modelAction<Record>(
-              EntityNames.Record,
-              ModelOperations.Retrieve,
-              record
-            )
-            .pipe(first());
-        })
+        exhaustMap(Ids =>
+          this.transport.modelAction<Record>(
+            EntityNames.Record,
+            ModelOperations.Retrieve,
+            {
+              ...record,
+              ...Ids
+            }
+          )
+        )
       )
       .pipe(
+        first(),
         map(val => {
           if (!val) {
             throw noRecordError;
@@ -68,20 +57,17 @@ export class AcademicRecordPageComponent implements OnInit {
    * @memberof AcademicRecordPageComponent
    */
   create(rec: Record) {
-    this.store
-      .select(schoolFeature)
-      .pipe(combineLatest(this.store.select(AuthFeature)))
+    this.acada
+      .teacherAndSchoolId()
       .pipe(
-        exhaustMap(([school, auth]) => {
-          rec = {
-            ...rec,
-            teacherId: auth.details.id,
-            school: school.details.id
-          };
+        exhaustMap(Ids => {
           return this.transport.modelAction<Record>(
             EntityNames.Record,
             ModelOperations.Create,
-            rec
+            {
+              ...rec,
+              ...Ids
+            }
           );
         })
       )

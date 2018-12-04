@@ -13,7 +13,8 @@ import {
   Record,
   StudentRecordMergeSheet,
   TermPreset,
-  StudentRecordMergeTermSheet
+  StudentRecordMergeTermSheet,
+  CumulativeRecordData
 } from '@dilta/shared';
 import { gradePreset, classPositionPreset } from 'modules/presets';
 
@@ -47,12 +48,13 @@ export class ScoreSheet {
       records.map(async rec => this.mergeRecordScores(sheet, rec))
     );
     const scoreSheet = this.differentTermScores(sheet, recordScoreSheets);
+    const cumulative = this.studentCumulativeRecord(scoreSheet);
     const student = await this.student.retrieve$({ id: sheet.studentId });
-    return { scoreSheet, biodata: student, ...sheet };
+    return { scoreSheet, cumulative, biodata: student, ...sheet };
   }
 
   async classRecords({ term, session, level }: AcadmicRecordSheet) {
-    const { data } = await this.record.find$({ class: level, session });
+    const { data } = await this.record.find$({ class: level, term, session });
     return data;
   }
 
@@ -102,10 +104,14 @@ export class ScoreSheet {
     const sorted = data.sort((a, b) => b.total - a.total);
     // retrieves the student position
     const position = classPositionPreset(data.findIndex((score) => score.studentId === studentId));
-    const max = sorted[0].total;
-    const min = sorted[sorted.length - 1].total;
-    const avg =
-      (sorted as any[]).reduce((prev, curr) => prev.total + curr.total) / sorted.length;
+    const max = (sorted[0]) ? sorted[0].total : 0;
+    const min = (sorted[sorted.length - 1]) ? sorted[sorted.length - 1].total : 0;
+    const sum = (sorted as any[]).reduce((prev, curr) => {
+      return {
+        total: prev.total + curr.total
+      };
+    }, { total: 0 });
+    const avg = (sorted.length > 0) ? sum.total / sorted.length : 0;
     return { max, min, avg, position };
   }
 
@@ -121,10 +127,11 @@ export class ScoreSheet {
     recordId: string,
     studentId: string
   ): Promise<StudentRecordSheet> {
-    const score: Subject = await this.subject.retrieve$({
+    let score: Subject = await this.subject.retrieve$({
       recordId,
       studentId
     });
+    score = score ? score : { total: 0, firstCa: 0, exam: 0, secondCa: 0, recordId, studentId };
     const grade = gradePreset(score.total);
     return { ...grade, ...score };
   }
@@ -174,6 +181,21 @@ export class ScoreSheet {
     return map;
   }
 
+
+  /**
+   * collates the total student records across all subjects
+   *
+   * @param {RecordSheet[]} sheets
+   * @returns {CumulativeRecordData}
+   * @memberof ScoreSheet
+   */
+  studentCumulativeRecord(sheets: RecordSheet[]): CumulativeRecordData {
+    const total = (sheets as any).reduce((prev, curr) => prev.total + curr.total, 0);
+    const average = (sheets.length > 1) ? total / sheets.length : total;
+    const grade = gradePreset(average).grade;
+    return { average, grade, total };
+  }
+
   /**
    * set the various terms total score for each subject.
    *
@@ -204,4 +226,5 @@ export class ScoreSheet {
     }
     return report;
   }
+
 }

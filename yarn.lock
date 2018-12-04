@@ -6874,6 +6874,11 @@ neo-async@^2.5.0:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.5.2.tgz#489105ce7bc54e709d736b195f82135048c50fcc"
   integrity sha512-vdqTKI9GBIYcAEbFAcpKPErKINfPF5zIuz3/niBfq8WUZjpT2tytLlFVrBgWdOtqI4uaA/Rb6No0hux39XXDuw==
 
+ng-snotify@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/ng-snotify/-/ng-snotify-4.3.1.tgz#4f338bb241cb5137729585e8ffc56cd43d1cab45"
+  integrity sha512-prtS39n6tH9AZpK0/HVpqrzWRI8yow5FjMwJ1D8LU2HCI0lCqaNhDhfB++8kz7yZ5/5K2LzXbEgU8ViG75lZ6w==
+
 ngx-electron@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/ngx-electron/-/ngx-electron-1.0.4.tgz#2d80b25d74ae4d6226ad8b3bc4ecfa611e48fdca"

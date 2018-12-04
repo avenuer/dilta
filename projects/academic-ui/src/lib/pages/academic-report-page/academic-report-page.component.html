@@ -1,0 +1,14 @@
+<div class="container">
+  <mat-card *ngIf="showFormAndHideTable">
+      <acada-academic-report (load)="reportSheetConfig($event)"></acada-academic-report>
+  </mat-card>
+
+  <acada-student-grid
+  *ngIf="!showFormAndHideTable"
+  [config]="config"
+  (filter)="searchStudents($event)"
+  (paginator)="paginator($event)"
+  [students]="students"
+  (student)="studentReport($event)"
+></acada-student-grid>
+</div>

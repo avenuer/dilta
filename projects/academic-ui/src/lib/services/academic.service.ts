@@ -12,13 +12,22 @@ import {
   Student,
   StudentSheet,
   AcademicActions,
-  StudentReportSheet
+  StudentReportSheet,
+  schoolValueToKey,
+  schoolTermValueToKey
 } from '@dilta/shared';
-import { first } from 'rxjs/operators';
+import { first, map, combineLatest } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { schoolFeature } from '@dilta/client-shared';
+import { AuthFeature } from 'projects/auth/src/lib/ngrx';
 
 @Injectable()
 export class AcademicService {
-  constructor(private transport: TransportService, private router: Router) {}
+  constructor(
+    private transport: TransportService,
+    private router: Router,
+    private store: Store<any>
+  ) {}
 
   findStudents(query: SearchFindRequest<Student>, params?: FindQueryParam) {
     return this.transport.modelAction<FindResponse<Student>>(
@@ -30,12 +39,23 @@ export class AcademicService {
   }
 
   findRecords(query: SearchFindRequest<Student>, params?: FindQueryParam) {
-    return this.transport.modelAction<FindResponse<Record>>(
-      EntityNames.Record,
-      ModelOperations.Find,
-      query,
-      params
-    );
+    return this.transport
+      .modelAction<FindResponse<Record>>(
+        EntityNames.Record,
+        ModelOperations.Find,
+        query,
+        params
+      )
+      .pipe(
+        map(res => {
+          res.data = res.data.map(rec => {
+            (rec as any).term = schoolTermValueToKey(rec.term);
+            (rec as any).class = schoolValueToKey(rec.class);
+            return rec;
+          });
+          return res;
+        })
+      );
   }
 
   viewRecord(rec: Record) {
@@ -47,6 +67,20 @@ export class AcademicService {
       AcademicActions.StudentReportSheet,
       sheet
     );
+  }
+
+  teacherAndSchoolId() {
+    return this.store
+      .select(schoolFeature)
+      .pipe(combineLatest(this.store.select(AuthFeature)))
+      .pipe(
+        map(([school, auth]) => {
+          return {
+            teacherId: auth.details.id,
+            school: school.details.id
+          };
+        })
+      );
   }
 
   count(no: number) {

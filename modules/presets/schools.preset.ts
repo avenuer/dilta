@@ -260,20 +260,18 @@ const scores: ScoreMax[] = [
  * @returns {string}
  */
 export function gradePreset(score: number): GradeSheet {
-  let gradeSheet: GradeSheet;
-
-  for (let i = 0; i < scores.length; i++) {
-    const preset = scores[i];
-    // shortcut full loop with break statment
-    if (score >= preset.max) {
-      gradeSheet = {
-        comment: GradesComment[preset.symbol],
-        grade: Grades[preset.symbol]
-      };
-      break;
+  const preset = scores.reduce((prev, curr) => {
+    if (score >= prev.max && score <= curr.max ) {
+      return curr;
     }
-  }
-  return gradeSheet;
+    return prev;
+  });
+
+ return {
+    comment: GradesComment[preset.symbol],
+    grade: Grades[preset.symbol]
+  };
+
 }
 
 

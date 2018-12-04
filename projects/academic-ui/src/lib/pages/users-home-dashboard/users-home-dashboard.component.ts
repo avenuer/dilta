@@ -1,7 +1,7 @@
 import { AcademicService } from '../../services/academic.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GridConfig, Record, Student } from '@dilta/shared';
+import { GridConfig, Record, Student, schoolTermValueToKey, schoolValueToKey } from '@dilta/shared';
 
 @Component({
   selector: 'acada-users-home-dashboard',

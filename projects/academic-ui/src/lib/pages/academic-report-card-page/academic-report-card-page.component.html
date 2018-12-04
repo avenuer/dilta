@@ -1,0 +1,6 @@
+<div class="container">
+  <acada-academic-report-card-grid
+    [term]="(reportSheet$ | async)?.term"
+    [scoreSheet]="(reportSheet$ | async)?.scoreSheet"
+  ></acada-academic-report-card-grid>
+</div>

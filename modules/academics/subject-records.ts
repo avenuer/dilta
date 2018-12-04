@@ -7,7 +7,6 @@ import {
   Subject,
   SubjectRecords
   } from '@dilta/shared';
-import * as uuidRandom from 'uuid/v4';
 
 @Injectable()
 export class RecordOperations {
@@ -27,10 +26,8 @@ export class RecordOperations {
   @Action(AcademicActions.UpdateSubjectRecord)
   async updateSubjectRecord(record: AcademicSubject) {
     const { name, ...details } = record;
-    if (!record.id) {
-      return this.subject.create$(details);
-    }
-    return this.subject.update$(record.id, details);
+    const resp = (!record.id) ? await this.subject.create$(details) : await this.subject.update$(record.id, details);
+    return { name, ...resp };
   }
 
   /**
@@ -46,7 +43,7 @@ export class RecordOperations {
     if (record) {
       const records = await this.subject.find$({ recordId });
       const students = await this.student.find$({ class: record.class });
-      const data = this.mapAcademicSubject(
+      const data = this.mapAcademicSubject(recordId,
         this.recordIDMap(records.data),
         students.data
       );
@@ -61,6 +58,7 @@ export class RecordOperations {
    * @memberof RecordOperations
    */
   mapAcademicSubject(
+    recordId: string,
     recordMap: Map<string, Subject>,
     students: Student[]
   ): AcademicSubject[] {
@@ -73,7 +71,7 @@ export class RecordOperations {
             secondCa: 0,
             total: 0,
             studentId: e.id,
-            recordId: uuidRandom()
+            recordId: recordId
           };
       return Object.assign({}, { name: e.name }, record);
     });

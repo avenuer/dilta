@@ -40,7 +40,7 @@ export class StudentGridPageComponent implements OnInit {
   }
 
   query(query: SearchFindRequest<Student>) {
-    this.queryObj = query === '' ? query : {};
+    this.queryObj = query !== '' ? query : {};
     return this.search(this.queryObj);
   }
 

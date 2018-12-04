@@ -1,3 +1,5 @@
+import { cleanNumericEnums } from './shared';
+
 /**
  * school Preset containing various courses and interface
  *
@@ -40,7 +42,6 @@ export interface SchoolPresetBio {
 export interface SchoolPreset {
   [key: string]: SchoolPresetBio;
 }
-
 
 /**
  * interface for the individual level presets
@@ -119,7 +120,6 @@ export interface SchoolDict {
   permisions: Object;
 }
 
-
 /**
  * Actions for PresetModule
  *
@@ -127,7 +127,6 @@ export interface SchoolDict {
  * @enum {number}
  */
 export enum PresetAction {
-
   /**
    * retrieves the local govts in Nigeria
    */
@@ -146,10 +145,8 @@ export enum PresetAction {
   /**
    * retrieves the school preseted information by category
    */
-  SchoolPreset = '[Preset] SCHOOL PRESET',
+  SchoolPreset = '[Preset] SCHOOL PRESET'
 }
-
-
 
 /**
  * grades shortcut
@@ -163,9 +160,8 @@ export enum Grades {
   C = 'C',
   D = 'D',
   E = 'E',
-  F = 'F',
+  F = 'F'
 }
-
 
 /**
  * grades full comment
@@ -179,9 +175,8 @@ export enum GradesComment {
   C = 'Good',
   D = 'Pass',
   E = 'Fair',
-  F = 'Fail',
+  F = 'Fail'
 }
-
 
 /**
  * GradeSheet constiting of the short and full symbols
@@ -194,7 +189,6 @@ export interface GradeSheet {
   comment: GradesComment;
 }
 
-
 /**
  * term preset shows various terms available
  *
@@ -205,7 +199,7 @@ export enum TermPreset {
   Lesson = 0,
   First,
   Second,
-  Third,
+  Third
 }
 
 export enum NuseryPrimarySchoolClassPreset {
@@ -221,7 +215,7 @@ export enum NuseryPrimarySchoolClassPreset {
   'Primary Three',
   'Primary Four',
   'Primary Five',
-  'Primary Six',
+  'Primary Six'
 }
 
 export enum SecondarySchoolClassPreset {
@@ -239,16 +233,22 @@ export enum SecondarySchoolClassPreset {
   'SSS Three A' = 511,
   'SSS Three B',
   'SSS Three C',
-  'SSS Three D',
+  'SSS Three D'
 }
 
 // type for student class.
-export type SchoolClass = NuseryPrimarySchoolClassPreset & SecondarySchoolClassPreset;
+export type SchoolClass = NuseryPrimarySchoolClassPreset &
+  SecondarySchoolClassPreset;
 
 /** all school classes available */
-export const schoolClasses = Object.keys({ ...NuseryPrimarySchoolClassPreset, ...SecondarySchoolClassPreset  });
+export const schoolClasses = cleanNumericEnums(
+  Object.keys({
+    ...NuseryPrimarySchoolClassPreset,
+    ...SecondarySchoolClassPreset
+  })
+);
 /** all school terms available */
-export const schoolTerms = Object.keys(TermPreset);
+export const schoolTerms = cleanNumericEnums(Object.keys(TermPreset));
 
 /**
  * maps the school Name to the corresponding value
@@ -267,6 +267,30 @@ export function schoolClassValue(className: string): number {
   throw noClassError;
 }
 
+
+/**
+ * Returns School Key from value
+ *
+ * @export
+ * @param {number} classValue
+ * @returns
+ */
+export function schoolValueToKey(classValue: number) {
+  let schoolKey: string;
+  Object.entries({
+    ...NuseryPrimarySchoolClassPreset,
+    ...SecondarySchoolClassPreset
+  }).forEach(([key, value]) => {
+    if (value === Number(classValue)) {
+      schoolKey = key;
+    }
+  });
+  if (!schoolKey) {
+    throw noClassError;
+  }
+  return schoolKey;
+}
+
 // Error thrown when class not found
 const noClassError = new Error('class requested doesn\'t exist');
 
@@ -279,11 +303,12 @@ const noClassError = new Error('class requested doesn\'t exist');
  */
 export function schoolTermValueToKey(termValue: number) {
   let termKey: string;
-  Object.entries({ ...NuseryPrimarySchoolClassPreset, ...SecondarySchoolClassPreset })
-    .forEach(([key, value]) => {
-      if (value === termValue) {
-        termKey = key;
-      }
-    });
+  Object.entries({
+    ...TermPreset
+  }).forEach(([key, value]) => {
+    if (value === termValue) {
+      termKey = key;
+    }
+  });
   return termKey;
 }

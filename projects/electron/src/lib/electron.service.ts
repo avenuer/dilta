@@ -88,13 +88,13 @@ export class TransportService {
    */
   bus<ResponseType>(ctx: ApiFormat): Promise<ApiResponse<ResponseType>> {
     this.electron.ipcRenderer.send(Transport.Request, ctx);
-    console.log(ctx);
+    console.log({ctx});
     return new Promise((resolve, rejects) => {
       this.electron.ipcRenderer.on(
         Transport.Response,
         (event: Event, response: ApiResponse<ResponseType>) => {
           if (response.reqId === ctx.id) {
-            console.log(response);
+            console.log({response});
             return resolve(response);
           }
         }

@@ -1,5 +1,5 @@
 import { Record, Student, Subject } from './models';
-import { TermPreset, GradeSheet, SchoolClass } from './preset';
+import { TermPreset, GradeSheet, SchoolClass, Grades } from './preset';
 
 export interface GridConfig {
   filter?: boolean;
@@ -60,6 +60,12 @@ export interface DifferentTermScores {
   thirdTerm?: number;
 }
 
+export interface CumulativeRecordData {
+  average: number;
+  total: number;
+  grade: Grades;
+}
+
 export type StudentRecordMergeSheet = Record & RecordSheet;
 export type StudentRecordMergeTermSheet = Record & RecordSheet & DifferentTermScores;
 export type RecordSheet = ClassSheet &  StudentRecordSheet;
@@ -67,4 +73,5 @@ export type RecordSheet = ClassSheet &  StudentRecordSheet;
 export interface StudentReportSheet extends StudentSheet {
   biodata: Student;
   scoreSheet: RecordSheet[];
+  cumulative?: CumulativeRecordData;
 }

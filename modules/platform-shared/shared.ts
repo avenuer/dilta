@@ -18,3 +18,15 @@ export enum SettingTypes {
   school = 'school',
   user = 'user'
 }
+
+
+/**
+ * clean Numeric enums by removing the Number values
+ *
+ * @export
+ * @param {string[]} keys
+ * @returns
+ */
+export function cleanNumericEnums(keys: string[]) {
+  return keys.filter((k) => !Number(k) && k !== '0');
+}

@@ -13,6 +13,8 @@ import { AuthenticationFeatureModule } from '@dilta/client-auth';
 import { MaterialModule, SchoolFeatureNgrxModule } from '@dilta/client-shared';
 import { ElectronTransportModule } from '@dilta/electron-client';
 import { ProcessNgrxModule } from 'projects/setup/src/app/process/process.module';
+import { AcademicReportPageComponent } from './academic-report-page/academic-report-page.component';
+import { AcademicReportCardPageComponent } from './academic-report-card-page/academic-report-card-page.component';
 
 @NgModule({
   imports: [
@@ -31,7 +33,9 @@ import { ProcessNgrxModule } from 'projects/setup/src/app/process/process.module
     RecordGridPageComponent,
     AcademicRecordPageComponent,
     UsersHomeDashboardComponent,
-    SubjectGridPageComponent
+    SubjectGridPageComponent,
+    AcademicReportPageComponent,
+    AcademicReportCardPageComponent
   ],
   exports: [AcademicSharedUiModule],
   providers: [AcademicService],

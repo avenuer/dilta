@@ -8,8 +8,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { StudentBioFormEditorComponent } from 'projects/admin-uis/src/lib/pages/student-bio-form-editor/student-bio-form-editor.component';
 import { StudentBioProfileComponent } from 'projects/admin-uis/src/lib/pages/student-bio-profile/student-bio-profile.component';
-
-
+import { AcademicReportPageComponent } from './academic-report-page/academic-report-page.component';
+import { AcademicReportCardPageComponent } from './academic-report-card-page/academic-report-card-page.component';
 
 const routes: Routes = [
   {
@@ -24,11 +24,16 @@ const routes: Routes = [
         path: 'students',
         component: StudentGridPageComponent
       },
+      { path: 'reports', component: AcademicReportPageComponent },
       { path: 'record', component: AcademicRecordPageComponent },
       { path: 'records', component: RecordGridPageComponent },
-      { path: 'student', component:  StudentBioFormEditorComponent},
+      { path: 'student', component: StudentBioFormEditorComponent },
       { path: 'students/:id', component: StudentBioProfileComponent },
       { path: 'subjects/:id', component: SubjectGridPageComponent },
+      {
+        path: 'score-sheet/:session/:term/:level/:studentId',
+        component: AcademicReportCardPageComponent
+      }
     ]
   }
 ];
