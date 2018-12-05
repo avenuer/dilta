@@ -146,6 +146,7 @@ export interface Student extends Partial<BaseModel> {
   bloodgroup?: string;
   prevschool?: string;
   parentPhone: number | string;
+  admissionNo: string;
 }
 
 /**

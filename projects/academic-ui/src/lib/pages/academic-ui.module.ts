@@ -15,6 +15,8 @@ import { ElectronTransportModule } from '@dilta/electron-client';
 import { ProcessNgrxModule } from 'projects/setup/src/app/process/process.module';
 import { AcademicReportPageComponent } from './academic-report-page/academic-report-page.component';
 import { AcademicReportCardPageComponent } from './academic-report-card-page/academic-report-card-page.component';
+import { LevelStaticDetailsPageComponent } from './level-static-details-page/level-static-details-page.component';
+import { LevelsStudentComponent } from './levels-student/levels-student.component';
 
 @NgModule({
   imports: [
@@ -35,7 +37,9 @@ import { AcademicReportCardPageComponent } from './academic-report-card-page/aca
     UsersHomeDashboardComponent,
     SubjectGridPageComponent,
     AcademicReportPageComponent,
-    AcademicReportCardPageComponent
+    AcademicReportCardPageComponent,
+    LevelsStudentComponent,
+    LevelStaticDetailsPageComponent
   ],
   exports: [AcademicSharedUiModule],
   providers: [AcademicService],

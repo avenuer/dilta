@@ -176,6 +176,7 @@ export const levels = ['owner', 'manager', 'busar', 'teacher'];
 export function admin(): User {
   return {
     authId: faker.internet.userName(),
+    admissionNo: faker.random.uuid(),
     school: faker.random.uuid(),
     address: faker.address.streetAddress(),
     class: NuseryPrimarySchoolClassPreset[select(classes)] as any,

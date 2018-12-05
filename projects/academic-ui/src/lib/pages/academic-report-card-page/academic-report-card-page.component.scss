@@ -1,0 +1,13 @@
+.tabled-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.striped {
+  background-color: rgb(199, 193, 193);
+  border-color: rgb(199, 193, 193);
+  hr {
+    font: bolder;
+  }
+}

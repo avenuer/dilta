@@ -8,7 +8,7 @@ import { AcademicPageModule } from '@dilta/academic-ui';
 import { MaterialModule } from '@dilta/client-shared';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
-
+import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
 
 @NgModule({
   declarations: [
@@ -18,6 +18,7 @@ import { StoreModule } from '@ngrx/store';
     BrowserModule,
     MaterialModule,
     NoopAnimationsModule,
+    // SnotifyModule.forRoot(),
     RouterModule.forRoot([]),
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),

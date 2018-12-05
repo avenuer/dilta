@@ -14,7 +14,8 @@ import {
   AcademicActions,
   StudentReportSheet,
   schoolValueToKey,
-  schoolTermValueToKey
+  schoolTermValueToKey,
+  ClassDetailedStat
 } from '@dilta/shared';
 import { first, map, combineLatest } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
@@ -81,6 +82,12 @@ export class AcademicService {
           };
         })
       );
+  }
+
+  levelStatics() {
+    return this.transport.execute<ClassDetailedStat[]>(
+      AcademicActions.ClassStatDetails
+    );
   }
 
   count(no: number) {

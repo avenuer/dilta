@@ -10,6 +10,8 @@ import { StudentBioFormEditorComponent } from 'projects/admin-uis/src/lib/pages/
 import { StudentBioProfileComponent } from 'projects/admin-uis/src/lib/pages/student-bio-profile/student-bio-profile.component';
 import { AcademicReportPageComponent } from './academic-report-page/academic-report-page.component';
 import { AcademicReportCardPageComponent } from './academic-report-card-page/academic-report-card-page.component';
+import { LevelStaticDetailsPageComponent } from './level-static-details-page/level-static-details-page.component';
+import { LevelsStudentComponent } from './levels-student/levels-student.component';
 
 const routes: Routes = [
   {
@@ -33,7 +35,15 @@ const routes: Routes = [
       {
         path: 'score-sheet/:session/:term/:level/:studentId',
         component: AcademicReportCardPageComponent
-      }
+      },
+      {
+        path: 'levels',
+        component: LevelStaticDetailsPageComponent
+      },
+      {
+        path: 'levels/:id',
+        component: LevelsStudentComponent
+      },
     ]
   }
 ];

@@ -17,7 +17,7 @@
       <th mat-header-cell *matHeaderCellDef>{{ key.title || key.key }}</th>
       <td
         mat-cell
-        (dblclick)="activateInput({ key: key, index: i })"
+        (dblclick)="activate({ key: key, index: i })"
         *matCellDef="let element; let i = index"
       >
       <span>

@@ -139,13 +139,13 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    */
   activate(map: Map, data: any) {
     if (map.key.send) {
-      this.sender.emit(data);
+      this.sender.emit(this.datagrid[map.index]);
       return;
     }
     if (!map.key.editable) {
       return;
     }
-    this.activateInput(map, data);
+    this.activateInput(map);
   }
 
   /**
@@ -153,11 +153,10 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    * allowed to be editable else returns
    *
    * @param {Map} map positon x, y of the cell
-   * @param {*} data mapped data from the grid
    * @param {string} key key of input clicked
    * @memberof DynamicDataGridComponent
    */
-  activateInput({ index, key }: Map, data: any) {
+  activateInput({ index, key }: Map) {
     const input_id = key.key + '_' + index + 'input';
     if (key.editable) {
       const elem: HTMLInputElement = document.getElementById(input_id) as any;

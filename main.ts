@@ -1,9 +1,10 @@
 import 'reflect-metadata';
+require('dotenv').config();
+
 import { ProcessIPCTransport, program } from '@dilta/electron';
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { devtools } from 'modules/electron/extenstion';
 import { join } from 'path';
-require('dotenv').config();
 
 
 

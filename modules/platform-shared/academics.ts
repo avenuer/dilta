@@ -31,6 +31,7 @@ export enum AcademicActions {
   SubjectRecord = '[ACADEMIC]  FIND SubjectRecords',
   UpdateSubjectRecord = '[ACADEMIC]  UPDATE SubjectRecords',
   StudentReportSheet = '[ACADEMIC]  GET StudentReportSheet',
+  ClassStatDetails = '[ACADEMIC]  GET ClassStatDetails',
 }
 
 
@@ -74,4 +75,16 @@ export interface StudentReportSheet extends StudentSheet {
   biodata: Student;
   scoreSheet: RecordSheet[];
   cumulative?: CumulativeRecordData;
+  totalStudents: number;
+}
+
+export interface GenderDistrubution {
+  total: number;
+  male: number;
+  female: number;
+}
+
+export interface ClassDetailedStat extends GenderDistrubution {
+  value: SchoolClass | any;
+  name: string;
 }

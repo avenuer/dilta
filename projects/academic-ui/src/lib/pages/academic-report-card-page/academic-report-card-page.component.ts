@@ -4,6 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { StudentSheet, StudentReportSheet } from '@dilta/shared';
 import { exhaustMap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { schoolTermValueToKey, schoolValueToKey } from '@dilta/shared';
+import { format  } from 'date-fns';
+
 
 @Component({
   selector: 'acada-academic-report-card-page',
@@ -13,7 +16,14 @@ import { Observable } from 'rxjs';
 export class AcademicReportCardPageComponent implements OnInit {
   public reportSheet$: Observable<StudentReportSheet>;
 
+  public levelName = schoolValueToKey;
+  public termName = schoolTermValueToKey;
+
   constructor(private avr: ActivatedRoute, private acada: AcademicService) {}
+
+  formatDob(date: number) {
+    return format(date, 'DD-MMM-YYYY');
+  }
 
   /**
    * Cleans the arguments from string to Numbers

@@ -51,9 +51,10 @@ export class SubjectGridPageComponent implements OnInit {
    * @memberof SubjectGridPageComponent
    */
   public keys: KeysConfig[] = [
-    { key: 'name', send: true, editable: false, type: 'string' },
+    { key: 'name', title: 'Name', send: true, editable: false, type: 'string' },
     {
       key: 'firstCa',
+      title: 'First C.A',
       send: false,
       editable: true,
       type: 'number',
@@ -63,6 +64,7 @@ export class SubjectGridPageComponent implements OnInit {
       }
     },
     {
+      title: 'Second C.A',
       key: 'secondCa',
       send: false,
       editable: true,
@@ -73,6 +75,7 @@ export class SubjectGridPageComponent implements OnInit {
       }
     },
     {
+      title: 'Exam',
       key: 'exam',
       send: false,
       editable: true,
@@ -83,6 +86,7 @@ export class SubjectGridPageComponent implements OnInit {
       }
     },
     {
+      title: 'Total',
       key: 'total',
       send: false,
       editable: false,

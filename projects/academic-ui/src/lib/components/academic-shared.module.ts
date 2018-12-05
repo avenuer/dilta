@@ -9,6 +9,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DyanmicDatagridModule } from './dynamic-datagrid/dynamic-datagrid.module';
 import { AcademicReportComponent } from './academic-report/academic-report.component';
 import { AcademicReportCardGridComponent } from './academic-report-card-grid/academic-report-card-grid.component';
+import { LevelStaticDetailsComponent } from './level-static-details/level-static-details.component';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { AcademicReportCardGridComponent } from './academic-report-card-grid/aca
     AcademicReportComponent,
     RecordGridComponent,
     AcademicRecordComponent,
+    LevelStaticDetailsComponent,
     AcademicReportCardGridComponent
   ],
   exports: [
@@ -31,6 +33,7 @@ import { AcademicReportCardGridComponent } from './academic-report-card-grid/aca
     AcademicReportComponent,
     AcademicRecordComponent,
     AcademicReportCardGridComponent,
+    LevelStaticDetailsComponent,
     MatTableModule,
     MatPaginatorModule,
     DyanmicDatagridModule

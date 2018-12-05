@@ -14,7 +14,8 @@ import {
   StudentRecordMergeSheet,
   TermPreset,
   StudentRecordMergeTermSheet,
-  CumulativeRecordData
+  CumulativeRecordData,
+  SchoolClass
 } from '@dilta/shared';
 import { gradePreset, classPositionPreset } from 'modules/presets';
 
@@ -50,12 +51,18 @@ export class ScoreSheet {
     const scoreSheet = this.differentTermScores(sheet, recordScoreSheets);
     const cumulative = this.studentCumulativeRecord(scoreSheet);
     const student = await this.student.retrieve$({ id: sheet.studentId });
-    return { scoreSheet, cumulative, biodata: student, ...sheet };
+    const totalStudents = await this.studentCounts(sheet.level);
+    return { scoreSheet, cumulative, biodata: student, ...sheet, totalStudents };
   }
 
   async classRecords({ term, session, level }: AcadmicRecordSheet) {
     const { data } = await this.record.find$({ class: level, term, session });
     return data;
+  }
+
+  async studentCounts(level: SchoolClass) {
+    const { total } = await this.student.find$({ class: level });
+    return total;
   }
 
   /**

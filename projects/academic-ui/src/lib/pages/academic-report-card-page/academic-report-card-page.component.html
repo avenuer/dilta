@@ -1,4 +1,34 @@
 <div class="container">
+  <div>
+    <mat-card>
+        <h2> Score Card </h2>
+        <h4> {{ termName((reportSheet$ | async)?.term) }} Term of {{ (reportSheet$ | async )?.session }} Academic Year. </h4>
+        <h4> Pupil's Information </h4>
+        <hr>
+      <div  class="tabled-row">
+        <span> Name: {{ (reportSheet$ | async)?.biodata?.name.toUpperCase() }} </span>
+        <span> Admission: {{ (reportSheet$ | async)?.biodata?.admissionNo }} </span>
+      </div>
+      <div class="striped">
+        <hr>
+        <div  class="tabled-row">
+          <span> Sex: {{ (reportSheet$ | async)?.biodata?.gender }} </span>
+          <span> Number In Class: {{ (reportSheet$ | async)?.totalStudents }} </span>
+        </div>
+        <hr>
+      </div>
+      <div  class="tabled-row">
+        <span> Date Of Birth: {{ formatDob((reportSheet$ | async)?.biodata?.dob )}} </span>
+        <span> Class: {{ levelName((reportSheet$ | async)?.level) }} </span>
+      </div>
+      <hr>
+      <h5> Cognitive, Affective and Psychomotor  Assessment </h5>
+    </mat-card>
+    <div>
+    </div>
+    <!-- <hr> -->
+    <!-- <hr> -->
+  </div>
   <acada-academic-report-card-grid
     [term]="(reportSheet$ | async)?.term"
     [scoreSheet]="(reportSheet$ | async)?.scoreSheet"
