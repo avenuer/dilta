@@ -1,12 +1,12 @@
 import { AuthDetailsNotFondError, InValidPasswordError } from './errors';
-import { AuthService } from '@dilta/database';
+import { AuthService, SchoolService } from '@dilta/database';
 import { AuthSecurity } from './auth-security';
 import { Auth, USER_AUTH } from '@dilta/shared';
 import { Injectable, Action } from '@dilta/core';
 
 @Injectable()
 export class AuthController {
-  constructor(private sec: AuthSecurity, private auth: AuthService) {}
+  constructor(private sec: AuthSecurity, private auth: AuthService, private sch: SchoolService) {}
 
   /**
    * signs in the user and respons with jwt token
@@ -27,6 +27,7 @@ export class AuthController {
     if (!isValid) {
       throw new InValidPasswordError();
     }
+    details.school = await this.sch.retrieve$({ id: details.school as string });
     const response = await this.sec.cleanAndGenerateToken(details);
     return response;
   }
