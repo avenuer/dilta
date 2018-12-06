@@ -1,9 +1,9 @@
-import { LiensceSecurity } from './liensce';
-import { isBefore } from 'date-fns';
 import { Keytar } from './keys.program';
-import { Injectable, Action } from '@dilta/core';
-import { LIENSCE_KEY, Platform, SchoolEncryptedData } from '@dilta/shared';
+import { LiensceSecurity } from './liensce';
+import { Action, Injectable } from '@dilta/core';
 import { SchoolService } from '@dilta/database';
+import { LIENSCE_KEY, Platform, SchoolEncryptedData } from '@dilta/shared';
+import { isBefore } from 'date-fns';
 
 @Injectable()
 export class EmbededLiensceService {
@@ -67,8 +67,7 @@ export class EmbededLiensceService {
       try {
         resolve(this.lsc.decryptLiensce(token));
       } catch (error) {
-        const { stack, name, message }: Error = error;
-        reject({ stack: error.stack.toString(), name, message });
+        reject(error);
       }
     });
   }

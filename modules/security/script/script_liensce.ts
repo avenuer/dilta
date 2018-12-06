@@ -44,14 +44,14 @@ export class LiensceGenerator {
     };
   }
 
-  static encryptLiensce(org: SchoolEncryptedData) {
+  static encryptLiensce(org: any) {
     return LiensceGenerator.encrypt(Algorithm, Password)(JSON.stringify(org));
   }
 
   static decryptLiensce(key: string) {
     return JSON.parse(
       LiensceGenerator.decrypt(Algorithm, Password)(key)
-    ) as SchoolEncryptedData;
+    ) ;
   }
 
   static generateDemoKey() {
