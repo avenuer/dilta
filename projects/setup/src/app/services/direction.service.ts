@@ -5,6 +5,7 @@ import {
   Auth,
   Manager,
   School,
+  Student,
   User
   } from '@dilta/shared';
 import { Authsuccess } from 'projects/auth/src/lib/ngrx/auth.reducer';
@@ -64,4 +65,13 @@ export class SetupRouterDirection extends RouterDirection {
   managerForm(manager: Manager) {
     this.router.navigate(['auth', 'signup']);
   }
+
+
+  /**
+   * route for successfull student update
+   *
+   * @param {Student} student
+   * @memberof SetupRouterDirection
+   */
+  studentForm(student: Student) {}
 }

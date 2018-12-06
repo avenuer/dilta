@@ -10,7 +10,8 @@ import { RouterDirection, schoolFeature } from '@dilta/client-shared';
 import { Auth, School, Signup } from '@dilta/shared';
 import { Store } from '@ngrx/store';
 import { isNil } from 'lodash';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { SnotifyService } from 'ng-snotify';
+import { Subscription } from 'rxjs';
 import { first, map, skipWhile } from 'rxjs/operators';
 
 /**
@@ -28,12 +29,6 @@ import { first, map, skipWhile } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AuthUserSignupComponent implements OnInit, OnDestroy {
-  /**
-   * error displayed by the sub component
-   *
-   * @memberof AuthUserSignupBase
-   */
-  public err$ = new BehaviorSubject<string>(null);
 
   /**
    * levels of authorization passed to the subcomponent
@@ -45,7 +40,7 @@ export class AuthUserSignupComponent implements OnInit, OnDestroy {
 
   public localSubscription: Subscription[] = [];
 
-  constructor(private dir: RouterDirection, private store: Store<any>) {}
+  constructor(private dir: RouterDirection, private store: Store<any>, private snotify: SnotifyService) {}
 
   /**
    * action triggered by the sub components submit button
@@ -63,7 +58,7 @@ export class AuthUserSignupComponent implements OnInit, OnDestroy {
       )
       .subscribe((school: School) => {
         this.store.dispatch(new AuthSignUp({ ...$event, school: school.id }));
-      });
+      }, this.sendError.bind(this));
   }
 
   /**
@@ -103,11 +98,8 @@ export class AuthUserSignupComponent implements OnInit, OnDestroy {
    * @param {Error} err
    * @memberof AuthUserSignupBase
    */
-  sendError(err: Error) {
-    this.err$.next(err.message);
-    setTimeout(() => {
-      this.err$.next(null);
-    }, 3000);
+  sendError({ name, message }: Error) {
+    this.snotify.error(message, name);
   }
 
   ngOnInit() {
@@ -116,6 +108,5 @@ export class AuthUserSignupComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.localSubscription.forEach(e => e.unsubscribe());
-    this.err$.unsubscribe();
   }
 }

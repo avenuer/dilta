@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterDirection } from '@dilta/client-shared';
 import { TransportService } from '@dilta/electron-client';
 import { EntityNames, Manager, ModelOperations } from '@dilta/shared';
+import { SnotifyService } from 'ng-snotify';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { exhaustMap, first } from 'rxjs/operators';
 
@@ -21,19 +22,12 @@ import { exhaustMap, first } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ManagerDataFormComponent implements OnInit {
-  /**
-   * err displayed to the component view
-   *
-   * @private
-   * @type {string}
-   * @memberof AdminSetupComponent
-   */
-  public err$ = new BehaviorSubject(undefined);
 
   constructor(
     private dir: RouterDirection,
     private transport: TransportService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private snotify: SnotifyService
   ) {}
 
   /**
@@ -67,11 +61,8 @@ export class ManagerDataFormComponent implements OnInit {
    * @param {Error} e
    * @memberof AdminSetupComponent
    */
-  displayError(e: Error) {
-    this.err$.next(e.message);
-    setTimeout(() => {
-      this.err$.next(undefined);
-    }, 3000);
+  displayError(error: Error) {
+    this.snotify.error(error.message, error.name);
   }
 
   /**
@@ -81,6 +72,7 @@ export class ManagerDataFormComponent implements OnInit {
    */
   changeRoute(manager?: Manager) {
     if (manager) {
+      this.snotify.success(`Manager's Information saved Successfully`);
       this.dir.managerForm(manager);
     }
   }

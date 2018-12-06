@@ -9,11 +9,17 @@ import {
   School,
   SchoolDict,
   User
-} from '@dilta/shared';
+  } from '@dilta/shared';
 import { Store } from '@ngrx/store';
+import { SnotifyService } from 'ng-snotify';
 import { schoolFeature } from 'projects/client-shared/src/lib/ngrx/school';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { combineLatest, exhaustMap, first, map } from 'rxjs/operators';
+import {
+  combineLatest,
+  exhaustMap,
+  first,
+  map
+  } from 'rxjs/operators';
 
 export interface BiodataFormPageARQMap {
   authId: string;
@@ -49,15 +55,6 @@ export class UserBioDataFormPageComponent implements OnInit {
   ];
 
   /**
-   * err displayed to the view
-   *
-   * @private
-   * @type {string}
-   * @memberof UserBioDataFormPageBase
-   */
-  public err$: BehaviorSubject<string> = new BehaviorSubject(undefined);
-
-  /**
    * array containing classes
    *
    * @private
@@ -74,7 +71,8 @@ export class UserBioDataFormPageComponent implements OnInit {
     private store: Store<any>,
     private dir: RouterDirection,
     private transport: TransportService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private snotify: SnotifyService
   ) {}
 
   /**
@@ -169,10 +167,7 @@ export class UserBioDataFormPageComponent implements OnInit {
    * @memberof UserBioDataFormPageBase
    */
   displayError(err: Error) {
-    this.err$.next(err.message);
-    setTimeout(() => {
-      this.err$.next(null);
-    }, 3000);
+    this.snotify.error(err.message, err.name);
   }
 
   /**
@@ -183,6 +178,7 @@ export class UserBioDataFormPageComponent implements OnInit {
    */
   changeRoute(user: User) {
     if (user) {
+      this.snotify.success(`User information successfully saved`);
       this.dir.userForm(user);
     }
   }

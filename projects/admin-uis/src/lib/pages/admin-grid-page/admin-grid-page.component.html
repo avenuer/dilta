@@ -1,0 +1,8 @@
+
+<div class="container">
+  <button (click)="newAdmin($event)" mat-raised-button color="primary">Create Admin</button>
+  <acada-dynamic-table
+    [datagrid]="users$ | async"
+    [keys]="keys"
+  ></acada-dynamic-table>
+</div>

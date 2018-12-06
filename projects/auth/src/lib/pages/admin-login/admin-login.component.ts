@@ -1,9 +1,9 @@
 import { AuthFeature, AuthLogin, Authsuccess } from '../../ngrx';
 import { Component, OnInit } from '@angular/core';
-import { RouterDirection } from '@dilta/client-shared';
-import { Login } from '@dilta/shared';
+import { RouterDirection, SchoolActionSuccess } from '@dilta/client-shared';
+import { Login, School } from '@dilta/shared';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject } from 'rxjs';
+import { SnotifyService } from 'ng-snotify';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -12,9 +12,8 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./admin-login.component.scss']
 })
 export class AuthUserLoginComponent implements OnInit {
-  public err$ = new BehaviorSubject(undefined);
 
-  constructor(private store: Store<any>, private dir: RouterDirection) {}
+  constructor(private store: Store<any>, private dir: RouterDirection, private snotify: SnotifyService) {}
 
   /**
    * dispath ation to login
@@ -37,6 +36,7 @@ export class AuthUserLoginComponent implements OnInit {
     if (!auth.details) {
       return;
     }
+    this.store.dispatch(new SchoolActionSuccess(auth.details.school as School));
     this.dir.loginForm(auth);
   }
 
@@ -46,11 +46,8 @@ export class AuthUserLoginComponent implements OnInit {
    * @param {Error} err
    * @memberof AuthUserLoginBase
    */
-  displayError(err: Error) {
-    this.err$.next(err.message);
-    setTimeout(() => {
-      this.err$.next(undefined);
-    }, 4000);
+  displayError({ message, name }: Error) {
+    this.snotify.error(message, name);
   }
 
   /**

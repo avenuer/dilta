@@ -1,13 +1,16 @@
 import { AppComponent } from './app.component';
 import { DiltaAppRoutingModule } from './dilta.routing';
+import { environment } from '../environments/environment';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { AcademicPageModule } from '@dilta/academic-ui';
+import { AuthPagesModule } from '@dilta/client-auth';
 import { MaterialModule } from '@dilta/client-shared';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
 
 @NgModule({
@@ -18,14 +21,20 @@ import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
     BrowserModule,
     MaterialModule,
     NoopAnimationsModule,
-    // SnotifyModule.forRoot(),
+    SnotifyModule.forRoot(),
     RouterModule.forRoot([]),
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
+    !environment.production
+    ? StoreDevtoolsModule.instrument({
+        name: 'Dilta Application Store'
+      })
+    : [],
     DiltaAppRoutingModule,
-    AcademicPageModule
+    AuthPagesModule,
+    AcademicPageModule,
   ],
-  providers: [],
+  providers: [SnotifyService, { provide: 'SnotifyToastConfig', useValue: ToastDefaults }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

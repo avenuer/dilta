@@ -1,6 +1,6 @@
-import { Auth } from '@dilta/shared';
 import { AuthActions, AuthActionTypes, Status } from './auth.action';
 import { AuthTokenUser } from '../services/auth.service';
+import { Auth } from '@dilta/shared';
 
 /**
  * Interface for a successfull Authentication
@@ -37,10 +37,6 @@ export const authInitialState: Authsuccess = {
   status: Status.Pending,
   timeStamp: Date(),
   error: null,
-  // TODO: remove hack
-  details: {
-    id: 'my_random_teacher_id'
-  } as any
 };
 
 /**

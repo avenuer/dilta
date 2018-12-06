@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { reader, SchoolEncryptedData } from '@dilta/shared';
 import { Store } from '@ngrx/store';
 import { to } from 'await-to-js';
+import { SnotifyService } from 'ng-snotify';
 import { UploadFile } from 'ngx-uploader';
 
 /**
@@ -30,13 +31,7 @@ export class LiensceKeyComponent implements OnInit, OnDestroy {
   public logo = '/assets/logo.svg';
 
   public uploadOptions = {};
-  /**
-   * holds an err displayed to the view
-   *
-   * @type {string}
-   * @memberof LiensceKeyComponent
-   */
-  public err: string;
+
 
   /**
    * holds and display the liensce key path
@@ -65,7 +60,8 @@ export class LiensceKeyComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<ProcessState>,
-    private router: Router
+    private router: Router,
+    private snotify: SnotifyService
   ) {}
 
   /**
@@ -92,11 +88,7 @@ export class LiensceKeyComponent implements OnInit, OnDestroy {
     if (!err) {
       return;
     }
-    setTimeout(() => {
-      this.err = null;
-      this.key = null;
-    }, 3000);
-    this.err = err.message;
+    this.snotify.error(err.message, err.name, { showProgressBar: true });
   }
 
   /**
@@ -127,6 +119,7 @@ export class LiensceKeyComponent implements OnInit, OnDestroy {
         return this.displayError(new Error(error.message));
       }
       if (schoolData) {
+        this.snotify.success('Liensce Successfully Verified');
         this.setupSchoolDetails(schoolData);
       }
     });

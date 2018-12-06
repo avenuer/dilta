@@ -4,6 +4,7 @@ import { LiensceKeyComponent } from './pages/LiensceKey';
 import { SetupDoneComponent } from './pages/setup-done';
 import { ProcessNgrxModule } from './process/process.module';
 import { SetupRouterDirection } from './services/direction.service';
+import { environment } from '../environments/environment';
 import { ClassProvider, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -14,8 +15,9 @@ import { ClientSharedModule, MaterialModule, RouterDirection } from '@dilta/clie
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
 import { NgxUploaderModule } from 'ngx-uploader';
-import { environment } from '../environments/environment';
+
 
 // custom route provider to match setup route directional mapping
 const direction: ClassProvider = {
@@ -39,6 +41,7 @@ const direction: ClassProvider = {
       : [],
     FormsModule,
     ReactiveFormsModule,
+    SnotifyModule.forRoot(),
     ClientSharedModule,
     ProcessNgrxModule,
     SchoolPageModule,
@@ -46,7 +49,7 @@ const direction: ClassProvider = {
     UserPageModule,
     AppRoutingModule
   ],
-  providers: [direction],
+  providers: [direction, SnotifyService, { provide: 'SnotifyToastConfig', useValue: ToastDefaults }],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

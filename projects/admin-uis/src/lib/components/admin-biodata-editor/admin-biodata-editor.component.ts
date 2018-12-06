@@ -1,14 +1,21 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output
+  } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   defaultKeys,
   errorInvalid,
   errorNotAndObject,
   fileBase64,
-  User,
+  schoolClasses,
   schoolClassValue,
-  schoolClasses
-} from '@dilta/shared';
+  schoolValueToKey,
+  User
+  } from '@dilta/shared';
 import { isEmpty } from 'lodash';
 import { UploadInput } from 'ngx-uploader';
 
@@ -75,7 +82,7 @@ export class AdminBiodataEditorComponent implements OnInit {
     // constructs the form group value
     return this.fb.group({
       address: [value.address, required],
-      class: [value.class || this.classes[0], required],
+      class: [(value.class) ? schoolValueToKey(value.class) : this.classes[0], required],
       email: [value.email || '', ''],
       gender: [value.gender, required],
       image: [value.image, required],
@@ -129,6 +136,7 @@ export class AdminBiodataEditorComponent implements OnInit {
   cleanValue(value: Partial<User>) {
     value.phoneNos = !value.phoneNos ? 'none' : value.phoneNos;
     (value as any).class = schoolClassValue(value.class);
+    console.log(value);
     return value;
   }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Route } from '@angular/router';
-import { RouterDirection } from '@dilta/client-shared';
+import { RouterDirection, SchoolActionSuccess } from '@dilta/client-shared';
 import { TransportService } from '@dilta/electron-client';
 import {
   EntityNames,
@@ -8,6 +8,8 @@ import {
   PresetAction,
   School
   } from '@dilta/shared';
+import { Store } from '@ngrx/store';
+import { SnotifyService } from 'ng-snotify';
 import { Observable } from 'rxjs';
 import { exhaustMap, first, map } from 'rxjs/operators';
 
@@ -27,14 +29,6 @@ const ErrorDisplayTimeOut = 4000;
   encapsulation: ViewEncapsulation.None
 })
 export class SchoolDataFormComponent implements OnInit {
-  /**
-   * error displayed to the view.
-   *
-   * @private
-   * @type {string}
-   * @memberof SchoolComponent
-   */
-  public err: string;
 
   /**
    * list of nigerian states
@@ -60,8 +54,10 @@ export class SchoolDataFormComponent implements OnInit {
 
   constructor(
     private dir: RouterDirection,
+    private store: Store<any>,
     private transport: TransportService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private snotify: SnotifyService
   ) {}
 
   /**
@@ -103,10 +99,7 @@ export class SchoolDataFormComponent implements OnInit {
       trace: `SchoolComponent::displayErr`,
       module: 'AdminUiModule'
     });
-    this.err = err.message;
-    setTimeout(() => {
-      this.err = undefined;
-    }, ErrorDisplayTimeOut);
+    this.snotify.error(err.message, err.name);
   }
 
   /**
@@ -117,11 +110,13 @@ export class SchoolDataFormComponent implements OnInit {
    * @memberof SchoolComponent
    */
   changeRoute(school: School) {
+    this.store.dispatch(new SchoolActionSuccess(school));
     this.transport.log('debug', {
       message: `changing route to admin/${school.id}`,
       trace: `SchoolComponent::changeRoute`,
       module: 'AdminUiModule'
     });
+    this.snotify.success(`School details saved successfully`);
     this.dir.schoolForm(school);
   }
 

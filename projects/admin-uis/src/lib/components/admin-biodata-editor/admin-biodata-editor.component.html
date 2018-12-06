@@ -34,7 +34,7 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label> Gender </mat-label>
-      <mat-select formControlName="gender" required placeholder="LGA">
+      <mat-select formControlName="gender" required placeholder="Gender">
         <mat-option [value]="'female'" > Female </mat-option>
         <mat-option [value]="'male'" > Male </mat-option>
       </mat-select>
@@ -43,8 +43,8 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label> Class</mat-label>
-      <mat-select formControlName="class" required placeholder="LGA">
-        <mat-option *ngFor="let _class of classes"> {{ _class }} </mat-option>
+      <mat-select formControlName="class" required placeholder="Class">
+        <mat-option [value]="_class" *ngFor="let _class of classes"> {{ _class }} </mat-option>
       </mat-select>
       <mat-error *ngIf="!adminForm.controls['class'].valid && adminForm.controls['class'].touched">class in charge of
         is required</mat-error>

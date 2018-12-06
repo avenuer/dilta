@@ -106,7 +106,6 @@ export class SchoolBiodataEditorComponent implements OnInit {
         school.description,
         Validators.compose([
           required,
-          Validators.minLength(60),
           Validators.maxLength(150)
         ])
       ],

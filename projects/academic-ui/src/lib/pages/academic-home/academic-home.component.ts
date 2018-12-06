@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 })
 export class AcademicHomeComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(public router: Router) { }
 
   changeRoute(path: string) {
     const route = ['academics'];

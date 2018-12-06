@@ -1,3 +1,4 @@
+import { AdminGridPageComponent } from './admin-grid-page/admin-grid-page.component';
 import { ManagerDataFormComponent } from './managers-biodata-form/AdminSetup.component';
 import { ParentBioProfileComponent } from './parent-bio-profile/parent-bio-profile.component';
 import { ParentFormEditorComponent } from './parent-form-editor/parent-form-editor.component';
@@ -7,9 +8,15 @@ import { StudentBioFormEditorComponent } from './student-bio-form-editor/student
 import { StudentBioProfileComponent } from './student-bio-profile/student-bio-profile.component';
 import { UserBiodataProfileComponent } from './user-biodata-profile/user-biodata-profile.component';
 import { UserBioDataFormPageComponent } from './user-biodata-setup/admin-biodata.component';
-import { AdminUiSharedModule, ParentUiSharedModule, SchoolUiSharedModule, StudentUiSharedModule } from '../components/modules';
+import {
+  AdminUiSharedModule,
+  ParentUiSharedModule,
+  SchoolUiSharedModule,
+  StudentUiSharedModule
+  } from '../components/modules';
 import { NgModule } from '@angular/core';
 import { ClientSharedModule, MaterialModule } from '@dilta/client-shared';
+import { DyanmicDatagridModule } from 'projects/academic-ui/src/lib/components/dynamic-datagrid/dynamic-datagrid.module';
 
 
 const parents = [ParentBioProfileComponent, ParentFormEditorComponent];
@@ -29,9 +36,9 @@ const students = [StudentBioFormEditorComponent, StudentBioProfileComponent];
 })
 export class StudentPageModule {}
 
-const users = [UserBioDataFormPageComponent, UserBiodataProfileComponent];
+const users = [UserBioDataFormPageComponent, UserBiodataProfileComponent, AdminGridPageComponent];
 @NgModule({
-  imports: [AdminUiSharedModule, ClientSharedModule, UserRouteModule, MaterialModule],
+  imports: [AdminUiSharedModule, ClientSharedModule, UserRouteModule, MaterialModule, DyanmicDatagridModule],
   exports: users,
   declarations: users
 })

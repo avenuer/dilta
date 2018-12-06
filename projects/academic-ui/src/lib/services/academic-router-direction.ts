@@ -1,6 +1,6 @@
-import { RouterState } from './router-state.service';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RouterDirection, RouterState } from '@dilta/client-shared';
 import {
   Auth,
   Manager,
@@ -18,12 +18,14 @@ import { Authsuccess } from 'projects/auth/src/lib/ngrx/auth.reducer';
  * @class RouterDirection
  */
 @Injectable()
-export class RouterDirection {
+export class AcademicRouterDirection extends RouterDirection {
   constructor(
     public router: Router,
     public route: ActivatedRoute,
     public state: RouterState
-  ) {}
+  ) {
+    super(router, route, state);
+  }
 
   /**
    * the route to load when user biodata is succesfully created or edited
@@ -31,7 +33,9 @@ export class RouterDirection {
    * @param {User} user
    * @memberof RouterDirection
    */
-  userForm(user: User) {}
+  userForm(user: User) {
+    this.router.navigate(['admin', 'list']);
+  }
 
   /**
    * the route to load when user  authentication succesfully signup or edited
@@ -39,7 +43,9 @@ export class RouterDirection {
    * @param {Auth} auth
    * @memberof RouterDirection
    */
-  signupForm(auth: Auth) {}
+  signupForm(auth: Auth) {
+    this.router.navigate(['user', 'biodata', auth.id]);
+  }
 
   /**
    * the route to load when user succesfully logins in
@@ -47,7 +53,9 @@ export class RouterDirection {
    * @param {Authsuccess} auth
    * @memberof RouterDirection
    */
-  loginForm(auth: Authsuccess) {}
+  loginForm(auth: Authsuccess) {
+    this.router.navigate(['academics']);
+  }
 
   /**
    * the route to load when school biodata is succesfully created or edited
@@ -65,7 +73,7 @@ export class RouterDirection {
    */
   managerForm(manager: Manager) {}
 
-    /**
+  /**
    * route for successfull student details.
    *
    * @param {Student} student

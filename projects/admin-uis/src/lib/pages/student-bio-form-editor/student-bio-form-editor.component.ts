@@ -5,6 +5,7 @@ import { TransportService } from '@dilta/electron-client';
 import { EntityNames, ModelOperations, Student } from '@dilta/shared';
 import { Store } from '@ngrx/store';
 import { format } from 'date-fns';
+import { SnotifyService } from 'ng-snotify';
 import { Observable } from 'rxjs';
 import { exhaustMap, first, map } from 'rxjs/operators';
 
@@ -20,12 +21,12 @@ export class StudentBioFormEditorComponent implements OnInit {
     private store: Store<any>,
     private transport: TransportService,
     private avr: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private snotify: SnotifyService
   ) {}
 
-
-  clean() {
-
+  displayError({ name, message }: Error) {
+    this.snotify.error(message, name);
   }
 
   /**
@@ -47,7 +48,7 @@ export class StudentBioFormEditorComponent implements OnInit {
         ),
         first()
       )
-      .subscribe(this.changeRoute.bind(this));
+      .subscribe(this.changeRoute.bind(this), this.displayError.bind(this));
   }
 
   /**
@@ -85,6 +86,7 @@ export class StudentBioFormEditorComponent implements OnInit {
 
   changeRoute(student: Student) {
     // TODO: change to student profile instead of academic dashboard
+    this.snotify.success(`student details successfully saved`);
     this.router.navigate(['academics', 'students']);
   }
 
