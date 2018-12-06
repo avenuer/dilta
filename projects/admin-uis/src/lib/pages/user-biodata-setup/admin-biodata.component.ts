@@ -90,7 +90,7 @@ export class UserBioDataFormPageComponent implements OnInit {
     );
     const schoolId$ = this.store
       .select(schoolFeature)
-      .pipe(map(school => school.details.id));
+      .pipe(map(school => (typeof school.details === 'string') ? school.details : school.details.id));
     return event$.pipe(
       combineLatest(authId$, schoolId$),
       map(this.remap.bind(this))

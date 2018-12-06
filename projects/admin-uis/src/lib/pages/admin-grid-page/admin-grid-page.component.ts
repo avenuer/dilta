@@ -7,7 +7,9 @@ import {
   ModelOperations,
   User
   } from '@dilta/shared';
+import { Store } from '@ngrx/store';
 import { KeysConfig } from 'projects/academic-ui/src/lib/components/dynamic-datagrid/dynamic-datagrid.component';
+import { AuthLogOut } from 'projects/auth/src/lib/ngrx/auth.action';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -30,9 +32,10 @@ export class AdminGridPageComponent implements OnInit {
     { key: 'address', title: 'Address', type: 'string', editable: false, send: true  },
   ];
 
-  constructor(private transport: TransportService, private router: Router) { }
+  constructor(private transport: TransportService, private router: Router, private store: Store<any>) { }
 
   newAdmin() {
+    this.store.dispatch(new AuthLogOut());
     this.router.navigate(['auth', 'signup']);
   }
 

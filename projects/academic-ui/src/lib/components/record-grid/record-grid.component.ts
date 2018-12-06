@@ -14,7 +14,7 @@ import { GridConfig, Record } from '@dilta/shared';
 })
 export class RecordGridComponent implements OnInit {
 
-  displayedColumns: string[] = ['no', 'class', 'subject', 'term', 'session', 'action'];
+  displayedColumns: string[] = ['no', 'class', 'subject', 'term', 'session'];
 
   @Input() records: Record[] = [];
   @Input() config: GridConfig = {};

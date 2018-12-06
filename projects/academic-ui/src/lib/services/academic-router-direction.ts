@@ -9,6 +9,8 @@ import {
   Student,
   User
   } from '@dilta/shared';
+import { Store } from '@ngrx/store';
+import { AuthLogOut } from 'projects/auth/src/lib/ngrx';
 import { Authsuccess } from 'projects/auth/src/lib/ngrx/auth.reducer';
 
 /**
@@ -22,7 +24,8 @@ export class AcademicRouterDirection extends RouterDirection {
   constructor(
     public router: Router,
     public route: ActivatedRoute,
-    public state: RouterState
+    public state: RouterState,
+    public store: Store<any>
   ) {
     super(router, route, state);
   }
@@ -34,7 +37,8 @@ export class AcademicRouterDirection extends RouterDirection {
    * @memberof RouterDirection
    */
   userForm(user: User) {
-    this.router.navigate(['admin', 'list']);
+    this.store.dispatch(new AuthLogOut());
+    this.router.navigate(['']);
   }
 
   /**
