@@ -51,6 +51,7 @@ export function authReducer(
   state = authInitialState,
   action: AuthActions
 ): Authsuccess {
+  console.log(state, action);
   switch (action.type) {
     // when the login is succesfull
     case AuthActionTypes.Success: {

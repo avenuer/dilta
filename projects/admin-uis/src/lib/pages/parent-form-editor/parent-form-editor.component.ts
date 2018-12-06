@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { Parent, EntityNames, ModelOperations } from '@dilta/shared';
-import { exhaustMap, first, map } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
 import { TransportService } from '@dilta/electron-client';
+import { EntityNames, ModelOperations, Parent } from '@dilta/shared';
+import { Store } from '@ngrx/store';
 import { schoolFeature } from 'projects/client-shared/src/lib/ngrx/school';
+import { Observable, of } from 'rxjs';
+import { exhaustMap, first, map } from 'rxjs/operators';
 
 export interface ParentFormEditorQPM {
   // unique parent id
@@ -33,7 +33,7 @@ export class ParentFormEditorComponent implements OnInit {
       .pipe(
         exhaustMap(school =>
           this.transport.modelAction(
-            EntityNames.School,
+            EntityNames.Parent,
             ModelOperations.Create,
             { ...parent, school: school.details.id }
           )

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Student, GridConfig, SearchFindRequest } from '@dilta/shared';
 import { AcademicService } from '../../services/academic.service';
+import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
+import { ClientUtilService } from '@dilta/client-shared';
+import { GridConfig, SearchFindRequest, Student } from '@dilta/shared';
 
 @Component({
   selector: 'acada-levels-student',
@@ -26,14 +27,14 @@ export class LevelsStudentComponent implements OnInit {
 
   private queryObj: SearchFindRequest<Student>;
 
-  constructor(private acada: AcademicService, private avr: ActivatedRoute) {}
+  constructor(private acada: AcademicService, private avr: ActivatedRoute, private util: ClientUtilService) {}
 
   search(query: SearchFindRequest<Student>) {
     this.acada.findStudents(query, this._params).subscribe(res => {
       this.students = res.data;
       this.config.paginator.count = res.limit;
       this.config.paginator.length = res.total;
-    });
+    }, (err) => this.util.error(err));
   }
 
   paginator($event: PageEvent) {

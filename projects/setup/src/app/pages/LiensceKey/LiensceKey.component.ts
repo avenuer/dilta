@@ -8,10 +8,10 @@ import {
   } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ClientUtilService } from '@dilta/client-shared';
 import { reader, SchoolEncryptedData } from '@dilta/shared';
 import { Store } from '@ngrx/store';
 import { to } from 'await-to-js';
-import { SnotifyService } from 'ng-snotify';
 import { UploadFile } from 'ngx-uploader';
 
 /**
@@ -32,7 +32,6 @@ export class LiensceKeyComponent implements OnInit, OnDestroy {
 
   public uploadOptions = {};
 
-
   /**
    * holds and display the liensce key path
    *
@@ -50,7 +49,6 @@ export class LiensceKeyComponent implements OnInit, OnDestroy {
    */
   public key: string;
 
-
   /**
    * formControl for liensce file path
    *
@@ -61,7 +59,7 @@ export class LiensceKeyComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<ProcessState>,
     private router: Router,
-    private snotify: SnotifyService
+    private util: ClientUtilService
   ) {}
 
   /**
@@ -88,7 +86,7 @@ export class LiensceKeyComponent implements OnInit, OnDestroy {
     if (!err) {
       return;
     }
-    this.snotify.error(err.message, err.name, { showProgressBar: true });
+    this.util.error(err);
   }
 
   /**
@@ -112,14 +110,13 @@ export class LiensceKeyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.select(processFeature)
-    .subscribe(({ error, schoolData }) => {
+    this.store.select(processFeature).subscribe(({ error, schoolData }) => {
       console.log({ error, schoolData });
       if (error) {
         return this.displayError(new Error(error.message));
       }
       if (schoolData) {
-        this.snotify.success('Liensce Successfully Verified');
+        this.util.success('Liensce', 'Liensce Successfully Verified');
         this.setupSchoolDetails(schoolData);
       }
     });

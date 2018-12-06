@@ -1,8 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { StudentSheet, Student, GridConfig, SearchFindRequest } from '@dilta/shared';
 import { AcademicService } from '../../services/academic.service';
+import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material';
 import { Router } from '@angular/router';
+import { ClientUtilService } from '@dilta/client-shared';
+import {
+  GridConfig,
+  SearchFindRequest,
+  Student,
+  StudentSheet
+  } from '@dilta/shared';
 
 @Component({
   selector: 'acada-academic-report-page',
@@ -76,7 +82,7 @@ export class AcademicReportPageComponent implements OnInit {
    * @param {AcademicService} acada
    * @memberof AcademicReportPageComponent
    */
-  constructor(private acada: AcademicService, private router: Router) { }
+  constructor(private acada: AcademicService, private router: Router, private util: ClientUtilService) { }
 
 
   /**
@@ -109,7 +115,7 @@ studentReport(student: Student) {
       this.config.paginator.count = res.limit;
       this.config.paginator.length = res.total;
       this.showFormAndHideTable = false;
-    });
+    }, (err) => this.util.error(err));
   }
 
   searchStudents(query: SearchFindRequest<Student>) {

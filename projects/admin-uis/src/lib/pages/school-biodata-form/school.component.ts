@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Route } from '@angular/router';
-import { RouterDirection, SchoolActionSuccess } from '@dilta/client-shared';
+import { ClientUtilService, RouterDirection, SchoolActionSuccess } from '@dilta/client-shared';
 import { TransportService } from '@dilta/electron-client';
 import {
   EntityNames,
@@ -9,7 +9,6 @@ import {
   School
   } from '@dilta/shared';
 import { Store } from '@ngrx/store';
-import { SnotifyService } from 'ng-snotify';
 import { Observable } from 'rxjs';
 import { exhaustMap, first, map } from 'rxjs/operators';
 
@@ -57,7 +56,7 @@ export class SchoolDataFormComponent implements OnInit {
     private store: Store<any>,
     private transport: TransportService,
     private route: ActivatedRoute,
-    private snotify: SnotifyService
+    private util: ClientUtilService
   ) {}
 
   /**
@@ -84,23 +83,9 @@ export class SchoolDataFormComponent implements OnInit {
         )
       )
       .pipe(first())
-      .subscribe(this.changeRoute.bind(this), this.displayErr.bind(this));
+      .subscribe(this.changeRoute.bind(this), (err) => this.util.error(err));
   }
 
-  /**
-   * displays the error to the view
-   *
-   * @param {Error} err
-   * @memberof SchoolComponent
-   */
-  displayErr(err: Error) {
-    this.transport.log('error', {
-      message: `displaying error:: ${err.message}`,
-      trace: `SchoolComponent::displayErr`,
-      module: 'AdminUiModule'
-    });
-    this.snotify.error(err.message, err.name);
-  }
 
   /**
    * changes the route to the admin page for setup
@@ -116,7 +101,7 @@ export class SchoolDataFormComponent implements OnInit {
       trace: `SchoolComponent::changeRoute`,
       module: 'AdminUiModule'
     });
-    this.snotify.success(`School details saved successfully`);
+    this.util.success('School Form', `School details saved successfully`);
     this.dir.schoolForm(school);
   }
 

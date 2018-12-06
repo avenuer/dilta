@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ClientUtilService } from '@dilta/client-shared';
 import { TransportService } from '@dilta/electron-client';
 import {
   EntityNames,
@@ -11,7 +12,7 @@ import { Store } from '@ngrx/store';
 import { KeysConfig } from 'projects/academic-ui/src/lib/components/dynamic-datagrid/dynamic-datagrid.component';
 import { AuthLogOut } from 'projects/auth/src/lib/ngrx/auth.action';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { first, map } from 'rxjs/operators';
 
 type CleanUser = User & { no: number };
 
@@ -32,7 +33,7 @@ export class AdminGridPageComponent implements OnInit {
     { key: 'address', title: 'Address', type: 'string', editable: false, send: true  },
   ];
 
-  constructor(private transport: TransportService, private router: Router, private store: Store<any>) { }
+  constructor(private transport: TransportService, private router: Router, private store: Store<any>, private util: ClientUtilService) { }
 
   newAdmin() {
     this.store.dispatch(new AuthLogOut());
@@ -57,6 +58,7 @@ export class AdminGridPageComponent implements OnInit {
 
   ngOnInit() {
     this.users$ = this.retriveUsers();
+    this.users$.pipe(first()).subscribe({ error: this.util.error });
   }
 
 }

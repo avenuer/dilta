@@ -2,6 +2,7 @@ import { AcademicService } from '../../services/academic.service';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
+import { ClientUtilService } from '@dilta/client-shared';
 import {
   FindQueryParam,
   GridConfig,
@@ -31,14 +32,14 @@ export class RecordGridPageComponent implements OnInit {
 
   private queryObj: SearchFindRequest<Student> = {} as any;
 
-  constructor(public acada: AcademicService) {}
+  constructor(public acada: AcademicService, private util: ClientUtilService) {}
 
   search(query: SearchFindRequest<Student>) {
     this.acada.findRecords(query, this._params).subscribe(res => {
       this.records = res.data;
       this.config.paginator.count = res.total;
       this.config.paginator.length = res.limit;
-    });
+    }, (err) => this.util.error(err));
   }
 
   paginator($event: PageEvent) {

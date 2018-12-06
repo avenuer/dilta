@@ -1,9 +1,10 @@
+import { AcademicService } from '../../services/academic.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ClientUtilService } from '@dilta/client-shared';
 import { TransportService } from '@dilta/electron-client';
 import { EntityNames, ModelOperations, Record } from '@dilta/shared';
 import { exhaustMap, first, map } from 'rxjs/operators';
-import { AcademicService } from '../../services/academic.service';
 
 @Component({
   selector: 'acada-academic-record-page',
@@ -14,7 +15,8 @@ export class AcademicRecordPageComponent implements OnInit {
   constructor(
     private transport: TransportService,
     private router: Router,
-    private acada: AcademicService
+    private acada: AcademicService,
+    private util: ClientUtilService
   ) {}
 
   /**
@@ -47,7 +49,7 @@ export class AcademicRecordPageComponent implements OnInit {
           return val;
         })
       )
-      .subscribe(val => this.changeRoute(val));
+      .subscribe(val => this.changeRoute(val), (err) => this.util.error(err));
   }
 
   /**
@@ -72,7 +74,7 @@ export class AcademicRecordPageComponent implements OnInit {
         })
       )
       .pipe(first())
-      .subscribe(val => this.changeRoute(val));
+      .subscribe(val => this.changeRoute(val), (err) => this.util.error(err));
   }
 
   /**

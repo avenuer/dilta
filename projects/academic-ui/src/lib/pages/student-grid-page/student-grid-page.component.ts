@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { GridConfig, SearchFindRequest, Student } from '@dilta/shared';
 import { AcademicService } from '../../services/academic.service';
+import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material';
+import { ClientUtilService } from '@dilta/client-shared';
+import { GridConfig, SearchFindRequest, Student } from '@dilta/shared';
 
 @Component({
   selector: 'acada-student-grid-page',
@@ -24,14 +25,14 @@ export class StudentGridPageComponent implements OnInit {
 
   private queryObj: SearchFindRequest<Student> = {} as any;
 
-  constructor(private acada: AcademicService) {}
+  constructor(private acada: AcademicService, private util: ClientUtilService) {}
 
   search(query: SearchFindRequest<Student>) {
     this.acada.findStudents(query, this._params).subscribe(res => {
       this.students = res.data;
       this.config.paginator.count = res.limit;
       this.config.paginator.length = res.total;
-    });
+    }, (err) => this.util.error(err));
   }
 
   paginator($event: PageEvent) {

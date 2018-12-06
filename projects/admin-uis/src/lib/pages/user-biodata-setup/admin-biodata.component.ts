@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { RouterDirection } from '@dilta/client-shared';
+import { ClientUtilService, RouterDirection } from '@dilta/client-shared';
 import { TransportService } from '@dilta/electron-client';
 import {
   EntityNames,
@@ -11,7 +11,6 @@ import {
   User
   } from '@dilta/shared';
 import { Store } from '@ngrx/store';
-import { SnotifyService } from 'ng-snotify';
 import { schoolFeature } from 'projects/client-shared/src/lib/ngrx/school';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import {
@@ -72,7 +71,7 @@ export class UserBioDataFormPageComponent implements OnInit {
     private dir: RouterDirection,
     private transport: TransportService,
     private route: ActivatedRoute,
-    private snotify: SnotifyService
+    private util: ClientUtilService,
   ) {}
 
   /**
@@ -130,7 +129,7 @@ export class UserBioDataFormPageComponent implements OnInit {
         ),
         first()
       )
-      .subscribe(this.changeRoute.bind(this), this.displayError.bind(this));
+      .subscribe(this.changeRoute.bind(this),  (err) => this.util.error(err));
   }
 
   /**
@@ -145,7 +144,7 @@ export class UserBioDataFormPageComponent implements OnInit {
       .pipe(exhaustMap(({ details }) => this.selectView(details)))
       .subscribe((v: SchoolDict) => {
         this.view$.next(v);
-      }, this.displayError.bind(this));
+      }, (err) => this.util.error(err));
   }
 
   /** app view state for different school categories */
@@ -160,15 +159,6 @@ export class UserBioDataFormPageComponent implements OnInit {
       );
   }
 
-  /**
-   * retireves the error and displays it to the view
-   *
-   * @param {Error} err
-   * @memberof UserBioDataFormPageBase
-   */
-  displayError(err: Error) {
-    this.snotify.error(err.message, err.name);
-  }
 
   /**
    * changes the route to the finished route page
@@ -178,7 +168,7 @@ export class UserBioDataFormPageComponent implements OnInit {
    */
   changeRoute(user: User) {
     if (user) {
-      this.snotify.success(`User information successfully saved`);
+      this.util.success('User Form', `User information successfully saved`);
       this.dir.userForm(user);
     }
   }

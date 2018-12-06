@@ -6,11 +6,10 @@ import {
   OnInit,
   ViewEncapsulation
   } from '@angular/core';
-import { RouterDirection, schoolFeature } from '@dilta/client-shared';
+import { ClientUtilService, RouterDirection, schoolFeature } from '@dilta/client-shared';
 import { Auth, School, Signup } from '@dilta/shared';
 import { Store } from '@ngrx/store';
 import { isNil } from 'lodash';
-import { SnotifyService } from 'ng-snotify';
 import { Subscription } from 'rxjs';
 import { first, map, skipWhile } from 'rxjs/operators';
 
@@ -40,7 +39,7 @@ export class AuthUserSignupComponent implements OnInit, OnDestroy {
 
   public localSubscription: Subscription[] = [];
 
-  constructor(private dir: RouterDirection, private store: Store<any>, private snotify: SnotifyService) {}
+  constructor(private dir: RouterDirection, private store: Store<any>, private util: ClientUtilService) {}
 
   /**
    * action triggered by the sub components submit button
@@ -98,8 +97,8 @@ export class AuthUserSignupComponent implements OnInit, OnDestroy {
    * @param {Error} err
    * @memberof AuthUserSignupBase
    */
-  sendError({ name, message }: Error) {
-    this.snotify.error(message, name);
+  sendError(err: Error) {
+    this.util.error(err);
   }
 
   ngOnInit() {

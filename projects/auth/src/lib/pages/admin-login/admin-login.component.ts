@@ -1,9 +1,8 @@
 import { AuthFeature, AuthLogin, Authsuccess } from '../../ngrx';
 import { Component, OnInit } from '@angular/core';
-import { RouterDirection, SchoolActionSuccess } from '@dilta/client-shared';
+import { ClientUtilService, RouterDirection, SchoolActionSuccess } from '@dilta/client-shared';
 import { Login, School } from '@dilta/shared';
 import { Store } from '@ngrx/store';
-import { SnotifyService } from 'ng-snotify';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -13,7 +12,7 @@ import { map } from 'rxjs/operators';
 })
 export class AuthUserLoginComponent implements OnInit {
 
-  constructor(private store: Store<any>, private dir: RouterDirection, private snotify: SnotifyService) {}
+  constructor(private store: Store<any>, private dir: RouterDirection, private util: ClientUtilService) {}
 
   /**
    * dispath ation to login
@@ -37,17 +36,8 @@ export class AuthUserLoginComponent implements OnInit {
       return;
     }
     this.store.dispatch(new SchoolActionSuccess(auth.details.school as School));
+    this.util.success('Authentication', 'user successfully login');
     this.dir.loginForm(auth);
-  }
-
-  /**
-   * displays the error to the child component
-   *
-   * @param {Error} err
-   * @memberof AuthUserLoginBase
-   */
-  displayError({ message, name }: Error) {
-    this.snotify.error(message, name);
   }
 
   /**
@@ -66,7 +56,7 @@ export class AuthUserLoginComponent implements OnInit {
           return store;
         })
       )
-      .subscribe(this.changeRoute.bind(this), this.displayError.bind(this));
+      .subscribe(this.changeRoute.bind(this), (err) => this.util.error(err));
   }
 
   ngOnInit() {

@@ -1,9 +1,8 @@
-import {
-  KeysConfig,
-  MathExp
-} from '../../components/dynamic-datagrid/dynamic-datagrid.component';
+import { KeysConfig, MathExp } from '../../components/dynamic-datagrid/dynamic-datagrid.component';
+import { AcademicService } from '../../services/academic.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ClientUtilService } from '@dilta/client-shared';
 import { TransportService } from '@dilta/electron-client';
 import {
   AcademicActions,
@@ -11,9 +10,8 @@ import {
   Record,
   Subject,
   SubjectRecords
-} from '@dilta/shared';
+  } from '@dilta/shared';
 import { exhaustMap, first } from 'rxjs/operators';
-import { AcademicService } from '../../services/academic.service';
 
 @Component({
   selector: 'acada-subject-grid-page',
@@ -98,7 +96,8 @@ export class SubjectGridPageComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private transport: TransportService,
-    private acada: AcademicService
+    private acada: AcademicService,
+    private util: ClientUtilService
   ) {}
 
   /**
@@ -127,7 +126,7 @@ export class SubjectGridPageComponent implements OnInit {
       .pipe(first())
       .subscribe(subject => {
         this.data[index] = subject;
-      });
+      }, (err) => this.util.error(err));
   }
 
   emitted(data: Subject) {}
@@ -151,7 +150,7 @@ export class SubjectGridPageComponent implements OnInit {
       .subscribe(resp => {
         this.data = resp.data;
         this.record = resp.record;
-      });
+      }, (err) => this.util.error(err));
   }
 
   ngOnInit() {
