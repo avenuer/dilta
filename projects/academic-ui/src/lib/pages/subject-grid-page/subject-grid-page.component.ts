@@ -97,7 +97,7 @@ export class SubjectGridPageComponent implements OnInit {
     private route: ActivatedRoute,
     private transport: TransportService,
     private acada: AcademicService,
-    private util: ClientUtilService
+    public util: ClientUtilService
   ) {}
 
   /**

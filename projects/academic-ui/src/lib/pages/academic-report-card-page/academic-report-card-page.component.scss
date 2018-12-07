@@ -11,3 +11,16 @@
     font: bolder;
   }
 }
+
+.school {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .logo {
+    height: 128px;
+    width: 128px;
+    border-radius: 50%;
+  }
+
+}
+

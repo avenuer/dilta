@@ -17,7 +17,7 @@ export class LevelStaticDetailsPageComponent implements OnInit {
   constructor(
     private acada: AcademicService,
     private router: Router,
-    private util: ClientUtilService
+    public util: ClientUtilService
   ) {}
 
   viewClass(detail: ClassDetailedStat) {

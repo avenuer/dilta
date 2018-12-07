@@ -33,7 +33,7 @@ export class AdminGridPageComponent implements OnInit {
     { key: 'address', title: 'Address', type: 'string', editable: false, send: true  },
   ];
 
-  constructor(private transport: TransportService, private router: Router, private store: Store<any>, private util: ClientUtilService) { }
+  constructor(private transport: TransportService, private router: Router, private store: Store<any>, public util: ClientUtilService) { }
 
   newAdmin() {
     this.store.dispatch(new AuthLogOut());

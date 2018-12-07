@@ -1,9 +1,10 @@
 import { AcademicService } from '../../services/academic.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ClientUtilService } from '@dilta/client-shared';
-import { StudentReportSheet, StudentSheet } from '@dilta/shared';
+import { ClientUtilService, schoolFeature } from '@dilta/client-shared';
+import { School, StudentReportSheet, StudentSheet } from '@dilta/shared';
 import { schoolTermValueToKey, schoolValueToKey } from '@dilta/shared';
+import { Store } from '@ngrx/store';
 import { format } from 'date-fns';
 import { Observable } from 'rxjs';
 import { exhaustMap, first, map } from 'rxjs/operators';
@@ -20,7 +21,9 @@ export class AcademicReportCardPageComponent implements OnInit {
   public levelName = schoolValueToKey;
   public termName = schoolTermValueToKey;
 
-  constructor(private avr: ActivatedRoute, private acada: AcademicService, private util: ClientUtilService) {}
+  public school$: Observable<School>;
+
+  constructor(private avr: ActivatedRoute, private acada: AcademicService, public util: ClientUtilService, private store: Store<any>) {}
 
   formatDob(date: number) {
     return format(date, 'DD-MMM-YYYY');
@@ -59,8 +62,13 @@ export class AcademicReportCardPageComponent implements OnInit {
       );
   }
 
+  retrieveSchool() {
+    return this.store.select(schoolFeature).pipe(map(store => store.details));
+  }
+
   ngOnInit() {
     this.reportSheet$ = this.retrieveReportSheet();
     this.reportSheet$.pipe(first()).subscribe({ error: (err) => this.util.error(err) });
+    this.school$ = this.retrieveSchool();
   }
 }

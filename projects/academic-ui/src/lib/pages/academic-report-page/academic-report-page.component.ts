@@ -82,7 +82,7 @@ export class AcademicReportPageComponent implements OnInit {
    * @param {AcademicService} acada
    * @memberof AcademicReportPageComponent
    */
-  constructor(private acada: AcademicService, private router: Router, private util: ClientUtilService) { }
+  constructor(private acada: AcademicService, private router: Router, public util: ClientUtilService) { }
 
 
   /**

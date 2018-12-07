@@ -1,7 +1,12 @@
-<acada-dynamic-table
-  [datagrid]="data"
-  [mathExp]="expression"
-  [keys]="keys"
-  (sender)="emitted($event)"
-  (changedData)="updateSubjectRecord($event)"
-></acada-dynamic-table>
+
+<div>
+  <button class="printbtn" (click)="util.printHtml('print')"  mat-raised-button color="secondary">Print</button>
+  <acada-dynamic-table
+    id="print"
+    [datagrid]="data"
+    [mathExp]="expression"
+    [keys]="keys"
+    (sender)="emitted($event)"
+    (changedData)="updateSubjectRecord($event)"
+  ></acada-dynamic-table>
+</div>

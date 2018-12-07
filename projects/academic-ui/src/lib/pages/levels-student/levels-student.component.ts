@@ -27,7 +27,7 @@ export class LevelsStudentComponent implements OnInit {
 
   private queryObj: SearchFindRequest<Student>;
 
-  constructor(private acada: AcademicService, private avr: ActivatedRoute, private util: ClientUtilService) {}
+  constructor(private acada: AcademicService, private avr: ActivatedRoute, public util: ClientUtilService) {}
 
   search(query: SearchFindRequest<Student>) {
     this.acada.findStudents(query, this._params).subscribe(res => {

@@ -25,7 +25,7 @@ export class StudentGridPageComponent implements OnInit {
 
   private queryObj: SearchFindRequest<Student> = {} as any;
 
-  constructor(private acada: AcademicService, private util: ClientUtilService) {}
+  constructor(private acada: AcademicService, public util: ClientUtilService) {}
 
   search(query: SearchFindRequest<Student>) {
     this.acada.findStudents(query, this._params).subscribe(res => {

@@ -1,7 +1,12 @@
-<acada-record-grid
-  [records]="records"
-  [config]="config"
-  (record)="acada.viewRecord($event)"
-  (filter)="search($event)"
-  (paginator)="paginator($event)"
-></acada-record-grid>
+<div>
+    <button class="printbtn" (click)="util.printHtml('print')"  mat-raised-button color="secondary">Print</button>
+    <acada-record-grid
+    id="print"
+      [records]="records"
+      [config]="config"
+      (record)="acada.viewRecord($event)"
+      (filter)="search($event)"
+      (paginator)="paginator($event)"
+    ></acada-record-grid>
+</div>
+

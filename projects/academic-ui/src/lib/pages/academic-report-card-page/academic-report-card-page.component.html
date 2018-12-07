@@ -1,4 +1,13 @@
-<div class="container">
+<button class="printbtn" (click)="util.printHtml('print')"  mat-raised-button color="secondary">Print</button>
+
+<div id="print" class="container">
+  <div>
+    <mat-card class="school">
+      <img class="logo" [src]="(school$ | async)?.logo" alt="">
+      <h3 class="details"> {{ (school$ | async)?.name }} </h3>
+      <span> {{ (school$ | async)?.address }} </span>
+    </mat-card>
+  </div>
   <div>
     <mat-card>
         <h2> Score Card </h2>
@@ -24,10 +33,7 @@
       <hr>
       <h5> Cognitive, Affective and Psychomotor  Assessment </h5>
     </mat-card>
-    <div>
-    </div>
-    <!-- <hr> -->
-    <!-- <hr> -->
+
   </div>
   <acada-academic-report-card-grid
     [term]="(reportSheet$ | async)?.term"

@@ -1,5 +1,9 @@
-<acada-student-grid
-  [config]="config"
-  (paginator)="paginator($event)"
-  [students]="students"
-></acada-student-grid>
+<div class="container">
+    <button class="printbtn" (click)="util.printHtml('print')"  mat-raised-button color="secondary">Print</button>
+    <acada-student-grid
+      id="print"
+      [config]="config"
+      (paginator)="paginator($event)"
+      [students]="students"
+    ></acada-student-grid>
+</div>

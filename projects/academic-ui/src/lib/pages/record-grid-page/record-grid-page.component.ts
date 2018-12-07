@@ -32,7 +32,7 @@ export class RecordGridPageComponent implements OnInit {
 
   private queryObj: SearchFindRequest<Student> = {} as any;
 
-  constructor(public acada: AcademicService, private util: ClientUtilService) {}
+  constructor(public acada: AcademicService, public util: ClientUtilService) {}
 
   search(query: SearchFindRequest<Student>) {
     this.acada.findRecords(query, this._params).subscribe(res => {
