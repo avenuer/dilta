@@ -4,8 +4,7 @@
   <div>
     <mat-card class="school">
       <img class="logo" [src]="(school$ | async)?.logo" alt="">
-      <h3 class="details"> {{ (school$ | async)?.name }} </h3>
-      <span> {{ (school$ | async)?.address }} </span>
+      <p> {{ (school$ | async)?.name }} <br> {{ (school$ | async)?.address }} </p>
     </mat-card>
   </div>
   <div>
