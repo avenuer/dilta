@@ -1,13 +1,18 @@
-import { electronDatabase } from '@dilta/emdb';
-import { RxCollection, RxDatabase } from 'rxdb';
 import * as gen from './school.data';
+import { electronDatabase } from '@dilta/emdb';
+import {
+  Parent,
+  Receipt,
+  Student,
+  User
+  } from '@dilta/shared';
 import { Logger } from '@dilta/util';
-import { Parent, Receipt, User, Student } from '@dilta/shared';
+import { RxCollection, RxDatabase } from 'rxdb';
 
 async function generate() {
   let db: RxDatabase;
   const data = script();
-  db = await electronDatabase(new Logger);
+  db = await electronDatabase();
   await uploadData(db.school, data.school, 'school');
   await uploadData(db.manager, data.manager, 'manager');
   await uploadData(db.user, data.teachers, 'teachers');

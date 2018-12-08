@@ -5,13 +5,14 @@ import {
   defaultPreInsert,
   defaultPreSave,
   Embededb
-} from '@dilta/emdb';
+  } from '@dilta/emdb';
 import {
   BaseModel,
+  EntityNames,
   FindQueryParam,
-  SearchFindRequest,
-  FindResponse
-} from '@dilta/shared';
+  FindResponse,
+  SearchFindRequest
+  } from '@dilta/shared';
 import { autobind } from 'core-decorators';
 import { RxCollection } from 'rxdb';
 
@@ -35,7 +36,7 @@ export class ModelBase<T extends Partial<BaseModel>> implements DBModel<T> {
   public collection: RxCollection<T>;
 
   constructor(
-    public collectionName: keyof CollectionMaps,
+    public collectionName: EntityNames,
     public database: Promise<Embededb>
   ) {
     this.database.then(db => {

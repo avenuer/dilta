@@ -6,7 +6,6 @@ import {
   createInjector
   } from './methods';
 import { Provider, ReflectiveInjector } from 'injection-js';
-import 'reflect-metadata';
 
 
 export interface DiltaApp {

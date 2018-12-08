@@ -47,6 +47,10 @@ export enum LIENSCE_KEY {
    * Action to decrypt liensce key ti valid json object
    */
   Decrypt = '[Security] Decrypt Liensce',
+  /** Decrypts the token directly....
+   *
+   */
+  Decrypt_Service = '[Security] Decrypt Liensce',
   /** Action to retreiving the liensce key */
   Retrieve = '[Security] Retrieve Liensce',
   /** Action to setting the liensce key */

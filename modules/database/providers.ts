@@ -1,20 +1,20 @@
 import { ModelBase } from './models.base';
-import { Inject, Injectable, FactoryProvider } from '@dilta/core';
+import { FactoryProvider, Inject, Injectable } from '@dilta/core';
+import { electronDatabase, Embededb } from '@dilta/emdb';
 import {
   Auth,
   EntityNames,
+  Expense,
   Manager,
   Parent,
   Receipt,
+  Record,
   School,
-  Student,
-  User,
   Setting,
-  Expense,
+  Student,
   Subject,
-  Record
-} from '@dilta/shared';
-import { Embededb, electronDatabase } from '@dilta/emdb';
+  User
+  } from '@dilta/shared';
 
 /** Token For RXDB leveldown instance */
 export const EmbededDatabaseToken = 'RXDB_LOCAL';
