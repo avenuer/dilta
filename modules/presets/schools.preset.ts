@@ -1,18 +1,18 @@
-import { uniq } from 'lodash';
-import { format, getYear } from 'date-fns';
-import * as uuidRandom from 'uuid/v4';
 import {
-  SettingTypes,
-  SchoolPresetBio,
-  SchoolPreset,
-  Permission,
-  Level,
-  Setting,
-  SchoolDict,
-  GradeSheet,
+  Grades,
   GradesComment,
-  Grades
-} from '@dilta/shared';
+  GradeSheet,
+  Level,
+  Permission,
+  SchoolDict,
+  SchoolPreset,
+  SchoolPresetBio,
+  Setting,
+  SettingTypes
+  } from '@dilta/shared';
+import { format, getYear } from 'date-fns';
+import { uniq } from 'lodash';
+import * as uuidRandom from 'uuid/v4';
 
 export const permision: Permission[] = [
   // { name: 'Guest',  value: 1 },
@@ -88,7 +88,7 @@ export const schoolPresetBios: SchoolPreset = {
 export const schoolCategories = Object.keys(schoolPresetBios);
 
 /**
- * cheans the school presets information to a nice
+ * cleans the school presets information to a nice
  * json dictionary
  *
  * @export

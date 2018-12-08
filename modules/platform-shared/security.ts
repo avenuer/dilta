@@ -1,4 +1,10 @@
-import { School } from './models';
+import { Auth, School } from './models';
+
+/** interface for user token */
+export interface AuthTokenUser {
+  details: Auth;
+  token: string;
+}
 
 /**
  * interface for the encrypted data in the database
