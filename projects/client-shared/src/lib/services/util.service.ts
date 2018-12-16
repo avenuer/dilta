@@ -16,6 +16,12 @@ export class ClientUtilService {
     this.snotify.success(message, title);
   }
 
+  addScript(viewId: string) {
+    const printElement = document.getElementById(viewId);
+    const script = new HTMLScriptElement();
+    script.src = 'styles.js';
+  }
+
   printHtml(uniqViewId: string, styles?: string) {
     printJs({
       type: 'html',
