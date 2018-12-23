@@ -1,6 +1,5 @@
 import { AuthActions, AuthActionTypes, Status } from './auth.action';
-import { AuthTokenUser } from '../services/auth.service';
-import { Auth } from '@dilta/shared';
+import { Auth, AuthTokenUser } from '@dilta/shared';
 
 /**
  * Interface for a successfull Authentication

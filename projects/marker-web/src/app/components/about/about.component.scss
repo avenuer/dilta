@@ -1,0 +1,27 @@
+.about-section {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: space-between;
+
+  .header-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .details-container {
+    // flex: 4;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+
+@media all and (min-width: 480px) {
+  .details-container {
+    flex: 4;
+    justify-content: space-between;
+    padding: 2%;
+  }
+}

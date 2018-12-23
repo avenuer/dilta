@@ -22,7 +22,7 @@ import { DyanmicDatagridModule } from 'projects/academic-ui/src/lib/components/d
 const parents = [ParentBioProfileComponent, ParentFormEditorComponent];
 
 @NgModule({
-  imports: [ParentUiSharedModule],
+  imports: [ParentUiSharedModule, MaterialModule],
   exports: parents,
   declarations: parents
 })

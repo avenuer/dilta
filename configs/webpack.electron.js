@@ -14,7 +14,7 @@ module.exports = {
   // watch: true,
   output: {
     path: path.resolve(__dirname, '..', 'dist'),
-    filename: 'main.js'
+    filename: 'electron-main.js'
   },
   externals: [nodeExternals()],
   resolve: {

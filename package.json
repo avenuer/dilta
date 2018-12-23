@@ -1,6 +1,7 @@
 {
   "name": "dilta",
   "version": "0.0.0",
+  "main": "./dist/electron-main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -9,12 +10,11 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "repl": "node -r ./debugger.js repl.ts",
-    "e:start": "npm run e:clean && npx electron -r ./debugger.js main.ts",
+    "e:start": "npm run e:clean && npx electron .",
     "e:watch": "npx webpack-cli --config=webpack.electron.js -w",
     "e:pack": "npx webpack-cli --config=./configs/webpack.electron.js",
     "e:rebuild": "npx electron-rebuild",
-    "e:clean": "rimraf C:\\Users\\AbiZeus\\AppData\\Local\\Temp\\pubkey.bc\\A3503c69c90b007512d60",
-    "playground": "angular-playground"
+    "e:clean": "rimraf C:\\Users\\AbiZeus\\AppData\\Local\\Temp\\pubkey.bc\\A3503c69c90b007512d60"
   },
   "private": true,
   "dependencies": {

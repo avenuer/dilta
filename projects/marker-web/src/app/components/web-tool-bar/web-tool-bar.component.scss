@@ -1,0 +1,11 @@
+.logo {
+    width: 64px;
+    height: 64px;
+    border-radius: 25%;
+}
+
+@media (max-width: 768px) {
+    .show-desktop {
+      visibility: hidden;
+    }
+}
