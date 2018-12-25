@@ -3,9 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ClientUtilService, schoolFeature } from '@dilta/client-shared';
 import { School, StudentReportSheet, StudentSheet } from '@dilta/shared';
-import { schoolTermValueToKey, schoolValueToKey } from '@dilta/shared';
 import { Store } from '@ngrx/store';
-import { format } from 'date-fns';
 import { Observable } from 'rxjs';
 import { exhaustMap, first, map } from 'rxjs/operators';
 
@@ -18,16 +16,9 @@ import { exhaustMap, first, map } from 'rxjs/operators';
 export class AcademicReportCardPageComponent implements OnInit {
   public reportSheet$: Observable<StudentReportSheet>;
 
-  public levelName = schoolValueToKey;
-  public termName = schoolTermValueToKey;
-
   public school$: Observable<School>;
 
   constructor(private avr: ActivatedRoute, private acada: AcademicService, public util: ClientUtilService, private store: Store<any>) {}
-
-  formatDob(date: number) {
-    return format(date, 'DD-MMM-YYYY');
-  }
 
   /**
    * Cleans the arguments from string to Numbers

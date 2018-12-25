@@ -25,7 +25,11 @@
             "styles": [
               "apps/dilta/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              {
+                "input": "node_modules/document-register-element/build/document-register-element.js"
+              }
+            ]
           },
           "configurations": {
             "production": {
@@ -652,6 +656,129 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "projects/marker-web-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "dilta-web-conponents": {
+      "root": "projects/dilta-web-conponents/",
+      "sourceRoot": "projects/dilta-web-conponents/src",
+      "projectType": "application",
+      "prefix": "dilta",
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss"
+        }
+      },
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/dilta-web-conponents",
+            "index": "projects/dilta-web-conponents/src/index.html",
+            "main": "projects/dilta-web-conponents/src/main.ts",
+            "polyfills": "projects/dilta-web-conponents/src/polyfills.ts",
+            "tsConfig": "projects/dilta-web-conponents/tsconfig.app.json",
+            "assets": [
+              "projects/dilta-web-conponents/src/favicon.ico",
+              "projects/dilta-web-conponents/src/assets"
+            ],
+            "styles": [
+              "projects/dilta-web-conponents/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/dilta-web-conponents/src/environments/environment.ts",
+                  "with": "projects/dilta-web-conponents/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "dilta-web-conponents:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "dilta-web-conponents:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "dilta-web-conponents:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/dilta-web-conponents/src/test.ts",
+            "polyfills": "projects/dilta-web-conponents/src/polyfills.ts",
+            "tsConfig": "projects/dilta-web-conponents/tsconfig.spec.json",
+            "karmaConfig": "projects/dilta-web-conponents/karma.conf.js",
+            "styles": [
+              "projects/dilta-web-conponents/src/styles.scss"
+            ],
+            "scripts": [],
+            "assets": [
+              "projects/dilta-web-conponents/src/favicon.ico",
+              "projects/dilta-web-conponents/src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/dilta-web-conponents/tsconfig.app.json",
+              "projects/dilta-web-conponents/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "dilta-web-conponents-e2e": {
+      "root": "projects/dilta-web-conponents-e2e/",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/dilta-web-conponents-e2e/protractor.conf.js",
+            "devServerTarget": "dilta-web-conponents:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "dilta-web-conponents:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "projects/dilta-web-conponents-e2e/tsconfig.e2e.json",
             "exclude": [
               "**/node_modules/**"
             ]
