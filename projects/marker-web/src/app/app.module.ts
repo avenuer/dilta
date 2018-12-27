@@ -31,7 +31,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
       WebFooterComponent
    ],
    imports: [
-      BrowserModule,
+      BrowserModule.withServerTransition({ appId: 'web-root' }),
       NoopAnimationsModule,
       WebMaterialModule,
       AppRoutingModule

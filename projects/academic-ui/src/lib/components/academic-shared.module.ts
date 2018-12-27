@@ -11,6 +11,16 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatPaginatorModule, MatTableModule } from '@angular/material';
 import { MaterialModule } from '@dilta/client-shared';
 
+export const academicSharedComponents = [
+  StudentGridComponent,
+  AcademicReportComponent,
+  RecordGridComponent,
+  AcademicRecordComponent,
+  LevelStaticDetailsComponent,
+  AcademicReportCardGridComponent,
+  AcademicReportCardComponent,
+];
+
 
 @NgModule({
   imports: [
@@ -21,22 +31,10 @@ import { MaterialModule } from '@dilta/client-shared';
     DyanmicDatagridModule
   ],
   declarations: [
-    StudentGridComponent,
-    AcademicReportComponent,
-    RecordGridComponent,
-    AcademicRecordComponent,
-    LevelStaticDetailsComponent,
-    AcademicReportCardGridComponent,
-    AcademicReportCardComponent
+    ...academicSharedComponents
   ],
   exports: [
-    StudentGridComponent,
-    RecordGridComponent,
-    AcademicReportComponent,
-    AcademicRecordComponent,
-    AcademicReportCardGridComponent,
-    AcademicReportCardComponent,
-    LevelStaticDetailsComponent,
+    ...academicSharedComponents,
     MatTableModule,
     MatPaginatorModule,
     DyanmicDatagridModule
