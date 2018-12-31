@@ -12,8 +12,8 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 import { PricingComponent } from './pages/pricing/pricing.component';
 import { WebMaterialModule } from './web-material.module';
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NgtUniversalModule } from '@ng-toolkit/universal';
 
 
 @NgModule({
@@ -31,7 +31,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
       WebFooterComponent
    ],
    imports: [
-      BrowserModule.withServerTransition({ appId: 'web-root' }),
+    NgtUniversalModule,
       NoopAnimationsModule,
       WebMaterialModule,
       AppRoutingModule

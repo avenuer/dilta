@@ -554,7 +554,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/marker-web",
+            "outputPath": "dist/marker-web/browser",
             "index": "projects/marker-web/src/index.html",
             "main": "projects/marker-web/src/main.ts",
             "polyfills": "projects/marker-web/src/polyfills.ts",
@@ -591,7 +591,7 @@
         "server": {
           "builder": "@angular-devkit/build-angular:server",
           "options": {
-            "outputPath": "dist/marker-web",
+            "outputPath": "dist/marker-web/server",
             "main": "projects/marker-web/src/main.server.ts",
             "tsConfig": "projects/marker-web/tsconfig.server.json"
           }
@@ -795,5 +795,5 @@
       }
     }
   },
-  "defaultProject": "dilta"
+  "defaultProject": "marker-web"
 }

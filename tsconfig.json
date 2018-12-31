@@ -34,5 +34,9 @@
       "@dilta/client-shared": ["projects/client-shared/src/lib"],
       "@dilta/electron-client": ["projects/electron/src/lib"]
     }
-  }
+  },
+  "exclude": [
+    "**/test.*",
+    "**/*.spec.ts"
+  ]
 }
