@@ -3,7 +3,7 @@ import { StudentService } from '@dilta/database';
 import {
   Student,
   ClassDetailedStat,
-  schoolValueToKey,
+  schoolClassValueToKey,
   GenderDistrubution,
   AcademicActions
 } from '@dilta/shared';
@@ -34,7 +34,7 @@ export class ClassStaticsDetails {
   remapClassToText(studentMap: Map<number, GenderDistrubution>) {
     const details: ClassDetailedStat[] = [];
     studentMap.forEach((stat, key) => {
-      details.push({ ...stat, value: key, name: schoolValueToKey(key) });
+      details.push({ ...stat, value: key, name: schoolClassValueToKey(key) });
     });
     return details;
   }

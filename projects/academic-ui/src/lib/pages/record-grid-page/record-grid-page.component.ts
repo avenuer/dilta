@@ -2,14 +2,19 @@ import { AcademicService } from '../../services/academic.service';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
-import { ClientUtilService } from '@dilta/client-shared';
+import { ClientUtilService, PrinterService } from '@dilta/client-shared';
 import {
   FindQueryParam,
   GridConfig,
   Record,
   SearchFindRequest,
-  Student
-  } from '@dilta/shared';
+  Student,
+  schoolClassValueToKey,
+  schoolTermValueToKey,
+  RecordGridConfig,
+  DateFormat
+} from '@dilta/shared';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'acada-record-grid-page',
@@ -32,14 +37,21 @@ export class RecordGridPageComponent implements OnInit {
 
   private queryObj: SearchFindRequest<Student> = {} as any;
 
-  constructor(public acada: AcademicService, public util: ClientUtilService) {}
+  constructor(
+    public acada: AcademicService,
+    public util: ClientUtilService,
+    private printer: PrinterService
+  ) {}
 
   search(query: SearchFindRequest<Student>) {
-    this.acada.findRecords(query, this._params).subscribe(res => {
-      this.records = res.data;
-      this.config.paginator.count = res.total;
-      this.config.paginator.length = res.limit;
-    }, (err) => this.util.error(err));
+    this.acada.findRecords(query, this._params).subscribe(
+      res => {
+        this.records = res.data;
+        this.config.paginator.count = res.total;
+        this.config.paginator.length = res.limit;
+      },
+      err => this.util.error(err)
+    );
   }
 
   paginator($event: PageEvent) {
@@ -47,10 +59,26 @@ export class RecordGridPageComponent implements OnInit {
     this.search(this.queryObj);
   }
 
-
   query(query: SearchFindRequest<Student>) {
-      this.queryObj = query === '' ? query : {};
-      return this.search(this.queryObj);
+    this.queryObj = query === '' ? query : {};
+    return this.search(this.queryObj);
+  }
+
+  print() {
+    this.acada
+      .findRecords(this.queryObj, {
+        limit: this.config.paginator.length,
+        skip: 0,
+        sort: 'name'
+      })
+      .subscribe(
+        ({ data }) => {
+          this.printer.printTable(RecordGridConfig, data, {
+            filename: `subject records ${format(Date.now(), DateFormat)}`
+          });
+        },
+        err => this.util.error(err)
+      );
   }
 
   ngOnInit() {

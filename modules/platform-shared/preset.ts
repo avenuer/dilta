@@ -218,10 +218,13 @@ export enum NuseryPrimarySchoolClassPreset {
   'Primary Six'
 }
 
-export enum SecondarySchoolClassPreset {
+export enum JuniorSecondaryClassPreset {
   'JSS One' = 211,
   'JSS Two',
-  'JSS Three',
+  'JSS Three'
+}
+
+export enum SeniorSecondarySchoolClassPreset {
   'SSS One A' = 311,
   'SSS One B',
   'SSS One c',
@@ -236,15 +239,24 @@ export enum SecondarySchoolClassPreset {
   'SSS Three D'
 }
 
+export enum SpecialCasesPreset {
+  'Graduated' = 600,
+  'Left'
+}
+
 // type for student class.
 export type SchoolClass = NuseryPrimarySchoolClassPreset &
-  SecondarySchoolClassPreset;
+  JuniorSecondaryClassPreset &
+  SeniorSecondarySchoolClassPreset &
+  SpecialCasesPreset;
 
 /** all school classes available */
 export const schoolClasses = cleanNumericEnums(
   Object.keys({
     ...NuseryPrimarySchoolClassPreset,
-    ...SecondarySchoolClassPreset
+    ...JuniorSecondaryClassPreset,
+    ...SeniorSecondarySchoolClassPreset,
+    ...SpecialCasesPreset
   })
 );
 /** all school terms available */
@@ -258,15 +270,22 @@ export const schoolTerms = cleanNumericEnums(Object.keys(TermPreset));
  * @returns
  */
 export function schoolClassValue(className: string): number {
-  if (Object.keys(NuseryPrimarySchoolClassPreset).includes(className)) {
-    return NuseryPrimarySchoolClassPreset[className];
+  let number;
+  [
+    NuseryPrimarySchoolClassPreset,
+    JuniorSecondaryClassPreset,
+    SeniorSecondarySchoolClassPreset,
+    SpecialCasesPreset
+  ].forEach(preset => {
+    if (Object.keys(preset).includes(className)) {
+      number = preset[className];
+    }
+  });
+  if (typeof number !== 'number') {
+    throw noClassError;
   }
-  if (Object.keys(SecondarySchoolClassPreset).includes(className)) {
-    return SecondarySchoolClassPreset[className];
-  }
-  throw noClassError;
+  return number;
 }
-
 
 /**
  * Returns School Key from value
@@ -275,17 +294,19 @@ export function schoolClassValue(className: string): number {
  * @param {number} classValue
  * @returns
  */
-export function schoolValueToKey(classValue: number) {
+export function schoolClassValueToKey(classValue: number) {
   let schoolKey: string;
   Object.entries({
     ...NuseryPrimarySchoolClassPreset,
-    ...SecondarySchoolClassPreset
+    ...JuniorSecondaryClassPreset,
+    ...SeniorSecondarySchoolClassPreset,
+    ...SpecialCasesPreset
   }).forEach(([key, value]) => {
     if (value === Number(classValue)) {
       schoolKey = key;
     }
   });
-  if (!schoolKey) {
+  if (typeof schoolKey !== 'string') {
     throw noClassError;
   }
   return schoolKey;
@@ -311,4 +332,67 @@ export function schoolTermValueToKey(termValue: number) {
     }
   });
   return termKey;
+}
+
+export interface LevelPromotionScheme {
+  prevLevel: SchoolClass;
+  level: SchoolClass;
+  nextLevel: SchoolClass;
+}
+
+
+/**
+ * shows promotion scheeme for a particular class level
+ *
+ * @export
+ * @param {SchoolClass} level
+ * @returns {LevelPromotionScheme}
+ */
+export function levelPromotion(level: SchoolClass): LevelPromotionScheme {
+  return {
+    prevLevel: prevLevel(level),
+    level,
+    nextLevel: nextLevel(level)
+  };
+}
+
+/**
+ * the next level for promotion
+ *
+ * @param {SchoolClass} level
+ * @returns
+ */
+function nextLevel(level: SchoolClass) {
+  if (level === SpecialCasesPreset.Left) {
+    return level === NuseryPrimarySchoolClassPreset['Primary Six'] ||
+      level === JuniorSecondaryClassPreset['JSS Three'] ||
+      level > 500
+      ? ((SpecialCasesPreset.Graduated as any) as SchoolClass)
+      : (((level + 1) as any) as SchoolClass);
+  }
+  return level;
+}
+
+/**
+ * previous level before current level
+ *
+ * @param {SchoolClass} level
+ * @returns
+ */
+function prevLevel(level: SchoolClass) {
+  if (
+    level !== SpecialCasesPreset.Left &&
+    level !== SpecialCasesPreset.Graduated
+  ) {
+    if (
+      level === NuseryPrimarySchoolClassPreset.Crech ||
+      level === JuniorSecondaryClassPreset['JSS One']
+    ) {
+      return level;
+    }
+    if (Object.values(SeniorSecondarySchoolClassPreset).includes(level)) {
+      return level < 400 ? level : (((level - 100) as any) as SchoolClass);
+    }
+  }
+  return level;
 }

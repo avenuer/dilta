@@ -18,12 +18,14 @@
       "dom"
     ],
     "paths": {
+      "@dilta/academics": ["modules/academics"],
       "@dilta/core": ["modules/core"],
       "@dilta/database": ["modules/database"],
       "@dilta/electron": ["modules/electron"],
       "@dilta/emdb": ["modules/embededDb"],
       "@dilta/gen": ["modules/generator"],
       "@dilta/shared": ["modules/platform-shared"],
+      "@dilta/preset": ["modules/presets"],
       "@dilta/security": ["modules/security"],
       "@dilta/util": ["modules/util"],
       "@dilta/academic-ui": ["projects/academic-ui/src"],
@@ -32,5 +34,9 @@
       "@dilta/client-shared": ["projects/client-shared/src/lib"],
       "@dilta/electron-client": ["projects/electron/src/lib"]
     }
-  }
+  },
+  "exclude": [
+    "**/test.*",
+    "**/*.spec.ts"
+  ]
 }

@@ -1,6 +1,5 @@
 import { AuthActions, AuthActionTypes, Status } from './auth.action';
-import { AuthTokenUser } from '../services/auth.service';
-import { Auth } from '@dilta/shared';
+import { Auth, AuthTokenUser } from '@dilta/shared';
 
 /**
  * Interface for a successfull Authentication
@@ -51,15 +50,13 @@ export function authReducer(
   state = authInitialState,
   action: AuthActions
 ): Authsuccess {
-  console.log(state, action);
   switch (action.type) {
     // when the login is succesfull
     case AuthActionTypes.Success: {
       return {
         // return new class state
-        ...state,
+        ...authInitialState,
         ...action.payload,
-        error: null,
         status: Status.Success,
         timeStamp: Date.now()
       };
@@ -67,7 +64,7 @@ export function authReducer(
     case AuthActionTypes.LoginFailure:
     case AuthActionTypes.SignUpFailure: {
       return {
-        ...state,
+        ...authInitialState,
         error: action.payload,
         status: Status.Failure,
         timeStamp: Date.now()

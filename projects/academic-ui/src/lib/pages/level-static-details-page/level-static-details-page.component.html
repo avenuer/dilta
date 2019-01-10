@@ -1,4 +1,4 @@
 <div class="container">
-    <button class="printbtn" (click)="util.printHtml('print')"  mat-raised-button color="secondary">Print</button>
+    <button class="printbtn" (click)="print()"  mat-raised-button color="secondary">Print</button>
   <acada-level-static-details id="print" (level)="viewClass($event)" [stats]="statics$ | async"></acada-level-static-details>
 </div>

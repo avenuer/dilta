@@ -2,13 +2,19 @@ import { AcademicService } from '../../services/academic.service';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material';
 import { Router } from '@angular/router';
-import { ClientUtilService } from '@dilta/client-shared';
+import {
+  ClientUtilService,
+  PrinterService,
+  schoolFeature
+} from '@dilta/client-shared';
 import {
   GridConfig,
   SearchFindRequest,
   Student,
   StudentSheet
-  } from '@dilta/shared';
+} from '@dilta/shared';
+import { Store } from '@ngrx/store';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'acada-academic-report-page',
@@ -16,14 +22,12 @@ import {
   styleUrls: ['./academic-report-page.component.scss']
 })
 export class AcademicReportPageComponent implements OnInit {
-
   /**
    * displays form and hides the student table
    *
    * @memberof AcademicReportPageComponent
    */
   public showFormAndHideTable = true;
-
 
   /**
    * array holding the student list
@@ -48,7 +52,6 @@ export class AcademicReportPageComponent implements OnInit {
     }
   };
 
-
   /**
    * pagination settings
    *
@@ -56,7 +59,6 @@ export class AcademicReportPageComponent implements OnInit {
    * @memberof AcademicReportPageComponent
    */
   private _params = { limit: 10, skip: 0, sort: 'id' };
-
 
   /**
    * Query for search
@@ -66,7 +68,6 @@ export class AcademicReportPageComponent implements OnInit {
    * @memberof AcademicReportPageComponent
    */
   private queryObj: SearchFindRequest<Student>;
-
 
   /**
    * query object for requesting the report sheet
@@ -82,8 +83,11 @@ export class AcademicReportPageComponent implements OnInit {
    * @param {AcademicService} acada
    * @memberof AcademicReportPageComponent
    */
-  constructor(private acada: AcademicService, private router: Router, public util: ClientUtilService) { }
-
+  constructor(
+    private acada: AcademicService,
+    private router: Router,
+    public util: ClientUtilService
+  ) {}
 
   /**
    * listens for the report sheet
@@ -97,11 +101,18 @@ export class AcademicReportPageComponent implements OnInit {
     this.retrieveStudents({ class: reportTerms.level });
   }
 
-studentReport(student: Student) {
-  this.reportSheetTerms.studentId = student.id;
-  const { level, studentId, session, term} = this.reportSheetTerms;
-  this.router.navigate(['academics', 'score-sheet', session, term, level, studentId ]);
-}
+  studentReport(student: Student) {
+    this.reportSheetTerms.studentId = student.id;
+    const { level, studentId, session, term } = this.reportSheetTerms;
+    this.router.navigate([
+      'academics',
+      'score-sheet',
+      session,
+      term,
+      level,
+      studentId
+    ]);
+  }
 
   /**
    * retieves the student from the class
@@ -110,16 +121,20 @@ studentReport(student: Student) {
    * @memberof AcademicReportPageComponent
    */
   retrieveStudents(query: SearchFindRequest<Student>) {
-    this.acada.findStudents(query, this._params).subscribe(res => {
-      this.students = res.data;
-      this.config.paginator.count = res.limit;
-      this.config.paginator.length = res.total;
-      this.showFormAndHideTable = false;
-    }, (err) => this.util.error(err));
+    this.acada.findStudents(query, this._params).subscribe(
+      res => {
+        this.students = res.data;
+        this.config.paginator.count = res.limit;
+        this.config.paginator.length = res.total;
+        this.showFormAndHideTable = false;
+      },
+      err => this.util.error(err)
+    );
   }
 
   searchStudents(query: SearchFindRequest<Student>) {
-    this.queryObj = query !== '' ? query : { class: this.reportSheetTerms.level };
+    this.queryObj =
+      query !== '' ? query : { class: this.reportSheetTerms.level };
     return this.retrieveStudents(this.queryObj);
   }
 
@@ -128,7 +143,5 @@ studentReport(student: Student) {
     this.retrieveStudents(this.queryObj);
   }
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

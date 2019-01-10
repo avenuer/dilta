@@ -15,6 +15,7 @@ import {
   } from '@dilta/shared';
 import { autobind } from 'core-decorators';
 import { RxCollection } from 'rxdb';
+import { sortBy } from 'lodash';
 
 /** Query Constants for find query */
 enum QUERY_CONSTANTS {
@@ -89,14 +90,17 @@ export class ModelBase<T extends Partial<BaseModel>> implements DBModel<T> {
    */
   async search(
     query: string,
-    { skip, limit }: FindQueryParam
+    { skip, limit, sort }: FindQueryParam
   ): Promise<FindResponse<T>> {
     const regx = new RegExp(`${query}`, 'i');
     const allDocs = await this.collection
       .find({})
       .exec()
       .then(res => res.map(e => e.toJSON()));
-    const matchDocs = allDocs.filter(e => regx.test(JSON.stringify(e)));
+    let matchDocs = allDocs.filter(e => regx.test(JSON.stringify(e)));
+    if (sort) {
+      matchDocs = sortBy(matchDocs, sort);
+    }
     return {
       skip,
       limit,
@@ -115,12 +119,15 @@ export class ModelBase<T extends Partial<BaseModel>> implements DBModel<T> {
    */
   async find(
     query: Partial<T>,
-    { skip, limit }: FindQueryParam
+    { skip, limit, sort }: FindQueryParam
   ): Promise<FindResponse<T>> {
-    const matchDocs = await this.collection
+    let matchDocs = await this.collection
       .find(query)
       .exec()
       .then(res => res.map(e => e.toJSON()));
+    if (sort) {
+      matchDocs = sortBy(matchDocs, sort);
+    }
     return {
       skip,
       limit,

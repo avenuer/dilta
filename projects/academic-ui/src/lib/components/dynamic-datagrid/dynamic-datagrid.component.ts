@@ -8,41 +8,11 @@ import {
   Output,
   ViewEncapsulation
   } from '@angular/core';
-import { errorInvalid } from '@dilta/shared';
+import { errorInvalid, KeysConfig, MathExp } from '@dilta/shared';
 import { isEmpty } from 'lodash';
 import * as math from 'mathjs';
-import { BehaviorSubject } from 'rxjs';
 
-/**
- * confiiguration of keys to display and allowed
- * ations on it
- *
- * @export
- * @interface KeysConfig
- */
-export interface KeysConfig {
-  key: string;
-  title?: string;
-  evaluated?: true;
-  editable: boolean;
-  type: string;
-  send?: boolean; // used instead of changing used to send grid data out
-  config?: {
-    max: number;
-    min: number;
-    map?(currVal: number): string | number;
-  };
-  default?: string | number;
-}
 
-/**
- * configuration for mathematical expression
- * for columns configuration
- *
- * @export
- * @interface MathExp
- */
-export type MathExp = string;
 
 export interface Map {
   key: KeysConfig;

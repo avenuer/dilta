@@ -13,7 +13,7 @@ import {
   StudentSheet,
   AcademicActions,
   StudentReportSheet,
-  schoolValueToKey,
+  schoolClassValueToKey,
   schoolTermValueToKey,
   ClassDetailedStat
 } from '@dilta/shared';
@@ -51,7 +51,7 @@ export class AcademicService {
         map(res => {
           res.data = res.data.map(rec => {
             (rec as any).term = schoolTermValueToKey(rec.term);
-            (rec as any).class = schoolValueToKey(rec.class);
+            (rec as any).class = schoolClassValueToKey(rec.class);
             return rec;
           });
           return res;

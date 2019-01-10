@@ -1,17 +1,23 @@
-import { KeysConfig, MathExp } from '../../components/dynamic-datagrid/dynamic-datagrid.component';
 import { AcademicService } from '../../services/academic.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ClientUtilService } from '@dilta/client-shared';
+import { ClientUtilService, PrinterService } from '@dilta/client-shared';
 import { TransportService } from '@dilta/electron-client';
 import {
   AcademicActions,
   AcademicSubject,
   Record,
   Subject,
-  SubjectRecords
-  } from '@dilta/shared';
+  SubjectRecords,
+  MathExp,
+  KeysConfig,
+  DateFormat,
+  schoolClassValueToKey,
+  schoolTermValueToKey,
+  SubjectGridConfig
+} from '@dilta/shared';
 import { exhaustMap, first } from 'rxjs/operators';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'acada-subject-grid-page',
@@ -48,55 +54,13 @@ export class SubjectGridPageComponent implements OnInit {
    * @type {KeysConfig[]}
    * @memberof SubjectGridPageComponent
    */
-  public keys: KeysConfig[] = [
-    { key: 'name', title: 'Name', send: true, editable: false, type: 'string' },
-    {
-      key: 'firstCa',
-      title: 'First C.A',
-      send: false,
-      editable: true,
-      type: 'number',
-      config: {
-        max: 15,
-        min: 0
-      }
-    },
-    {
-      title: 'Second C.A',
-      key: 'secondCa',
-      send: false,
-      editable: true,
-      type: 'number',
-      config: {
-        max: 15,
-        min: 0
-      }
-    },
-    {
-      title: 'Exam',
-      key: 'exam',
-      send: false,
-      editable: true,
-      type: 'number',
-      config: {
-        max: 70,
-        min: 0
-      }
-    },
-    {
-      title: 'Total',
-      key: 'total',
-      send: false,
-      editable: false,
-      type: 'number',
-      evaluated: true
-    }
-  ];
+  public keys: KeysConfig[] = SubjectGridConfig;
 
   constructor(
     private route: ActivatedRoute,
     private transport: TransportService,
     private acada: AcademicService,
+    private printer: PrinterService,
     public util: ClientUtilService
   ) {}
 
@@ -124,9 +88,12 @@ export class SubjectGridPageComponent implements OnInit {
         })
       )
       .pipe(first())
-      .subscribe(subject => {
-        this.data[index] = subject;
-      }, (err) => this.util.error(err));
+      .subscribe(
+        subject => {
+          this.data[index] = subject;
+        },
+        err => this.util.error(err)
+      );
   }
 
   emitted(data: Subject) {}
@@ -137,23 +104,54 @@ export class SubjectGridPageComponent implements OnInit {
    * @memberof SubjectGridPageComponent
    */
   retriveRecords() {
-    this.route.params
-      .pipe(
-        exhaustMap(param =>
-          this.transport.execute<SubjectRecords>(
-            AcademicActions.SubjectRecord,
-            param.id
-          )
-        ),
-        first()
-      )
-      .subscribe(resp => {
-        this.data = resp.data;
-        this.record = resp.record;
-      }, (err) => this.util.error(err));
+    return this.route.params.pipe(
+      exhaustMap(param =>
+        this.transport.execute<SubjectRecords>(
+          AcademicActions.SubjectRecord,
+          param.id
+        )
+      ),
+      first()
+    );
+  }
+
+  formatPrint(record: Record) {
+    return doc => {
+      doc.setFontSize(12);
+      doc
+        .text(`Subject: ${record.subject}`, 10, 87)
+        .text(`Term: ${schoolTermValueToKey(record.term)}`, 130, 87);
+      doc.line(10, 89, 200, 89);
+      doc
+        .text(`Class:  ${schoolClassValueToKey(record.class)}`, 10, 94)
+        .text(`Session:  ${record.session}`, 130, 94);
+      doc.line(10, 96, 200, 96);
+      return doc;
+    };
+  }
+
+  print() {
+    this.retriveRecords().subscribe(
+      ({ data, record }) => {
+        this.printer.printTable(SubjectGridConfig, data, {
+          filename: `${record.subject}  ${record.class} ${
+            record.term
+          } term ${format(Date.now(), DateFormat)}`,
+          map: this.formatPrint(record),
+          startY: 105
+        });
+      },
+      err => this.util.error(err)
+    );
   }
 
   ngOnInit() {
-    this.retriveRecords();
+    this.retriveRecords().subscribe(
+      resp => {
+        this.data = resp.data;
+        this.record = resp.record;
+      },
+      err => this.util.error(err)
+    );
   }
 }

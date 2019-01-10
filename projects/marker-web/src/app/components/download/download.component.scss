@@ -1,0 +1,64 @@
+.download-container {
+  display: flex;
+  flex-direction: column;
+  height: 78%;
+  width: 100%;
+  color: white;
+}
+
+.download-btn {
+  width: 50%;
+  align-self: center;
+}
+
+img {
+  width: 200px;
+}
+
+.sectioned {
+  display: flex;
+}
+
+button {
+  background-color: transparent;
+  color: white;
+}
+
+web-about {
+  color: white;
+}
+
+.download-text {
+  text-align: center;
+}
+
+@media all and (max-width: 480px) {
+  img {
+    padding-left: 25%;
+  }
+
+  .download{
+    padding-left: 35%;
+
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  img {
+    padding-left: 37%;
+  }
+
+  .download{
+    padding-left: 37%;
+  }
+}
+
+@media all and (min-width: 769px) {
+  img {
+    padding-left: 40%;
+  }
+
+  .download{
+    padding-left: 35%;
+  }
+}

@@ -1,0 +1,9 @@
+<div class="features">
+  <div *ngFor="let feature of features; let i = odd" class="feature-container">
+    <mat-toolbar [color]="i ? 'primary' : 'secondary'">
+     <span>  {{ feature.title }} </span>
+    </mat-toolbar>
+    <img [src]="'assets/images/' + feature.icon" alt="" />
+    <p class="features">{{ feature.info }}</p>
+  </div>
+</div>

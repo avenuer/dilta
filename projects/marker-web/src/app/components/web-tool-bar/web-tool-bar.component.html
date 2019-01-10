@@ -1,0 +1,19 @@
+<mat-toolbar class="tool-bar" color="primary">
+  <img [routerLink]="''" src="assets/images/book.png" class="logo" alt="">
+  <span class="spacer-full show-mobile"></span>
+  <a class="show-desktop" color="primary"  mat-flat-button [routerLink]="''" > <h1> Marker </h1> </a>
+  <span class="spacer-full"></span>
+  <a class="show-desktop" color="primary" mat-flat-button [routerLink]="'features'" > Features </a>
+  <a class="show-desktop" color="primary"  mat-flat-button [routerLink]="'pricing'" > Pricing </a>
+  <a mat-button class="show-mobile" [matMenuTriggerFor]="menu">Menu</a>
+  <!-- <a mat-flat-button> Contact </a> -->
+  <!-- <a mat-flat-button color="secondary"> Login </a> -->
+
+</mat-toolbar>
+
+<mat-menu #menu="matMenu">
+  <a mat-menu-item [routerLink]="''">Home</a>
+  <a mat-menu-item color="primary" [routerLink]="'features'" > Features </a>
+  <a mat-menu-item color="primary" [routerLink]="'pricing'" > Pricing </a>
+</mat-menu>
+

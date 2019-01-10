@@ -1,5 +1,7 @@
 import { BrowserWindow, dialog, globalShortcut } from 'electron';
-import { writeFile } from 'fs';
+import { writeFile, readdirSync } from 'fs';
+import { join } from 'path';
+
 
 /**
  * Developer shortcuts for the application
@@ -12,10 +14,7 @@ export enum AppDevShortcut {
   ToggleDevTool = 'CommandOrControl + shift + i'
 }
 
-const Extensions = [
-  `C:/Users/AbiZeus/AppData/Local/Google/Chrome/User Data/Default/Extensions/lmhkpmbekcpmknklioeibfkpmmfibljd/2.15.5_0`,
-  `C:/Users/AbiZeus/AppData/Local/Google/Chrome/User Data/Default/Extensions/elgalmkoelokbchhkhacckoklkejnhcd/1.21.0_1`
-];
+const EXTENSIONS_HOME = join(process.env.LOCALAPPDATA, 'Google', 'Chrome', 'User Data', 'Default', 'Extensions')
 
 /**
  * adds 3rd party apps to electron dev tools
@@ -23,9 +22,14 @@ const Extensions = [
  * @export
  */
 export async function addExtension() {
-  Extensions.forEach(async path => {
-    await BrowserWindow.addDevToolsExtension(path);
-  });
+  if (false) {
+    readdirSync(EXTENSIONS_HOME).map(extdir => {
+      const versions = readdirSync(join(EXTENSIONS_HOME, extdir));
+      return join(EXTENSIONS_HOME, extdir, versions[versions.length - 1]);
+    }).forEach(async path => {
+      await BrowserWindow.addDevToolsExtension(path);
+    });
+  }
 }
 
 /**

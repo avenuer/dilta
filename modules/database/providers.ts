@@ -13,7 +13,8 @@ import {
   Setting,
   Student,
   Subject,
-  User
+  User,
+  Promotion
   } from '@dilta/shared';
 
 /** Token For RXDB leveldown instance */
@@ -206,6 +207,23 @@ export class RecordService extends ModelBase<Record> {
   }
 }
 
+
+/**
+ * Responsible for student academic promtion history
+ *
+ * @export
+ * @class PromotionService
+ * @extends {ModelBase<Promotion>}
+ */
+@Injectable()
+export class PromotionService extends ModelBase<Promotion> {
+  constructor(
+    @Inject(EmbededDatabaseToken) public database: Promise<Embededb>
+  ) {
+    super(EntityNames.Promotion, database);
+  }
+}
+
 /** Provider Token Mapping  */
 const embededDBProvider: FactoryProvider = {
   provide: EmbededDatabaseToken,
@@ -225,4 +243,5 @@ export const databaseServices = [
   SettingService,
   ExpenseService,
   RecordService,
+  PromotionService
 ];

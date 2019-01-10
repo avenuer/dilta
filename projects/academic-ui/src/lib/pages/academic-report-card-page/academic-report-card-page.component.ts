@@ -1,14 +1,15 @@
 import { AcademicService } from '../../services/academic.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ClientUtilService, schoolFeature } from '@dilta/client-shared';
+import {
+  ClientUtilService,
+  schoolFeature,
+  PrinterService
+} from '@dilta/client-shared';
 import { School, StudentReportSheet, StudentSheet } from '@dilta/shared';
-import { schoolTermValueToKey, schoolValueToKey } from '@dilta/shared';
 import { Store } from '@ngrx/store';
-import { format } from 'date-fns';
 import { Observable } from 'rxjs';
-import { exhaustMap, first, map } from 'rxjs/operators';
-
+import { exhaustMap, first, map, combineLatest } from 'rxjs/operators';
 
 @Component({
   selector: 'acada-academic-report-card-page',
@@ -18,16 +19,15 @@ import { exhaustMap, first, map } from 'rxjs/operators';
 export class AcademicReportCardPageComponent implements OnInit {
   public reportSheet$: Observable<StudentReportSheet>;
 
-  public levelName = schoolValueToKey;
-  public termName = schoolTermValueToKey;
-
   public school$: Observable<School>;
 
-  constructor(private avr: ActivatedRoute, private acada: AcademicService, public util: ClientUtilService, private store: Store<any>) {}
-
-  formatDob(date: number) {
-    return format(date, 'DD-MMM-YYYY');
-  }
+  constructor(
+    private avr: ActivatedRoute,
+    private acada: AcademicService,
+    public util: ClientUtilService,
+    private store: Store<any>,
+    private printer: PrinterService
+  ) {}
 
   /**
    * Cleans the arguments from string to Numbers
@@ -44,7 +44,6 @@ export class AcademicReportCardPageComponent implements OnInit {
       term: Number(term)
     } as any;
   }
-
 
   /**
    * retrieves the student report card
@@ -66,9 +65,20 @@ export class AcademicReportCardPageComponent implements OnInit {
     return this.store.select(schoolFeature).pipe(map(store => store.details));
   }
 
+  print() {
+    this.reportSheet$
+      .pipe(first())
+      .subscribe(
+        sheet => this.printer.reportCard(sheet),
+        err => this.util.error(err)
+      );
+  }
+
   ngOnInit() {
     this.reportSheet$ = this.retrieveReportSheet();
-    this.reportSheet$.pipe(first()).subscribe({ error: (err) => this.util.error(err) });
+    this.reportSheet$
+      .pipe(first())
+      .subscribe({ error: err => this.util.error(err) });
     this.school$ = this.retrieveSchool();
   }
 }

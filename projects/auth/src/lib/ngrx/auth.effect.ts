@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, Effect, ofType } from '@ngrx/effects';
 import { exhaustMap, map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ClientAuthService } from '../services/auth.service';
@@ -16,8 +16,8 @@ export class AuthEffects {
    */
   @Effect()
   login$ = this.actions$
-    .ofType<AuthActions.AuthLogin>(AuthActionTypes.Login)
-    .pipe(
+  .pipe(
+    ofType<AuthActions.AuthLogin>(AuthActionTypes.Login),
       // changing action to payload only
       map(action => action.payload),
       // querying for various actions to login
@@ -40,8 +40,8 @@ export class AuthEffects {
 
     @Effect()
     signUp$ = this.actions$
-      .ofType<AuthActions.AuthSignUp>(AuthActionTypes.SignUp)
-      .pipe(
+    .pipe(
+      ofType<AuthActions.AuthSignUp>(AuthActionTypes.SignUp),
         map(action => action.payload),
         exhaustMap(payload => {
           return this.auth.signup(payload)

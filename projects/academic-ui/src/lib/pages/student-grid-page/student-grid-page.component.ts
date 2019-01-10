@@ -1,8 +1,16 @@
 import { AcademicService } from '../../services/academic.service';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material';
-import { ClientUtilService } from '@dilta/client-shared';
-import { GridConfig, SearchFindRequest, Student } from '@dilta/shared';
+import { ClientUtilService, PrinterService } from '@dilta/client-shared';
+import {
+  GridConfig,
+  SearchFindRequest,
+  Student,
+  schoolClassValueToKey,
+  DateFormat,
+  StudentGridConfig
+} from '@dilta/shared';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'acada-student-grid-page',
@@ -25,14 +33,21 @@ export class StudentGridPageComponent implements OnInit {
 
   private queryObj: SearchFindRequest<Student> = {} as any;
 
-  constructor(private acada: AcademicService, public util: ClientUtilService) {}
+  constructor(
+    private acada: AcademicService,
+    public util: ClientUtilService,
+    private printer: PrinterService
+  ) {}
 
   search(query: SearchFindRequest<Student>) {
-    this.acada.findStudents(query, this._params).subscribe(res => {
-      this.students = res.data;
-      this.config.paginator.count = res.limit;
-      this.config.paginator.length = res.total;
-    }, (err) => this.util.error(err));
+    this.acada.findStudents(query, this._params).subscribe(
+      res => {
+        this.students = res.data;
+        this.config.paginator.count = res.limit;
+        this.config.paginator.length = res.total;
+      },
+      err => this.util.error(err)
+    );
   }
 
   paginator($event: PageEvent) {
@@ -43,6 +58,30 @@ export class StudentGridPageComponent implements OnInit {
   query(query: SearchFindRequest<Student>) {
     this.queryObj = query !== '' ? query : {};
     return this.search(this.queryObj);
+  }
+
+  print() {
+    this.acada
+      .findStudents(this.queryObj, {
+        limit: this.config.paginator.length,
+        skip: 0,
+        sort: 'name'
+      })
+      .subscribe(
+        ({ data }) => {
+          const students = data.map(student => {
+            return {
+              ...student,
+              class: schoolClassValueToKey(student.class),
+              dob: format(student.dob, DateFormat)
+            };
+          });
+          this.printer.printTable(StudentGridConfig, students, {
+            filename: `School students ${format(Date.now(), DateFormat)}`,
+          });
+        },
+        err => this.util.error(err)
+      );
   }
 
   ngOnInit() {

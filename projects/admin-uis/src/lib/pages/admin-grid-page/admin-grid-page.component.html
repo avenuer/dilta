@@ -1,18 +1,18 @@
 <div class="container">
   <button
     class="printbtn"
-    (click)="util.printHtml('print')"
+    (click)="print()"
     mat-raised-button
     color="secondary"
   >
     Print
   </button>
-  <button (click)="newAdmin($event)" mat-raised-button color="primary">
+  <button (click)="newAdmin()" mat-raised-button color="primary">
     Create Admin
   </button>
   <acada-dynamic-table
   id="print"
-    [datagrid]="users$ | async"
+    [datagrid]="users"
     [keys]="keys"
   ></acada-dynamic-table>
 </div>

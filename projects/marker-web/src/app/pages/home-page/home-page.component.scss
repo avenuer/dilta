@@ -1,0 +1,36 @@
+.parallax-container {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: content;
+  background-image: url(../../../assets/images/classroom-1866519_1920.jpg);
+  object-fit: cover;
+  color: white
+}
+
+.parallax-item {
+  align-self: center;
+  justify-self: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.p-size {
+  flex: 1;
+}
+
+@media all and (max-width: 768px) {
+  .parallax-item {
+    padding-top: 10%;
+    flex-direction: column;
+  }
+
+}
+
+mat-card {
+  height: 1px;
+}
+
+.over {
+  height: 7%;
+}

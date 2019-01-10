@@ -6,7 +6,7 @@ import {
   GridConfig,
   Record,
   schoolTermValueToKey,
-  schoolValueToKey,
+  schoolClassValueToKey,
   Student
   } from '@dilta/shared';
 

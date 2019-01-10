@@ -13,6 +13,7 @@ import { recordModel } from './record.model';
 import * as RxDB from 'rxdb';
 import { RxDatabase } from 'rxdb';
 import { Logger } from 'modules/util';
+import { promotionModel } from './promotion.model';
 
 /** Logger For Database Scope */
 /** the database name for rxdb */
@@ -30,7 +31,8 @@ export const Kollections = [
   userModel,
   SettingModel,
   ExpenseModel,
-  recordModel
+  recordModel,
+  promotionModel
 ];
 
 /**

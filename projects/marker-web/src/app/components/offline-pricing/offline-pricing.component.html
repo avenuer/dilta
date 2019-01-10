@@ -1,0 +1,46 @@
+<div class="web-offline-pricing">
+  <mat-card *ngFor="let plan of plans; let i = index">
+    <div class="pricing-container">
+      <mat-toolbar
+        class="header-bar"
+        [color]="i % 2 === 0 ? 'secondary' : 'primary'"
+      >
+        <h3>{{ plan.name }}</h3>
+      </mat-toolbar>
+      <div class="price">
+        <sub><h2>N</h2></sub>
+        <h1>{{ plan.price }}</h1>
+      </div>
+      <mat-toolbar
+        class="header-bar"
+        [color]="i % 2 === 0 ? 'primary' : 'secondary'"
+      >
+        Ranges
+      </mat-toolbar>
+      <div *ngFor="let range of plan.ranges">
+        <div class="price-range">
+          <span *ngIf="!range.text">
+            {{ range.min }} - {{ range.actual }} - {{ range.max }}
+          </span>
+          <span *ngIf="range.text"> {{ range.text }} </span>
+          <span> N {{ range.price + '.00'}}</span>
+        </div>
+        <hr />
+      </div>
+      <mat-toolbar
+        class="header-bar"
+        [color]="i % 2 === 0 ? 'primary' : 'secondary'"
+      >
+        Features
+      </mat-toolbar>
+      <div>
+        <ul>
+          <li *ngFor="let offer of plan.offers">{{ offer }}</li>
+        </ul>
+      </div>
+      <a mat-raised-button [color]="i % 2 === 0 ? 'secondary' : 'primary'">
+        Get License
+      </a>
+    </div>
+  </mat-card>
+</div>

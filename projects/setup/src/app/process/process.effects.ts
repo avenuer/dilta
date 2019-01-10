@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, Effect, ofType } from '@ngrx/effects';
 import { TransportService } from '@dilta/electron-client';
 import {
   ProcessAction,
@@ -25,7 +25,9 @@ export class ProcessEffects {
   constructor(
     private action: Actions,
     private transport: TransportService
-  ) {}
+  ) {
+
+  }
 
   /**
    * dispatches the action to decrypt the liensce key
@@ -34,8 +36,8 @@ export class ProcessEffects {
    */
   @Effect()
   verify$ = this.action
-    .ofType<LiensceKey>(ProcessAction.VERITY_LIENSCE_KEY)
-    .pipe(
+  .pipe(
+    ofType<LiensceKey>(ProcessAction.VERITY_LIENSCE_KEY),
       exhaustMap(action =>
         this.streamMap(
           this.transport.execute<SchoolEncryptedData>(LIENSCE_KEY.Decrypt, action.payload)
@@ -50,9 +52,9 @@ export class ProcessEffects {
    */
   @Effect()
   retrieve$ = this.action
-    .ofType<RetrieveLiensceKey>(ProcessAction.RETRIEVE_LIENSCE_KEY)
-    .pipe(
-      exhaustMap(action =>
+  .pipe(
+    ofType<RetrieveLiensceKey>(ProcessAction.RETRIEVE_LIENSCE_KEY),
+    exhaustMap(action =>
         this.streamMap(this.transport.execute<SchoolEncryptedData>(LIENSCE_KEY.Retrieve))
       )
     );
@@ -64,8 +66,8 @@ export class ProcessEffects {
    */
   @Effect()
   update$ = this.action
-    .ofType<UpdateLiensceKey>(ProcessAction.UPDATE_LIENSCE_KEY)
-    .pipe(
+  .pipe(
+    ofType<UpdateLiensceKey>(ProcessAction.UPDATE_LIENSCE_KEY),
       exhaustMap(action =>
         this.streamMap(this.transport.execute(LIENSCE_KEY.Update, action.payload))
       )
@@ -73,9 +75,9 @@ export class ProcessEffects {
 
   @Effect()
   delete$ = this.action
-    .ofType<DelLiensceKey>(ProcessAction.DELETE_LIENSCE_KEY)
-    .pipe(
-      exhaustMap(action =>
+  .pipe(
+    ofType<DelLiensceKey>(ProcessAction.DELETE_LIENSCE_KEY),
+    exhaustMap(action =>
         this.transport
           .execute<boolean>(LIENSCE_KEY.Delete)
           .pipe(

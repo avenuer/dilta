@@ -7,3 +7,4 @@ export * from './composer';
 export * from './util';
 export * from './electron';
 export * from './academics';
+export * from './client-shared';

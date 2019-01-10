@@ -14,7 +14,7 @@ module.exports = {
   // watch: true,
   output: {
     path: path.resolve(__dirname, '..', 'dist'),
-    filename: 'main.js'
+    filename: 'electron-main.js'
   },
   externals: [nodeExternals()],
   resolve: {
@@ -28,34 +28,20 @@ module.exports = {
     // parrellization of build
     new HappyPack({
       id: 'ts',
-      threads: 2,
+      threads: 3,
       loaders: [
         {
           loader: 'ts-loader',
           options: { happyPackMode: true }
         }
       ]
-    }),
-    new HappyPack({
-      id: 'nodeloader',
-      threads: 2,
-      loaders: [
-        {
-          loader: 'node-loader',
-        }
-      ]
-    }),
-
+    })
   ],
   module: {
     rules: [
       {
         test: /\.ts$/,
         loader: 'happypack/loader?id=ts',
-      },
-      {
-        test: /\.node$/,
-        loader: 'happypack/loader?id=nodeloader',
       }
     ]
   }
