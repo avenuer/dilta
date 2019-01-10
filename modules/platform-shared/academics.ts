@@ -32,6 +32,9 @@ export enum AcademicActions {
   UpdateSubjectRecord = '[ACADEMIC]  UPDATE SubjectRecords',
   StudentReportSheet = '[ACADEMIC]  GET StudentReportSheet',
   ClassStatDetails = '[ACADEMIC]  GET ClassStatDetails',
+  PromoteClass = '[ACADEMIC]  GET PromoteClass',
+  PromoteStudent = '[ACADEMIC]  GET PromoteStudent',
+  StudentPromotion = '[ACADEMIC]  GET PromoteStudent',
 }
 
 
@@ -45,6 +48,15 @@ export interface StudentSheet extends AcadmicRecordSheet {
   studentId: string;
 }
 
+export interface ClassPromotion {
+  level: SchoolClass;
+  newLevel?: SchoolClass;
+  session: string;
+}
+
+export interface PromotionSheet extends ClassPromotion {
+  studentId: string;
+}
 
 export interface ClassSheet {
   max: number;

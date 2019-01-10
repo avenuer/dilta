@@ -10,6 +10,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "repl": "node -r ./debugger.js repl.ts",
+    "marker-web:live": "npm run marker-web:prod && ts-node ./projects/marker-web/src/prender.ts",
     "marker-web:browser:prod": "ng build marker-web --prod",
     "marker-web:server:prod": "ng run marker-web:server && webpack-cli --config ./configs/webpack.server.js --progress --colors",
     "marker-web:prod": "npm run marker-web:server:prod && npm run marker-web:browser:prod",
@@ -17,6 +18,7 @@
     "e:start": "npm run e:clean && npx electron .",
     "e:watch": "npx webpack-cli --config=webpack.electron.js -w",
     "e:pack": "npx webpack-cli --config=./configs/webpack.electron.js",
+    "e:launch": "npm run e:pack && npm run e:start",
     "e:rebuild": "npx electron-rebuild",
     "e:clean": "rimraf C:\\Users\\AbiZeus\\AppData\\Local\\Temp\\pubkey.bc\\A3503c69c90b007512d60"
   },
@@ -41,7 +43,6 @@
     "@ngrx/schematics": "^7.0.0",
     "@ngrx/store": "^7.0.0",
     "@ngrx/store-devtools": "^7.0.0",
-    "@nguniversal/express-engine": "^7.0.2",
     "@nguniversal/module-map-ngfactory-loader": "7.0.2",
     "@nrwl/schematics": "^7.1.1",
     "@webcomponents/custom-elements": "^1.2.1",
@@ -53,9 +54,12 @@
     "core-js": "^2.5.4",
     "date-fns": "^1.29.0",
     "document-register-element": "^1.7.2",
+    "electron-serve": "^0.2.0",
     "injection-js": "^2.2.1",
     "inquirer": "^6.2.1",
     "jsonwebtoken": "^8.3.0",
+    "jspdf": "^1.5.3",
+    "jspdf-autotable": "^2.3.5",
     "keytar": "^4.3.0",
     "leveldown": "^4.0.1",
     "mathjs": "^5.2.3",
@@ -86,6 +90,7 @@
     "codelyzer": "~4.5.0",
     "dotenv": "^6.0.0",
     "electron": "3.0.13",
+    "electron-builder": "^20.38.4",
     "electron-rebuild": "^1.8.2",
     "faker": "^4.1.0",
     "happypack": "^5.0.0",
@@ -103,7 +108,7 @@
     "ts-node": "~7.0.1",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
     "tslint": "~5.12.0",
-    "typescript": "~3.2.2",
+    "typescript": "^3.1.6",
     "webpack-node-externals": "^1.7.2"
   }
 }

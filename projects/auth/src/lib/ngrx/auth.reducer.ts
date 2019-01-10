@@ -50,15 +50,13 @@ export function authReducer(
   state = authInitialState,
   action: AuthActions
 ): Authsuccess {
-  console.log(state, action);
   switch (action.type) {
     // when the login is succesfull
     case AuthActionTypes.Success: {
       return {
         // return new class state
-        ...state,
+        ...authInitialState,
         ...action.payload,
-        error: null,
         status: Status.Success,
         timeStamp: Date.now()
       };
@@ -66,7 +64,7 @@ export function authReducer(
     case AuthActionTypes.LoginFailure:
     case AuthActionTypes.SignUpFailure: {
       return {
-        ...state,
+        ...authInitialState,
         error: action.payload,
         status: Status.Failure,
         timeStamp: Date.now()

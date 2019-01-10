@@ -683,7 +683,7 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "ngx-build-plus:build",
           "options": {
             "outputPath": "dist/dilta-web-components",
             "index": "projects/dilta-web-components/src/index.html",
@@ -795,5 +795,10 @@
       }
     }
   },
-  "defaultProject": "marker-web"
+  "defaultProject": "marker-web",
+  "cli": {
+    "warnings": {
+      "typescriptMismatch": true
+    }
+  }
 }

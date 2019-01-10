@@ -3,13 +3,14 @@
 const path = require('path');
 const webpack = require('webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const nodeExternals = require('webpack-node-externals');
 
 
 const MarkerPath = path.join(__dirname, '..', 'projects', 'marker-web');
 
 module.exports = {
   entry: {
-    server: path.join(MarkerPath, 'src' ,'server.ts')
+    prender: path.join(MarkerPath, 'src' ,'prender.ts')
   },
   target: 'node',
   resolve: {
@@ -18,7 +19,7 @@ module.exports = {
       new TsconfigPathsPlugin({ configFile: path.join(MarkerPath,  'tsconfig.server.json') })
     ]
   },
-  externals: [/(node_modules|main\..*\.js)/],
+  externals: [/(node_modules|main\..*\.js)/, nodeExternals()],
   output: {
     libraryTarget: 'commonjs2',
     path: path.join(process.cwd(), 'dist', 'marker-web', 'server'),

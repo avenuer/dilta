@@ -1,4 +1,5 @@
 import { SchoolPreset, TermPreset, SchoolClass } from './preset';
+import { PromotionSheet } from './academics';
 
 /**
  * entity name mapping to avoid magical variables
@@ -17,7 +18,8 @@ export enum EntityNames {
   Record = 'record_model',
   Receipt = 'receipt_model',
   Setting = 'preference_model',
-  Expense = 'expense_model'
+  Expense = 'expense_model',
+  Promotion = 'promotion_model',
 }
 
 /**
@@ -178,6 +180,12 @@ export interface Subject extends Partial<BaseModel> {
   studentId: string;
   recordId: string;
 }
+
+/**
+ * Promotion Models, show the histroy of student academic promotions.
+ */
+export type Promotion = PromotionSheet  & Partial<BaseModel>;
+
 
 /**
  * teachers biodata information recored stored in the database's interface

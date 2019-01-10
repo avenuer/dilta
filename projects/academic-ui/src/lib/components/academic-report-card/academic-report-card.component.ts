@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import {
   School,
   schoolTermValueToKey,
-  schoolValueToKey,
+  schoolClassValueToKey,
   StudentReportSheet
   } from '@dilta/shared';
 import { format } from 'date-fns';
@@ -17,7 +17,7 @@ export class AcademicReportCardComponent implements OnInit {
   @Input() reportSheet: StudentReportSheet;
   @Input() school: School;
 
-  public levelName = schoolValueToKey;
+  public levelName = schoolClassValueToKey;
   public termName = schoolTermValueToKey;
 
   constructor() { }

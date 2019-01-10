@@ -13,7 +13,7 @@ import {
   fileBase64,
   schoolClasses,
   schoolClassValue,
-  schoolValueToKey,
+  schoolClassValueToKey,
   User
   } from '@dilta/shared';
 import { isEmpty } from 'lodash';
@@ -82,7 +82,7 @@ export class AdminBiodataEditorComponent implements OnInit {
     // constructs the form group value
     return this.fb.group({
       address: [value.address, required],
-      class: [(value.class) ? schoolValueToKey(value.class) : this.classes[0], required],
+      class: [(value.class) ? schoolClassValueToKey(value.class) : this.classes[0], required],
       email: [value.email || '', ''],
       gender: [value.gender, required],
       image: [value.image, required],

@@ -1,7 +1,7 @@
 <div class="container">
   <button
     class="printbtn"
-    (click)="util.printHtml('print')"
+    (click)="print()"
     mat-raised-button
     color="secondary"
   >
@@ -12,7 +12,7 @@
   </button>
   <acada-dynamic-table
   id="print"
-    [datagrid]="users$ | async"
+    [datagrid]="users"
     [keys]="keys"
   ></acada-dynamic-table>
 </div>

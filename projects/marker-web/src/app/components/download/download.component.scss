@@ -28,13 +28,18 @@ web-about {
   color: white;
 }
 
+.download-text {
+  text-align: center;
+}
+
 @media all and (max-width: 480px) {
   img {
     padding-left: 25%;
   }
 
   .download{
-    padding-left: 25%;
+    padding-left: 35%;
+
   }
 }
 

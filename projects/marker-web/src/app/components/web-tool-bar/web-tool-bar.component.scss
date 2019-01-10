@@ -3,9 +3,18 @@
     height: 64px;
     border-radius: 25%;
 }
+.show-desktop {
+  visibility: visible;
+}
+.show-mobile {
+  visibility: hidden;
+}
 
-@media (max-width: 768px) {
+@media (max-width: 420px) {
     .show-desktop {
       visibility: hidden;
+    }
+    .show-mobile {
+      visibility: visible;
     }
 }

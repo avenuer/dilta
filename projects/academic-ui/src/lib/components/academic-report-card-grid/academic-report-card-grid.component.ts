@@ -1,6 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { StudentReportSheet, TermPreset, RecordSheet } from '@dilta/shared';
-import { KeysConfig } from '../dynamic-datagrid/dynamic-datagrid.component';
+import {
+  TermPreset,
+  RecordSheet,
+  KeysConfig,
+  AcademicReportCardGridConfig
+} from '@dilta/shared';
 
 @Component({
   selector: 'acada-academic-report-card-grid',
@@ -13,16 +17,7 @@ export class AcademicReportCardGridComponent implements OnInit {
 
   @Input() term: TermPreset;
 
-  public keys: KeysConfig[] = [
-    { key: 'no', title: 'N/O', type: 'number', editable: false },
-    { key: 'subject', title: 'Subject', type: 'string', editable: false },
-    { key: 'firstCa', title: '1st C.A', type: 'number', editable: false },
-    { key: 'secondCa', title: '2nd C.A', type: 'number', editable: false },
-    { key: 'exam', title: 'Examination', type: 'number', editable: false },
-    { key: 'total', title: 'Total', type: 'number', editable: false },
-    { key: 'avg', title: 'Class Average', type: 'number', editable: false },
-    { key: 'grade', title: 'Grade', type: 'string', editable: false }
-  ];
+  public keys: KeysConfig[] = AcademicReportCardGridConfig;
 
   constructor() {}
 
@@ -54,7 +49,7 @@ export class AcademicReportCardGridComponent implements OnInit {
   }
 
   get data() {
-    const scores = (this.scoreSheet) ?  this.scoreSheet : [];
+    const scores = this.scoreSheet ? this.scoreSheet : [];
     return scores.map((score, no) => Object.assign({}, score, { no: no + 1 }));
   }
 

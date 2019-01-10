@@ -2,8 +2,16 @@ import { AcademicService } from '../../services/academic.service';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
-import { ClientUtilService } from '@dilta/client-shared';
-import { GridConfig, SearchFindRequest, Student } from '@dilta/shared';
+import { ClientUtilService, PrinterService } from '@dilta/client-shared';
+import {
+  GridConfig,
+  SearchFindRequest,
+  Student,
+  schoolClassValueToKey,
+  DateFormat,
+  StudentGridConfig
+} from '@dilta/shared';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'acada-levels-student',
@@ -11,7 +19,6 @@ import { GridConfig, SearchFindRequest, Student } from '@dilta/shared';
   styleUrls: ['./levels-student.component.scss']
 })
 export class LevelsStudentComponent implements OnInit {
-
   public students: Student[] = [];
 
   public config: GridConfig = {
@@ -23,18 +30,28 @@ export class LevelsStudentComponent implements OnInit {
     }
   };
 
+  private level: number;
+
   private _params = { limit: 10, skip: 0, sort: 'id' };
 
   private queryObj: SearchFindRequest<Student>;
 
-  constructor(private acada: AcademicService, private avr: ActivatedRoute, public util: ClientUtilService) {}
+  constructor(
+    private acada: AcademicService,
+    private printer: PrinterService,
+    private avr: ActivatedRoute,
+    public util: ClientUtilService
+  ) {}
 
   search(query: SearchFindRequest<Student>) {
-    this.acada.findStudents(query, this._params).subscribe(res => {
-      this.students = res.data;
-      this.config.paginator.count = res.limit;
-      this.config.paginator.length = res.total;
-    }, (err) => this.util.error(err));
+    this.acada.findStudents(query, this._params).subscribe(
+      res => {
+        this.students = res.data;
+        this.config.paginator.count = res.limit;
+        this.config.paginator.length = res.total;
+      },
+      err => this.util.error(err)
+    );
   }
 
   paginator($event: PageEvent) {
@@ -42,9 +59,34 @@ export class LevelsStudentComponent implements OnInit {
     this.search(this.queryObj);
   }
 
+  print() {
+    const level = schoolClassValueToKey(this.level);
+    this.acada
+      .findStudents(this.queryObj, {
+        limit: this.config.paginator.length,
+        sort: 'name',
+        skip: 0
+      })
+      .subscribe(
+        ({ data }) => {
+          const students = data.map(student => {
+            return {
+              ...student,
+              class: schoolClassValueToKey(student.class),
+              dob: format(student.dob, DateFormat)
+            };
+          });
+          this.printer.printTable(StudentGridConfig, students, {
+            filename: `${level} students ${format(Date.now(), DateFormat)}`
+          });
+        },
+        err => this.util.error(err)
+      );
+  }
+
   ngOnInit() {
-    const level = Number(this.avr.snapshot.params.id);
-    this.queryObj = { class: level} as any;
+    this.level = Number(this.avr.snapshot.params.id);
+    this.queryObj = { class: this.level } as any;
     this.search(this.queryObj);
   }
 }
