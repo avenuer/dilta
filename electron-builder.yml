@@ -1,22 +1,14 @@
 productName: Marker
 appId: io.dilta.marker
+copyright: Copyright © 2019 Dilta Consult
 directories:
   output: build/package
 files:
-  - "dist/**/*"
-dmg:
-  contents:
-    - x: 410
-      "y": 150
-      type: link
-      path: /Applications
-    - x: 130
-      "y": 150
-      type: file
+  - dist/**/*
 mac:
   icon: build/icons/icon.icns
 win:
-  icon: build/icons/marker.ico
+  icon: build/icons/icon.ico
   target: NSIS
 linux:
-  icon: build/icons
+  icon: build/icons/icon.png
