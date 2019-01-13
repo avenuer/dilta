@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientUtilService } from '@dilta/client-shared';
+import { Store } from '@ngrx/store';
+import { TransportService } from '@dilta/electron-client';
+import { AuthLogOut } from 'projects/auth/src/lib/ngrx';
+import { ElectronActions, ElectronOperations } from '@dilta/shared';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'acada-academic-home',
@@ -8,8 +13,12 @@ import { ClientUtilService } from '@dilta/client-shared';
   styleUrls: ['./academic-home.component.scss']
 })
 export class AcademicHomeComponent implements OnInit {
-
-  constructor(public router: Router, private util: ClientUtilService) { }
+  constructor(
+    private store: Store<any>,
+    private router: Router,
+    private util: ClientUtilService,
+    private transport: TransportService
+  ) {}
 
   changeRoute(path: string) {
     const route = ['academics'];
@@ -19,7 +28,30 @@ export class AcademicHomeComponent implements OnInit {
     this.router.navigate(route);
   }
 
-  ngOnInit() {
+  sync() {
+    this.transport
+      .execute<ElectronOperations<string>>(ElectronActions.DatabaseSync)
+      .pipe(first())
+      .subscribe(
+        ({ data, operation }) => this.util.success(operation, data),
+        err => this.util.error(err)
+      );
   }
 
+  update() {
+    this.transport
+      .execute<ElectronOperations<string>>(ElectronActions.Update)
+      .pipe(first())
+      .subscribe(
+        ({ data, operation }) => this.util.success(operation, data),
+        err => this.util.error(err)
+      );
+  }
+
+  logout() {
+    this.store.dispatch(new AuthLogOut());
+    this.router.navigateByUrl('/');
+  }
+
+  ngOnInit() {}
 }

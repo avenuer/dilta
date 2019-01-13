@@ -11,9 +11,9 @@ import { Platform } from '@dilta/shared';
 import { UtilModule } from '@dilta/util';
 
 const embeddedProviders =
-  process.env.PLATFORM === Platform.Desktop
-    ? [EmbededLiensceService, Keytar, LiensceSecurity]
-    : [];
+	process.env.PLATFORM === Platform.Desktop
+	? [EmbededLiensceService, Keytar, LiensceSecurity]
+	: [];
 
 @Module({
   imports: [UtilModule, DatabaseModule],
