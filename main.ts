@@ -1,5 +1,12 @@
 import 'reflect-metadata';
-require('dotenv').config();
+import { devtools, isDev } from 'modules/electron/extenstion';
+import { join } from 'path';
+
+// conditional import for environmental variables
+const ENV_BASE_PATH = isDev()
+  ? join(process.cwd(), 'dist')
+  : join(process.cwd(), 'resources', 'app.asar', 'dist');
+require('dotenv').config({ path: join(ENV_BASE_PATH, 'electron.env') });
 
 import {
   ProcessIPCTransport,
@@ -8,12 +15,9 @@ import {
   WindowConfig
 } from '@dilta/electron';
 import { app, BrowserWindow, ipcMain } from 'electron';
-import { devtools } from 'modules/electron/extenstion';
 import * as serve from 'electron-serve';
 
 const protocol = serve({ directory: 'dist', scheme: 'dilta' });
-
-//  TODO: make conditional import for environmental variables
 
 (global as any).program = program;
 
@@ -23,7 +27,9 @@ let win: BrowserWindow | null;
 
 async function createWindow(config: WindowConfig) {
   // Create the browser window.
-  win = new BrowserWindow(config.config || { width: 503, height: 671, show: false });
+  win = new BrowserWindow(
+    config.config || { width: 503, height: 671, show: false }
+  );
   // off toolbars
   win.setMenu(null);
 
@@ -31,10 +37,13 @@ async function createWindow(config: WindowConfig) {
   protocol(win);
   win.loadURL(`dilta://dist/${config.path}`);
 
-  // Open the DevTools.
   win.webContents.openDevTools();
-  // add dev functions
-  devtools(win);
+  // Open the DevTools.
+  if (isDev()) {
+    win.webContents.openDevTools();
+    // add dev functions
+    devtools(win);
+  }
 
   /** show but hide if page not rendered */
   win.on('ready-to-show', () => {
@@ -52,7 +61,6 @@ async function createWindow(config: WindowConfig) {
     win = null;
   });
 }
-
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

@@ -1,8 +1,8 @@
 import { to } from 'await-to-js';
 import { deletePassword, getPassword, setPassword } from 'keytar';
 import { Logger } from '@dilta/util';
-import { PlatformShared, SchoolEncryptedData } from '@dilta/shared';
-import { Injectable } from '@dilta/core';
+import { PlatformShared, SchoolEncryptedData, LIENSCE_KEY } from '@dilta/shared';
+import { Injectable, Action } from '@dilta/core';
 
 /** the appicaton name on the platform */
 export const APPLICATION_NAME = PlatformShared.ApplicationName;
@@ -52,6 +52,7 @@ export class Keytar {
    *
    * @returns
    */
+  @Action(LIENSCE_KEY.Delete)
   deleteLiensceKey() {
     this.logger.debug({
       message: `deleting the liensceKey from the keystore`,

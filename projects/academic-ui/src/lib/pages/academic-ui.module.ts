@@ -18,10 +18,16 @@ import { AuthenticationFeatureModule } from '@dilta/client-auth';
 import { MaterialModule, RouterDirection, SchoolFeatureNgrxModule } from '@dilta/client-shared';
 import { ElectronTransportModule } from '@dilta/electron-client';
 import { ProcessNgrxModule } from 'projects/setup/src/app/process/process.module';
+import {
+  MatMenuModule
+  } from '@angular/material';
+
+
 
 @NgModule({
   imports: [
-    MaterialModule,
+      MaterialModule,
+      MatMenuModule,
     AcademicSharedUiModule,
     AcademicRoutingModule,
     ElectronTransportModule,

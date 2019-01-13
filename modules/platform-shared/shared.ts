@@ -19,6 +19,9 @@ export enum SettingTypes {
   user = 'user'
 }
 
+export enum DatabaseActions {
+  Synchronization = 'Database [Synchronization]'
+}
 
 /**
  * clean Numeric enums by removing the Number values

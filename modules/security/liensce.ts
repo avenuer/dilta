@@ -1,7 +1,6 @@
 import { LiensceCrypto } from './crypto';
 import { Action, Injectable } from '@dilta/core';
 import { LIENSCE_KEY, SchoolEncryptedData } from '@dilta/shared';
-import { autobind } from 'core-decorators';
 import { Logger } from 'modules/util';
 
 @Injectable()
