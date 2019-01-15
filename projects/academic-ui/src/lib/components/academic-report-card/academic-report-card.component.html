@@ -1,36 +1,50 @@
 <div class="container">
   <div>
     <mat-card class="school">
-      <img class="logo" [src]="school?.logo" alt="">
-      <p> {{ school?.name }} <br> {{ school?.address }} </p>
+      <img class="logo" [src]="school?.logo" alt="" />
+      <p>
+        {{ school?.name }} <br />
+        {{ school?.address }}
+      </p>
     </mat-card>
   </div>
   <div>
     <mat-card>
-        <h2> Score Card </h2>
-        <h4> {{ termName(reportSheet?.term) }} Term of {{ reportSheet?.session }} Academic Year. </h4>
-        <h4> Pupil's Information </h4>
-        <hr>
-      <div  class="tabled-row">
+      <h2>Score Card</h2>
+      <h4>
+        {{ termName(reportSheet?.term) }} Term of
+        {{ reportSheet?.session }} Academic Year.
+      </h4>
+      <h4>Pupil's Information</h4>
+      <hr />
+      <div class="tabled-row">
         <span> Name: {{ reportSheet?.biodata?.name.toUpperCase() }} </span>
         <span> Admission: {{ reportSheet?.biodata?.admissionNo }} </span>
       </div>
       <div class="striped">
-        <hr>
-        <div  class="tabled-row">
+        <hr />
+        <div class="tabled-row">
           <span> Sex: {{ reportSheet?.biodata?.gender }} </span>
           <span> Number In Class: {{ reportSheet?.totalStudents }} </span>
         </div>
-        <hr>
+        <hr />
       </div>
-      <div  class="tabled-row">
-        <span> Date Of Birth: {{ formatDob(reportSheet?.biodata?.dob )}} </span>
+      <div class="tabled-row">
+        <span> Date Of Birth: {{ formatDob(reportSheet?.biodata?.dob) }} </span>
         <span> Class: {{ levelName(reportSheet?.level) }} </span>
+        <!-- <hr /> -->
       </div>
-      <hr>
-      <h5> Cognitive, Affective and Psychomotor  Assessment </h5>
+      <div class="striped">
+        <hr />
+        <div class="tabled-row">
+          <span> Cumulative Score: {{ reportSheet?.cumulative?.total }} </span>
+          <span> Cumulative Grade: {{ reportSheet?.cumulative?.grade }} </span>
+          <span> Class Average: {{ reportSheet?.cumulative?.average }} </span>
+        </div>
+        <hr />
+      </div>
+      <h5>Cognitive, Affective and Psychomotor Assessment</h5>
     </mat-card>
-
   </div>
   <acada-academic-report-card-grid
     [term]="reportSheet?.term"

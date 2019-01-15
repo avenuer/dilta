@@ -52,7 +52,13 @@ export class ScoreSheet {
     const cumulative = this.studentCumulativeRecord(scoreSheet);
     const student = await this.student.retrieve$({ id: sheet.studentId });
     const totalStudents = await this.studentCounts(sheet.level);
-    return { scoreSheet, cumulative, biodata: student, ...sheet, totalStudents };
+    return {
+      scoreSheet,
+      cumulative,
+      biodata: student,
+      ...sheet,
+      totalStudents
+    };
   }
 
   async classRecords({ term, session, level }: AcadmicRecordSheet) {
@@ -110,15 +116,20 @@ export class ScoreSheet {
     // this sort from highest to lowest
     const sorted = data.sort((a, b) => b.total - a.total);
     // retrieves the student position
-    const position = classPositionPreset(data.findIndex((score) => score.studentId === studentId));
-    const max = (sorted[0]) ? sorted[0].total : 0;
-    const min = (sorted[sorted.length - 1]) ? sorted[sorted.length - 1].total : 0;
-    const sum = (sorted as any[]).reduce((prev, curr) => {
-      return {
-        total: prev.total + curr.total
-      };
-    }, { total: 0 });
-    const avg = (sorted.length > 0) ? sum.total / sorted.length : 0;
+    const position = classPositionPreset(
+      data.findIndex(score => score.studentId === studentId)
+    );
+    const max = sorted[0] ? sorted[0].total : 0;
+    const min = sorted[sorted.length - 1] ? sorted[sorted.length - 1].total : 0;
+    const sum = (sorted as any[]).reduce(
+      (prev, curr) => {
+        return {
+          total: prev.total + curr.total
+        };
+      },
+      { total: 0 }
+    );
+    const avg = sorted.length > 0 ? sum.total / sorted.length : 0;
     return { max, min, avg, position };
   }
 
@@ -138,7 +149,9 @@ export class ScoreSheet {
       recordId,
       studentId
     });
-    score = score ? score : { total: 0, firstCa: 0, exam: 0, secondCa: 0, recordId, studentId };
+    score = score
+      ? score
+      : { total: 0, firstCa: 0, exam: 0, secondCa: 0, recordId, studentId };
     const grade = gradePreset(score.total);
     return { ...grade, ...score };
   }
@@ -188,7 +201,6 @@ export class ScoreSheet {
     return map;
   }
 
-
   /**
    * collates the total student records across all subjects
    *
@@ -197,8 +209,14 @@ export class ScoreSheet {
    * @memberof ScoreSheet
    */
   studentCumulativeRecord(sheets: RecordSheet[]): CumulativeRecordData {
-    const total = (sheets as any).reduce((prev, curr) => prev.total + curr.total, 0);
-    const average = (sheets.length > 1) ? total / sheets.length : total;
+    if (sheets.length === 0) {
+      return { average: 0, grade: gradePreset(0).grade, total: 0 };
+    }
+    const total =
+      sheets.length === 1
+        ? sheets[0].total
+        : (sheets as any).reduce((prev, curr) => prev.total + curr.total);
+    const average = sheets.length > 1 ? total / sheets.length : total;
     const grade = gradePreset(average).grade;
     return { average, grade, total };
   }
@@ -233,5 +251,4 @@ export class ScoreSheet {
     }
     return report;
   }
-
 }

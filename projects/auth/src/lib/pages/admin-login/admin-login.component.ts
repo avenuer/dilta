@@ -40,7 +40,6 @@ export class AuthUserLoginComponent implements OnInit {
       .select(AuthFeature)
       .pipe(distinct())
       .subscribe(state => {
-        console.log({ state });
         if (state.error) {
           this.util.error(state.error);
           return;

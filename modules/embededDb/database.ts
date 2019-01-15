@@ -6,7 +6,9 @@ import { Logger } from '@dilta/util';
 /** the typeof adapter for rxdb */
 const DB_ADAPTER = 'leveldb';
 /** database plugin adapters to use */
-const rxDbPlugins = [require('pouchdb-adapter-leveldb')];
+// const rxDbPlugins = [require('pouchdb-adapter-leveldb')];
+/** database plugin adapters to use */
+const rxDbPlugins = [require('pouchdb-adapter-leveldb'), require('pouchdb-adapter-http')];
 /** pouchdb options */
 const options = {};
 const dir = join(process.env.HOMEPATH, 'ditla', 'database');

@@ -4,7 +4,7 @@ import { ClientUtilService } from '@dilta/client-shared';
 import { Store } from '@ngrx/store';
 import { TransportService } from '@dilta/electron-client';
 import { AuthLogOut } from 'projects/auth/src/lib/ngrx';
-import { ElectronActions, ElectronOperations } from '@dilta/shared';
+import { ElectronActions, ElectronOperations, Synchronization } from '@dilta/shared';
 import { first } from 'rxjs/operators';
 
 @Component({
@@ -28,9 +28,9 @@ export class AcademicHomeComponent implements OnInit {
     this.router.navigate(route);
   }
 
-  sync() {
+  sync(direction: string) {
     this.transport
-      .execute<ElectronOperations<string>>(ElectronActions.DatabaseSync)
+      .execute<ElectronOperations<string>>(ElectronActions.DatabaseSync, Synchronization[direction])
       .pipe(first())
       .subscribe(
         ({ data, operation }) => this.util.success(operation, data),

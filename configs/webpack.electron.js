@@ -9,12 +9,15 @@ console.log(__dirname);
 
 module.exports = {
   target: 'electron-main',
-  entry: 'main.ts',
+  entry: {
+    main: path.join(process.cwd(), 'main.ts'),
+    cli: path.join(process.cwd(), 'index.ts')
+  },
   devtool: 'eval-source-map',
   // watch: true,
   output: {
     path: path.resolve(__dirname, '..', 'dist'),
-    filename: 'electron-main.js'
+    filename: '[name].js'
   },
   externals: [nodeExternals()],
   resolve: {

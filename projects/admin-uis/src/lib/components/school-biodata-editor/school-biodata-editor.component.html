@@ -1,6 +1,6 @@
 <form class="container" [formGroup]="schoolForm">
   <div class="image-group">
-    <img class="sm-img school-logo-img" [src]="img" />
+    <img class="sm-img school-logo-img" [src]="schoolForm.get('logo').valueChanges | async" />
     <div class="upload-button">
       <label >
         <input type="file" ngFileSelect [options]="uploadOptions" (uploadOutput)="fil($event.file)" [uploadInput]="uploadInput">

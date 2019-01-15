@@ -3,10 +3,15 @@ import { devtools, isDev } from 'modules/electron/extenstion';
 import { join } from 'path';
 
 // conditional import for environmental variables
-const ENV_BASE_PATH = isDev()
-  ? join(process.cwd(), 'dist')
-  : join(process.cwd(), 'resources', 'app.asar', 'dist');
-require('dotenv').config({ path: join(ENV_BASE_PATH, 'electron.env') });
+if (isDev()) {
+  require('dotenv').config();
+}
+
+// const ENV_BASE_PATH = isDev()
+//   ? join(process.cwd())
+//   : join(process.cwd(), 'resources', 'app.asar', 'dist');
+// console.log(ENV_BASE_PATH, join(ENV_BASE_PATH, 'electron.env'), process.env.ELECTRON_IS_DEV)
+// require('dotenv').config({ path: join(ENV_BASE_PATH, 'electron.env') });
 
 import {
   ProcessIPCTransport,
@@ -37,7 +42,6 @@ async function createWindow(config: WindowConfig) {
   protocol(win);
   win.loadURL(`dilta://dist/${config.path}`);
 
-  win.webContents.openDevTools();
   // Open the DevTools.
   if (isDev()) {
     win.webContents.openDevTools();
