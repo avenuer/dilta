@@ -247,8 +247,8 @@ const scores: ScoreMax[] = [
   { max: 39, symbol: 'F' },
   { max: 44, symbol: 'E' },
   { max: 49, symbol: 'D' },
-  { max: 59, symbol: 'c' },
-  { max: 64, symbol: 'B' },
+  { max: 59, symbol: 'C' },
+  { max: 69, symbol: 'B' },
   { max: 100, symbol: 'A' }
 ];
 
@@ -261,7 +261,7 @@ const scores: ScoreMax[] = [
  */
 export function gradePreset(score: number): GradeSheet {
   const preset = scores.reduce((prev, curr) => {
-    if (score >= prev.max && score <= curr.max ) {
+    if (score >= (prev.max + 1) && score <= (curr.max + 1) ) {
       return curr;
     }
     return prev;

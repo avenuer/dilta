@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { TransportService } from '@dilta/electron-client';
-import { student } from '@dilta/gen';
 import {
   EntityNames,
   FindQueryParam,
@@ -17,7 +16,7 @@ import {
   schoolTermValueToKey,
   ClassDetailedStat
 } from '@dilta/shared';
-import { first, map, combineLatest } from 'rxjs/operators';
+import {  map, combineLatest } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { schoolFeature } from '@dilta/client-shared';
 import { AuthFeature } from 'projects/auth/src/lib/ngrx';
@@ -90,16 +89,4 @@ export class AcademicService {
     );
   }
 
-  count(no: number) {
-    for (let i = 0; i < no; i++) {
-      this.transport
-        .modelAction<Student>(
-          EntityNames.Student,
-          ModelOperations.Create,
-          student()
-        )
-        .pipe(first())
-        .subscribe(console.log);
-    }
-  }
 }

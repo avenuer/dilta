@@ -1,4 +1,4 @@
-import { LiensceKey } from '../../process/process.actions';
+import { UpdateLiensceKey } from '../../process/process.actions';
 import { processFeature, ProcessState } from '../../process/process.reducer';
 import {
   Component,
@@ -96,7 +96,7 @@ export class LiensceKeyComponent implements OnInit, OnDestroy {
    * @memberof LiensceKeyComponent
    */
   verify(key: string) {
-    this.store.dispatch(new LiensceKey(key));
+    this.store.dispatch(new UpdateLiensceKey(key));
   }
 
   /**
@@ -111,7 +111,6 @@ export class LiensceKeyComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.select(processFeature).subscribe(({ error, schoolData }) => {
-      console.log({ error, schoolData });
       if (error) {
         return this.displayError(new Error(error.message));
       }

@@ -68,5 +68,3 @@ export class LiensceGenerator {
   }
 }
 
-const _s = LiensceGenerator.generateDemoKey();
-console.log(_s);

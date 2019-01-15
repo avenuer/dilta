@@ -36,7 +36,6 @@ export class AuthSecurity {
   /** saves the user authentication */
   async save(auth: Auth) {
     const password = await  this.crypt.hashPassword(auth.password);
-    console.log(password);
     auth.password = password;
     auth = await this.auth.create$(auth);
     return auth;

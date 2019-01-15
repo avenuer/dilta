@@ -49,9 +49,15 @@
 </mat-menu>
 
 <mat-menu #menu="matMenu">
-  <a mat-menu-item (click)="sync()"> Synchronization </a>
+  <a mat-menu-item [matMenuTriggerFor]="syncMenu"> Synchronization </a>
   <a mat-menu-item (click)="update()"> Update </a>
   <a mat-menu-item (click)="logout()"> Logout </a>
+</mat-menu>
+
+<mat-menu #syncMenu="matMenu">
+  <a mat-menu-item (click)="sync('Upload')"> Upload to Online </a>
+  <a mat-menu-item (click)="sync('Download')"> Download from Online </a>
+  <a mat-menu-item (click)="sync('Both')"> Both-ways </a>
 </mat-menu>
 
 <div class="container"><router-outlet></router-outlet></div>

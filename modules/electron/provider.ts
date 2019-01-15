@@ -1,16 +1,25 @@
 import { Logger } from '@dilta/util';
 import { app } from 'electron';
 import { Action, Injectable } from '@dilta/core';
-import { ElectronActions, ElectronOperations } from '@dilta/shared';
+import {
+  ElectronActions,
+  ElectronOperations,
+  Synchronization,
+  ReplicationEvents
+} from '@dilta/shared';
 import { EmbededLiensceService, Keytar } from '@dilta/security';
 import { SETUP_WINDOW_CONFIG, PROGRAM_WINDOW_CONFIG } from './config';
+import { ElectronDatabaseSync } from './electron-db-sync';
+
+const REMOTE_DATABASE = process.env.REMOTE_DATABASE;
 
 @Injectable()
 export class ElectronService {
   constructor(
     private log: Logger,
     private liensce: EmbededLiensceService,
-    private keytar: Keytar
+    private keytar: Keytar,
+    private sync: ElectronDatabaseSync
   ) {}
 
   @Action(ElectronActions.Exit)
@@ -30,18 +39,15 @@ export class ElectronService {
       module: 'ElectronModule',
       trace: 'relaunch'
     });
-  }
-
-  @Action(ElectronActions.Update)
-  async update(): Promise<ElectronOperations<string>> {
-    return {
-      operation: ElectronActions.Update,
-      data: 'Electron Update check started'
-    };
+    app.relaunch();
+    app.exit();
   }
 
   @Action(ElectronActions.DatabaseSync)
-  async databaseSync(): Promise<ElectronOperations<string>> {
+  async databaseSync(
+    direction: Synchronization
+  ): Promise<ElectronOperations<string>> {
+    this.sync.emit(ReplicationEvents.Start, direction);
     return {
       operation: ElectronActions.DatabaseSync,
       data: 'Database Synchronization started'
@@ -52,8 +58,7 @@ export class ElectronService {
   async resetLiensce(): Promise<ElectronOperations<string>> {
     const lienseReset = await this.keytar.deleteLiensceKey();
     if (lienseReset) {
-      app.relaunch();
-      app.exit();
+      this.relaunch();
       return {
         operation: ElectronActions.LiensceReset,
         data: 'Program liensce reset successfully'

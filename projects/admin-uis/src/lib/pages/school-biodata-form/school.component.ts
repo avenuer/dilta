@@ -1,18 +1,29 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Route } from '@angular/router';
-import { ClientUtilService, RouterDirection, SchoolActionSuccess } from '@dilta/client-shared';
+import {
+  ClientUtilService,
+  RouterDirection,
+  SchoolActionSuccess
+} from '@dilta/client-shared';
 import { TransportService } from '@dilta/electron-client';
 import {
   EntityNames,
   ModelOperations,
   PresetAction,
   School
-  } from '@dilta/shared';
+} from '@dilta/shared';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { exhaustMap, first, map } from 'rxjs/operators';
+import { exhaustMap, first, map, combineLatest } from 'rxjs/operators';
 
 const ErrorDisplayTimeOut = 4000;
+
+interface ViewObject {
+  school: School;
+  states: string[];
+  lgas: string[];
+  categories: string[];
+}
 
 /**
  * ui for setting up school biodata
@@ -28,28 +39,7 @@ const ErrorDisplayTimeOut = 4000;
   encapsulation: ViewEncapsulation.None
 })
 export class SchoolDataFormComponent implements OnInit {
-
-  /**
-   * list of nigerian states
-   *
-   * @public
-   * @memberof SchoolComponent
-   */
-  public states$: Observable<string[]>;
-
-  /**
-   * list of local Govts in nigeria
-   *
-   * @memberof SchoolComponent
-   */
-  public lgas$: Observable<string[]>;
-
-  /**
-   * list of school categories suported
-   *
-   * @memberof SchoolComponent
-   */
-  public schoolCategories$: Observable<string[]>;
+  public viewObject$: Observable<ViewObject>;
 
   constructor(
     private dir: RouterDirection,
@@ -73,19 +63,19 @@ export class SchoolDataFormComponent implements OnInit {
     });
     this.route.params
       .pipe(
-        map(({ id }) => Object.assign({}, $event, { globalId: id })),
+        map(({ id }) => Object.assign({ id } as any, $event, { globalId: id })),
         exhaustMap((school: School) =>
           this.transport.modelAction<School>(
             EntityNames.School,
-            ModelOperations.Create,
+            ModelOperations.Update,
+            school.id,
             school
           )
         )
       )
       .pipe(first())
-      .subscribe(this.changeRoute.bind(this), (err) => this.util.error(err));
+      .subscribe(this.changeRoute.bind(this), err => this.util.error(err));
   }
-
 
   /**
    * changes the route to the admin page for setup
@@ -105,11 +95,30 @@ export class SchoolDataFormComponent implements OnInit {
     this.dir.schoolForm(school);
   }
 
-  ngOnInit() {
-    this.states$ = this.transport.execute(PresetAction.State);
-    this.lgas$ = this.transport.execute(PresetAction.Lga);
-    this.schoolCategories$ = this.transport.execute(
-      PresetAction.SchoolCategories
+  retrieveSchool() {
+    return this.route.params.pipe(
+      map(({ id }) => id),
+      exhaustMap(id =>
+        this.transport.modelAction<School>(
+          EntityNames.School,
+          ModelOperations.Retrieve,
+          { id }
+        )
+      )
     );
+  }
+
+  reactiveView(): Observable<ViewObject> {
+    return this.retrieveSchool().pipe(
+      combineLatest(
+        this.transport.execute<string[]>(PresetAction.State),
+        this.transport.execute<string[]>(PresetAction.Lga),
+        this.transport.execute(PresetAction.SchoolCategories)
+      )
+    ).pipe(map(([school, states, lgas, categories]) => Object.assign({ school, states, lgas, categories })));
+  }
+
+  ngOnInit() {
+    this.viewObject$ = this.reactiveView();
   }
 }

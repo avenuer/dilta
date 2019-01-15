@@ -121,7 +121,7 @@ export function defaultPreInsert<T extends Partial<BaseModel>>(doc: T): T {
  * @returns {T}
  */
 export function defaultPreSave<T extends Partial<BaseModel>>(doc: T): T {
-  return { ...doc as any, updatedAt: Date.now() };
+  return {...generateBase(doc as any), ...doc as any, updatedAt: Date.now() };
 }
 
 /** default middlewareoptinons */

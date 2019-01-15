@@ -136,7 +136,6 @@ export class AdminBiodataEditorComponent implements OnInit {
   cleanValue(value: Partial<User>) {
     value.phoneNos = !value.phoneNos ? 'none' : value.phoneNos;
     (value as any).class = schoolClassValue(value.class);
-    console.log(value);
     return value;
   }
 

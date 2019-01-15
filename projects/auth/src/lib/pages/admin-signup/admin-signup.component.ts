@@ -80,7 +80,6 @@ export class AuthUserSignupComponent implements OnInit, OnDestroy {
   storeListen() {
     return this.store.select(AuthFeature)
       .subscribe((state) => {
-        console.log({ state });
         if (state.error) {
           this.sendError(state.error);
           return;

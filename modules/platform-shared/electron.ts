@@ -15,3 +15,10 @@ export interface ElectronOperations<res> {
   operation: ElectronActions;
   data: res;
 }
+
+
+export enum Synchronization {
+  Upload = '[Database] Synchronization Upload',
+  Download = '[Database] Synchronization Download',
+  Both = '[Database] Synchronization Both',
+}

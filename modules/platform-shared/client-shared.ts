@@ -44,7 +44,9 @@ export const AcademicReportCardGridConfig: KeysConfig[] = [
   { key: 'exam', title: 'Examination', type: 'number', editable: false },
   { key: 'total', title: 'Total', type: 'number', editable: false },
   { key: 'avg', title: 'Class Average', type: 'number', editable: false },
-  { key: 'grade', title: 'Grade', type: 'string', editable: false }
+  { key: 'position', title: 'Position', type: 'string', editable: false },
+  { key: 'grade', title: 'Grade', type: 'string', editable: false },
+  { key: 'comment', title: 'Remarks', type: 'string', editable: false },
 ];
 
 export const LevelStaticDetailsGridConfig: KeysConfig[] = [
