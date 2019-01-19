@@ -12,6 +12,7 @@
   </button>
   <acada-dynamic-table
   id="print"
+  (sender)="dir.viewUserDetails($event)"
     [datagrid]="users"
     [keys]="keys"
   ></acada-dynamic-table>

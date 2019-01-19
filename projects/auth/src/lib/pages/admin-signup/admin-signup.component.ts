@@ -7,11 +7,13 @@ import {
   ViewEncapsulation
   } from '@angular/core';
 import { ClientUtilService, RouterDirection, schoolFeature } from '@dilta/client-shared';
-import { Auth, School, Signup } from '@dilta/shared';
+import { Auth, School, Signup, AuthenticationLevels } from '@dilta/shared';
 import { Store } from '@ngrx/store';
 import { isNil } from 'lodash';
 import { Subscription } from 'rxjs';
 import { first, map, skipWhile } from 'rxjs/operators';
+
+const { Administrator,Busar, Manager, Teacher } = AuthenticationLevels;
 
 /**
  * ui for signing up adminstartaions for login
@@ -35,7 +37,7 @@ export class AuthUserSignupComponent implements OnInit, OnDestroy {
    * @public
    * @memberof AuthUserSignupBase
    */
-  public authLevels = ['Teacher', 'Busar', 'Manager', 'Administrator'];
+  public authLevels =  [Administrator,Busar, Manager, Teacher];
 
   public localSubscription: Subscription[] = [];
 

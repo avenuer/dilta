@@ -1,4 +1,5 @@
 import { first, last } from 'lodash';
+
 import { RxError } from 'rxdb';
 
 export class EmbeddedRxDBError extends Error {
@@ -8,6 +9,7 @@ export class EmbeddedRxDBError extends Error {
 
   /** formats RxDBErrors to a single  meanfull Error */
   static cleanError(err: RxError) {
+    console.log(err);
     const { cleanField } = EmbeddedRxDBError;
     const errMgs = err.parameters.errors
       .map(e => `${cleanField(e.field)}: ${e.message}`)

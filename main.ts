@@ -1,26 +1,24 @@
 import 'reflect-metadata';
+
+import * as serve from 'electron-serve';
+
+import { BrowserWindow, app, ipcMain } from 'electron';
+import {
+  ElectronService,
+  ProcessIPCTransport,
+  WindowConfig,
+  program
+} from '@dilta/electron';
 import { devtools, isDev } from 'modules/electron/extenstion';
+
 import { join } from 'path';
 
 // conditional import for environmental variables
-if (isDev()) {
-  require('dotenv').config();
-}
+const ENV_BASE_PATH = isDev()
+  ? join(process.cwd())
+  : join(process.cwd(), 'resources', 'app.asar', 'dist');
+require('dotenv').config({ path: join(ENV_BASE_PATH, 'electron-builder.env') });
 
-// const ENV_BASE_PATH = isDev()
-//   ? join(process.cwd())
-//   : join(process.cwd(), 'resources', 'app.asar', 'dist');
-// console.log(ENV_BASE_PATH, join(ENV_BASE_PATH, 'electron.env'), process.env.ELECTRON_IS_DEV)
-// require('dotenv').config({ path: join(ENV_BASE_PATH, 'electron.env') });
-
-import {
-  ProcessIPCTransport,
-  program,
-  ElectronService,
-  WindowConfig
-} from '@dilta/electron';
-import { app, BrowserWindow, ipcMain } from 'electron';
-import * as serve from 'electron-serve';
 
 const protocol = serve({ directory: 'dist', scheme: 'dilta' });
 

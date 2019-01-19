@@ -1,19 +1,20 @@
+import { ClientUtilService, PrinterService, RouterDirection } from '@dilta/client-shared';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { ClientUtilService, PrinterService } from '@dilta/client-shared';
-import { TransportService } from '@dilta/electron-client';
 import {
+  DateFormat,
   EntityNames,
   FindResponse,
   ModelOperations,
   User,
-  UsersGridConfig,
-  DateFormat
+  UsersGridConfig
 } from '@dilta/shared';
-import { Store } from '@ngrx/store';
-import { AuthLogOut } from 'projects/auth/src/lib/ngrx/auth.action';
-import { format } from 'date-fns';
 import { first, map } from 'rxjs/operators';
+
+import { AuthLogOut } from 'projects/auth/src/lib/ngrx/auth.action';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { TransportService } from '@dilta/electron-client';
+import { format } from 'date-fns';
 
 type CleanUser = User & { no: number };
 
@@ -38,7 +39,8 @@ export class AdminGridPageComponent implements OnInit {
     private router: Router,
     private store: Store<any>,
     private printer: PrinterService,
-    public util: ClientUtilService
+    public util: ClientUtilService,
+    public dir: RouterDirection
   ) {}
 
   newAdmin() {

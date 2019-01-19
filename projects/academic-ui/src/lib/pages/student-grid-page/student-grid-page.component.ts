@@ -1,7 +1,7 @@
 import { AcademicService } from '../../services/academic.service';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material';
-import { ClientUtilService, PrinterService } from '@dilta/client-shared';
+import { ClientUtilService, PrinterService, RouterDirection } from '@dilta/client-shared';
 import {
   GridConfig,
   SearchFindRequest,
@@ -36,7 +36,8 @@ export class StudentGridPageComponent implements OnInit {
   constructor(
     private acada: AcademicService,
     public util: ClientUtilService,
-    private printer: PrinterService
+    private printer: PrinterService,
+    public route: RouterDirection
   ) {}
 
   search(query: SearchFindRequest<Student>) {

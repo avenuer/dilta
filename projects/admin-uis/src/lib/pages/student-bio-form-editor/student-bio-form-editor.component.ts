@@ -1,17 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import {
   ClientUtilService,
   RouterDirection,
-  schoolFeature,
-  SchoolStore
-  } from '@dilta/client-shared';
-import { TransportService } from '@dilta/electron-client';
-import { EntityNames, ModelOperations, Student } from '@dilta/shared';
-import { Store } from '@ngrx/store';
-import { format } from 'date-fns';
-import { Observable } from 'rxjs';
+  SchoolStore,
+  schoolFeature
+} from '@dilta/client-shared';
+import { Component, OnInit } from '@angular/core';
+import {
+  EntityNames,
+  ModelOperations,
+  Student,
+  schoolClassValueToKey
+} from '@dilta/shared';
 import { exhaustMap, first, map } from 'rxjs/operators';
+
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { TransportService } from '@dilta/electron-client';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'admin-ui-student-bio-form-editor',
@@ -40,15 +46,14 @@ export class StudentBioFormEditorComponent implements OnInit {
     this.store
       .select(schoolFeature)
       .pipe(
-        exhaustMap(
-          sch =>
-            $event.id
-              ? this.updateStudent($event)
-              : this.createStudent(sch, $event)
+        exhaustMap(sch =>
+          $event.id
+            ? this.updateStudent($event)
+            : this.createStudent(sch, $event)
         ),
         first()
       )
-      .subscribe(this.changeRoute.bind(this), (err) => this.util.error(err));
+      .subscribe(this.changeRoute.bind(this), err => this.util.error(err));
   }
 
   /**
@@ -100,12 +105,18 @@ export class StudentBioFormEditorComponent implements OnInit {
     return this.avr.params.pipe(
       map(param => (param as any).id || ''),
       exhaustMap(id => {
-        return this.transport.modelAction(
+        return this.transport.modelAction<Student>(
           EntityNames.Student,
           ModelOperations.Retrieve,
           id
         );
-      })
+      }),
+      map(student =>
+        Object.assign(student, {
+          dob: format(student.dob, 'YYYY-MM-DD'),
+          class: schoolClassValueToKey(student.class)
+        })
+      )
     );
   }
 

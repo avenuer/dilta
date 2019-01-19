@@ -1,6 +1,7 @@
 <div class="container">
     <button class="printbtn" (click)="print()"  mat-raised-button color="secondary">Print</button>
     <acada-student-grid
+    (student)="router.viewStudentDetails($event)"
       id="print"
       [config]="config"
       (paginator)="paginator($event)"

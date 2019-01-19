@@ -1,7 +1,7 @@
 import { AcademicService } from '../../services/academic.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ClientUtilService } from '@dilta/client-shared';
+import { ClientUtilService, RouterDirection } from '@dilta/client-shared';
 import {
   GridConfig,
   Record,
@@ -25,7 +25,8 @@ export class UsersHomeDashboardComponent implements OnInit {
   constructor(
     public router: Router,
     public acada: AcademicService,
-    private util: ClientUtilService
+    private util: ClientUtilService,
+    public dir: RouterDirection
   ) {}
 
   loadRecords(query) {

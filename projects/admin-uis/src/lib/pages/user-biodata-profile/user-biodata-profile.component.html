@@ -1,1 +1,16 @@
 <!-- Not Implemented -->
+<div class="container">
+  <div class="action-btns">
+    <button mat-raised-button color="danger" [disabled]="!(view$ | async)?.canDelete" (click)="deleteBiodata()"> Delete </button>
+    <button mat-raised-button color="primary" [disabled]="!(view$ | async)?.canEdit"  (click)="editBiodata()"> Edit </button>
+  </div>
+  <mat-card>
+    <admin-ui-user-biodata-form
+    [admin]="userBio$ | async"
+      [levels]="[]"
+      [subjects]="[]"
+      [levels]="[]"
+      [notEditable]="true"
+    ></admin-ui-user-biodata-form>
+  </mat-card>
+</div>

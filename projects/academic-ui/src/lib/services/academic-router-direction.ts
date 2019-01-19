@@ -1,6 +1,4 @@
-import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RouterDirection, RouterState } from '@dilta/client-shared';
 import {
   Auth,
   Manager,
@@ -8,10 +6,13 @@ import {
   School,
   Student,
   User
-  } from '@dilta/shared';
-import { Store } from '@ngrx/store';
+} from '@dilta/shared';
+import { RouterDirection, RouterState } from '@dilta/client-shared';
+
 import { AuthLogOut } from 'projects/auth/src/lib/ngrx';
 import { Authsuccess } from 'projects/auth/src/lib/ngrx/auth.reducer';
+import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 
 /**
  * This class holds various route configurations for pages dynamically
@@ -84,7 +85,7 @@ export class AcademicRouterDirection extends RouterDirection {
    * @memberof AcademicRouterDirection
    */
   studentForm(student: Student) {
-    this.router.navigate(['academics', 'levels', student.class]);
+    this.viewStudentDetails(student);
   }
 
   /**
@@ -95,5 +96,29 @@ export class AcademicRouterDirection extends RouterDirection {
    */
   parentForm(parent: Parent) {
 
+  }
+
+  viewStudentDetails(student: Student) {
+    this.router.navigate(['academics', 'students', student.id]);
+  }
+
+  editStudent(student: Student) {
+    this.router.navigate(['academics', 'student', student.id]);
+  }
+
+  viewUserDetails(user: User) {
+    this.router.navigate(['academics', 'admin', user.id]);
+  }
+
+  editUser(user: User) {
+    this.router.navigate(['academics', 'student', user.authId]);
+  }
+
+  deletedStudent() {
+    this.router.navigate(['academics', 'student']);
+  }
+
+  deletedUser() {
+    this.router.navigate(['academics', 'admins']);
   }
 }

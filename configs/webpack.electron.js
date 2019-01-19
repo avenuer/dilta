@@ -11,7 +11,7 @@ module.exports = {
   target: 'electron-main',
   entry: {
     main: path.join(process.cwd(), 'main.ts'),
-    cli: path.join(process.cwd(), 'index.ts')
+    // cli: path.join(process.cwd(), 'index.ts')
   },
   devtool: 'eval-source-map',
   // watch: true,

@@ -104,3 +104,17 @@ export interface Signup {
   password: string;
   level: string;
 }
+
+
+/**
+ * Various authentication leves assigned to the users
+ *
+ * @export
+ * @enum {number}
+ */
+export enum AuthenticationLevels {
+  Teacher = 'Teacher',
+  Busar = 'Busar',
+  Administrator = 'Administrator',
+  Manager = 'Manager',
+}

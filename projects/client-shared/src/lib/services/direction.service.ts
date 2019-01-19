@@ -1,14 +1,7 @@
 import { RouterState } from './router-state.service';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  Auth,
-  Manager,
-  Parent,
-  School,
-  Student,
-  User
-  } from '@dilta/shared';
+import { Auth, Manager, Parent, School, Student, User } from '@dilta/shared';
 import { Authsuccess } from 'projects/auth/src/lib/ngrx/auth.reducer';
 
 /**
@@ -65,7 +58,7 @@ export class RouterDirection {
    */
   managerForm(manager: Manager) {}
 
-    /**
+  /**
    * route for successfull student details.
    *
    * @param {Student} student
@@ -81,7 +74,53 @@ export class RouterDirection {
    * @param {Parent} parent
    * @memberof AcademicRouterDirection
    */
-  parentForm(parent: Parent) {
+  parentForm(parent: Parent) {}
 
-  }
+  /**
+   * Route navigation for editing the student
+   *
+   * @param {Student} student
+   * @memberof RouterDirection
+   */
+  editStudent(student: Student) {}
+
+  /**
+   * route direction to view student details
+   *
+   * @param {Student} student
+   * @memberof RouterDirection
+   */
+  viewStudentDetails(student: Student) {}
+
+  /**
+   * route navigation after deleting the student
+   *
+   * @param {Student} student
+   * @memberof RouterDirection
+   */
+  deletedStudent(student?: Student) {}
+
+  /**
+   * route navigation for editing the user
+   *
+   * @param {User} user
+   * @memberof RouterDirection
+   */
+  editUser(user: User) {}
+
+  /**
+   * route navigation after deleting the user.
+   *
+   * @param {User} user
+   * @memberof RouterDirection
+   */
+  deletedUser(user: User) {}
+
+  /**
+   * route direction to view user details
+   *
+   * @param {User} user
+   * @memberof RouterDirection
+   */
+  viewUserDetails(user: User) {}
 }

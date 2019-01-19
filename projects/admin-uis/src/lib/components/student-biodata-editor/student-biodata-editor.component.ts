@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Student, defaultKeys, schoolClasses, schoolClassValue } from '@dilta/shared';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Student, defaultKeys, schoolClassValue, schoolClasses } from '@dilta/shared';
 
 export const objStudentKeys = [
   'name',
@@ -17,12 +17,14 @@ export const objStudentKeys = [
   templateUrl: './student-biodata-editor.html',
   styleUrls: ['./student-biodata-editor.component.scss']
 })
-export class StudentBiodataEditorComponent {
+export class StudentBiodataEditorComponent implements OnChanges {
   public static inputError = new Error(`expected a valid School Object as input for
   StudentBiodataFormBase <app-student-biodata-form></app-student-biodata-form>`);
 
   @Input()
   public student: Student = {} as any;
+  @Input()
+  public notEditable = false;
   @Output()
   public emitter = new EventEmitter();
 
@@ -54,6 +56,7 @@ export class StudentBiodataEditorComponent {
       dob: [student.dob, required],
       gender: [student.gender, required],
       prevschool: [student.prevschool, required],
+      admissionNo: [student.admissionNo, required],
       parentPhone: [student.parentPhone, required]
     });
   }
@@ -65,5 +68,19 @@ export class StudentBiodataEditorComponent {
   public emit(value: Student) {
     (value as any).class = schoolClassValue(value.class);
     this.emitter.emit(value);
+  }
+
+  ngOnChanges() {
+    if (this.student && (typeof this.student === 'object')) {
+      Object.keys(this.student).forEach((key) => {
+        const control = this.studentForm.get(key);
+        if (control) {
+          control.setValue(this.student[key]);
+        }
+      });
+    }
+    if (this.notEditable) {
+      this.studentForm.disable();
+    }
   }
 }

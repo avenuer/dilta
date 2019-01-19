@@ -2,7 +2,7 @@ import { AcademicService } from '../../services/academic.service';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
-import { ClientUtilService, PrinterService } from '@dilta/client-shared';
+import { ClientUtilService, PrinterService, RouterDirection } from '@dilta/client-shared';
 import {
   GridConfig,
   SearchFindRequest,
@@ -40,7 +40,8 @@ export class LevelsStudentComponent implements OnInit {
     private acada: AcademicService,
     private printer: PrinterService,
     private avr: ActivatedRoute,
-    public util: ClientUtilService
+    public util: ClientUtilService,
+    public router: RouterDirection
   ) {}
 
   search(query: SearchFindRequest<Student>) {

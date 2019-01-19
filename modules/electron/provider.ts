@@ -1,15 +1,16 @@
-import { Logger } from '@dilta/util';
-import { app } from 'electron';
 import { Action, Injectable } from '@dilta/core';
 import {
   ElectronActions,
   ElectronOperations,
-  Synchronization,
-  ReplicationEvents
+  ReplicationEvents,
+  Synchronization
 } from '@dilta/shared';
 import { EmbededLiensceService, Keytar } from '@dilta/security';
-import { SETUP_WINDOW_CONFIG, PROGRAM_WINDOW_CONFIG } from './config';
+import { PROGRAM_WINDOW_CONFIG, SETUP_WINDOW_CONFIG } from './config';
+
 import { ElectronDatabaseSync } from './electron-db-sync';
+import { Logger } from '@dilta/util';
+import { app } from 'electron';
 
 const REMOTE_DATABASE = process.env.REMOTE_DATABASE;
 
@@ -68,6 +69,14 @@ export class ElectronService {
       operation: ElectronActions.LiensceReset,
       data: 'Program liensce reset Failed'
     };
+  }
+
+  @Action(ElectronActions.Update)
+  async updateElectron(): Promise<ElectronOperations<string>> {
+      return {
+        operation: ElectronActions.LiensceReset,
+        data: 'Program liensce reset Failed'
+      };
   }
 
   async loadView() {

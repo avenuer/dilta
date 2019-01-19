@@ -22,6 +22,7 @@
         <button (click)="router.navigate(['academics', 'student'])" mat-raised-button color="primary" >New Student </button>
          </mat-toolbar>
       <acada-student-grid
+      (student)="dir.viewStudentDetails($event)"
         [students]="students"
         [config]="config"
       ></acada-student-grid>
