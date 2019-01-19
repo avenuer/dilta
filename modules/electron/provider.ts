@@ -1,4 +1,5 @@
 import { Action, Injectable } from '@dilta/core';
+import { BrowserWindow, app } from 'electron';
 import {
   ElectronActions,
   ElectronOperations,
@@ -9,8 +10,8 @@ import { EmbededLiensceService, Keytar } from '@dilta/security';
 import { PROGRAM_WINDOW_CONFIG, SETUP_WINDOW_CONFIG } from './config';
 
 import { ElectronDatabaseSync } from './electron-db-sync';
+import { ElectronUpdate } from './electron-update';
 import { Logger } from '@dilta/util';
-import { app } from 'electron';
 
 const REMOTE_DATABASE = process.env.REMOTE_DATABASE;
 
@@ -20,7 +21,8 @@ export class ElectronService {
     private log: Logger,
     private liensce: EmbededLiensceService,
     private keytar: Keytar,
-    private sync: ElectronDatabaseSync
+    private sync: ElectronDatabaseSync,
+    private updater: ElectronUpdate
   ) {}
 
   @Action(ElectronActions.Exit)
@@ -73,10 +75,12 @@ export class ElectronService {
 
   @Action(ElectronActions.Update)
   async updateElectron(): Promise<ElectronOperations<string>> {
-      return {
-        operation: ElectronActions.LiensceReset,
-        data: 'Program liensce reset Failed'
-      };
+    this.updater.checkforUpdate(BrowserWindow.getFocusedWindow());
+
+    return {
+      operation: ElectronActions.Update,
+      data: 'Marker application checking for update at the background'
+    };
   }
 
   async loadView() {
