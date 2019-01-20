@@ -62,7 +62,7 @@ export interface ClassSheet {
   max: number;
   min: number;
   avg: number;
-  position?: string;
+  classPosition?: string;
 }
 
 export type StudentRecordSheet =  Subject & GradeSheet;

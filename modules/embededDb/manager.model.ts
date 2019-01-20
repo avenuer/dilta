@@ -15,8 +15,7 @@ export const managerSchema = {
   type: 'object',
   properties: {
     propName: {
-      type: 'string',
-      final: true
+      type: 'string'
     },
     propPhone: {
       type: 'string'

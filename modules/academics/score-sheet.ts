@@ -116,7 +116,7 @@ export class ScoreSheet {
     // this sort from highest to lowest
     const sorted = data.sort((a, b) => b.total - a.total);
     // retrieves the student position
-    const position = classPositionPreset(
+    const classPosition = classPositionPreset(
       data.findIndex(score => score.studentId === studentId)
     );
     const max = sorted[0] ? sorted[0].total : 0;
@@ -130,7 +130,7 @@ export class ScoreSheet {
       { total: 0 }
     );
     const avg = sorted.length > 0 ? sum.total / sorted.length : 0;
-    return { max, min, avg, position };
+    return { max, min, avg, classPosition };
   }
 
   /**

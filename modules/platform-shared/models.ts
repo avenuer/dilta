@@ -1,4 +1,6 @@
-import { SchoolPreset, TermPreset, SchoolClass } from './preset';
+import { SchoolClass, SchoolPreset, TermPreset } from './preset';
+
+import { AuthenticationLevels } from './security';
 import { PromotionSheet } from './academics';
 
 /**
@@ -215,7 +217,7 @@ export interface User extends Partial<BaseModel> {
 export interface Auth extends Partial<BaseModel> {
   username: string;
   password: string;
-  level: string;
+  level: AuthenticationLevels;
 }
 
 /**

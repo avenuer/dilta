@@ -79,6 +79,10 @@ export enum USER_AUTH {
   Signup = '[Security] Auth Signup  ',
   /** Action to verify the user token */
   Verify = '[Security] Auth Verify  ',
+  /**
+   * Action to delete a user
+   */
+  Delete = '[Security] Auth Verify  '
 }
 
 /**
@@ -102,7 +106,7 @@ export interface Login {
 export interface Signup {
   username: string;
   password: string;
-  level: string;
+  level: AuthenticationLevels;
 }
 
 

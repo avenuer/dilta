@@ -50,7 +50,7 @@ export class AcademicHomeComponent implements OnInit {
 
   logout() {
     this.store.dispatch(new AuthLogOut());
-    this.router.navigateByUrl('/');
+    this.router.navigate(['']);
   }
 
   ngOnInit() {}

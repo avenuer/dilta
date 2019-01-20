@@ -1,12 +1,22 @@
-import { AuthSecurity } from './auth-security';
-import { AuthDetailsNotFondError, InValidPasswordError } from './errors';
 import { Action, Injectable } from '@dilta/core';
+import {
+  Auth,
+  AuthTokenUser,
+  AuthenticationLevels,
+  USER_AUTH
+} from '@dilta/shared';
+import { AuthDetailsNotFondError, InValidPasswordError } from './errors';
 import { AuthService, SchoolService } from '@dilta/database';
-import { Auth, AuthTokenUser, USER_AUTH } from '@dilta/shared';
+
+import { AuthSecurity } from './auth-security';
 
 @Injectable()
 export class AuthController {
-  constructor(private sec: AuthSecurity, private auth: AuthService, private sch: SchoolService) {}
+  constructor(
+    private sec: AuthSecurity,
+    private auth: AuthService,
+    private sch: SchoolService
+  ) {}
 
   /**
    * signs in the user and response with jwt token
@@ -56,4 +66,27 @@ export class AuthController {
     const response = await this.sec.cleanAndGenerateToken(details as any);
     return response;
   }
+
+  @Action(USER_AUTH.Delete)
+  async deleteAccount(currentUserToken: string, userIdtoDelete) {
+    const { details } = await this.verify(currentUserToken);
+    const currentUserBio = await this.sec.user.retrieve$({
+      authId: details.id
+    });
+    if (details.level === AuthenticationLevels.Administrator) {
+      if (currentUserBio.id !== userIdtoDelete) {
+        return await this.sec.removeUser(userIdtoDelete);
+      }
+      throw deleteCurrentUserError;
+    }
+    throw authLevelError;
+  }
 }
+
+export const authLevelError = new Error(
+  `Current user lack adminstatrive level to execute operation`
+);
+
+export const deleteCurrentUserError = new Error(
+  `Current user cannot delete it's self while login`
+);

@@ -21,7 +21,7 @@ export class ElectronUpdate {
         this.downloadUpdate(updateInfo, await this.confirmDownload(win, updateInfo));
       }
     } catch (error) {
-      dialog.showErrorBox('Palace Update', (error as Error).message);
+      dialog.showErrorBox('Dilta Marker Update', 'error updating application');
     }
   }
 

@@ -1,5 +1,15 @@
 import 'reflect-metadata';
 
+import { devtools, isDev } from 'modules/electron/extenstion';
+import { join } from 'path';
+
+// NOTE: Don't change other because of env
+// conditional import for environmental variables
+const ENV_BASE_PATH = isDev()
+  ? join(process.cwd())
+  : join(process.cwd(), 'resources', 'app.asar', 'dist');
+require('dotenv').config({ path: join(ENV_BASE_PATH, 'electron-builder.env') });
+
 import * as serve from 'electron-serve';
 
 import { BrowserWindow, app, ipcMain } from 'electron';
@@ -7,20 +17,16 @@ import {
   ElectronService,
   ProcessIPCTransport,
   WindowConfig,
-  program
+  bootElectron
 } from '@dilta/electron';
-import { devtools, isDev } from 'modules/electron/extenstion';
-
-import { join } from 'path';
-
-// conditional import for environmental variables
-const ENV_BASE_PATH = isDev()
-  ? join(process.cwd())
-  : join(process.cwd(), 'resources', 'app.asar', 'dist');
-require('dotenv').config({ path: join(ENV_BASE_PATH, 'electron-builder.env') });
 
 
 const protocol = serve({ directory: 'dist', scheme: 'dilta' });
+// Starts the main-computational process
+const program = bootElectron((err) => {
+  console.error(err);
+  app.exit(1);
+});
 
 (global as any).program = program;
 

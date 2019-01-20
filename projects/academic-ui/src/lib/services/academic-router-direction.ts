@@ -38,8 +38,9 @@ export class AcademicRouterDirection extends RouterDirection {
    * @memberof RouterDirection
    */
   userForm(user: User) {
-    this.store.dispatch(new AuthLogOut());
-    this.router.navigate(['']);
+    this.viewUserDetails(user);
+    // this.store.dispatch(new AuthLogOut());
+    // this.router.navigate(['']);
   }
 
   /**
@@ -49,7 +50,7 @@ export class AcademicRouterDirection extends RouterDirection {
    * @memberof RouterDirection
    */
   signupForm(auth: Auth) {
-    this.router.navigate(['user', 'biodata', auth.id]);
+    this.router.navigate(['academics', 'admins', auth.id]);
   }
 
   /**
@@ -111,7 +112,7 @@ export class AcademicRouterDirection extends RouterDirection {
   }
 
   editUser(user: User) {
-    this.router.navigate(['academics', 'student', user.authId]);
+    this.router.navigate(['academics', 'admins', user.authId]);
   }
 
   deletedStudent() {

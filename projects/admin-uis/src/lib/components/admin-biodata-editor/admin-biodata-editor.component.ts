@@ -125,6 +125,9 @@ export class AdminBiodataEditorComponent implements OnInit, OnChanges {
 
   emit(value: Partial<User>) {
     value = this.cleanValue(value);
+    if (this.admin) {
+      value = { ...this.admin, ...value };
+    }
     this.emitter.emit(value);
   }
 

@@ -1,6 +1,6 @@
-<mat-toolbar color="primary">User Biodata </mat-toolbar>
+<mat-toolbar *ngIf="!(user$ | async)" color="primary">User Biodata </mat-toolbar>
 <mat-card>
     <admin-ui-user-biodata-form [levels]=" (view$ | async)?.classes"
     [subjects]="(view$ | async)?.subjects"
-    [levels]="(view$ | async)?.permisions" (emitter)="saveBiodata($event)" ></admin-ui-user-biodata-form>
+    [levels]="(view$ | async)?.permisions" (emitter)="saveBiodata($event)" [admin]="user$ | async" ></admin-ui-user-biodata-form>
 </mat-card>

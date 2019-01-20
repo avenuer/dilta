@@ -111,12 +111,15 @@ export class StudentBioFormEditorComponent implements OnInit {
           id
         );
       }),
-      map(student =>
-        Object.assign(student, {
-          dob: format(student.dob, 'YYYY-MM-DD'),
-          class: schoolClassValueToKey(student.class)
-        })
-      )
+      map(student => {
+        if (student) {
+          student = Object.assign(student, {
+            dob: format(student.dob, 'YYYY-MM-DD'),
+            class: schoolClassValueToKey(student.class)
+          });
+        }
+        return student;
+      })
     );
   }
 

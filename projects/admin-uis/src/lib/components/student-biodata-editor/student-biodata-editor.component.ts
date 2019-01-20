@@ -66,7 +66,13 @@ export class StudentBiodataEditorComponent implements OnChanges {
    * @param value student form value
    */
   public emit(value: Student) {
-    (value as any).class = schoolClassValue(value.class);
+    console.log(value);
+    if (typeof value.class !== 'number') {
+      (value as any).class = schoolClassValue(value.class);
+    }
+    if (this.student) {
+      value = { ...this.student, ...value };
+    }
     this.emitter.emit(value);
   }
 

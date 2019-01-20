@@ -8,17 +8,13 @@ import {
   PresetAction,
   School,
   SchoolDict,
-  User
-  } from '@dilta/shared';
+  User,
+  schoolClassValueToKey
+} from '@dilta/shared';
 import { Store } from '@ngrx/store';
 import { schoolFeature } from 'projects/client-shared/src/lib/ngrx/school';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import {
-  combineLatest,
-  exhaustMap,
-  first,
-  map
-  } from 'rxjs/operators';
+import { combineLatest, exhaustMap, first, map } from 'rxjs/operators';
 
 export interface BiodataFormPageARQMap {
   authId: string;
@@ -66,12 +62,14 @@ export class UserBioDataFormPageComponent implements OnInit {
     subjects: []
   });
 
+  public user$: Observable<User>;
+
   constructor(
     private store: Store<any>,
     private dir: RouterDirection,
     private transport: TransportService,
     private route: ActivatedRoute,
-    private util: ClientUtilService,
+    private util: ClientUtilService
   ) {}
 
   /**
@@ -89,7 +87,13 @@ export class UserBioDataFormPageComponent implements OnInit {
     );
     const schoolId$ = this.store
       .select(schoolFeature)
-      .pipe(map(school => (typeof school.details === 'string') ? school.details : school.details.id));
+      .pipe(
+        map(school =>
+          typeof school.details === 'string'
+            ? school.details
+            : school.details.id
+        )
+      );
     return event$.pipe(
       combineLatest(authId$, schoolId$),
       map(this.remap.bind(this))
@@ -121,15 +125,42 @@ export class UserBioDataFormPageComponent implements OnInit {
     this.remapEvent$($event)
       .pipe(
         exhaustMap(data =>
-          this.transport.modelAction(
-            EntityNames.User,
-            ModelOperations.Create,
-            data
-          )
+          data.id ? this.updateUser(data) : this.createUser(data)
         ),
         first()
       )
-      .subscribe(this.changeRoute.bind(this),  (err) => this.util.error(err));
+      .subscribe(this.changeRoute.bind(this), err => this.util.error(err));
+  }
+
+  /**
+   * Action to create a user biodata if it doesn't exists
+   *
+   * @param {User} biodata
+   * @returns
+   * @memberof UserBioDataFormPageComponent
+   */
+  createUser(biodata: User) {
+    return this.transport.modelAction<User>(
+      EntityNames.User,
+      ModelOperations.Create,
+      biodata
+    );
+  }
+
+  /**
+   * Action called to update the user biodata
+   *
+   * @param {User} biodata
+   * @returns
+   * @memberof UserBioDataFormPageComponent
+   */
+  updateUser(biodata: User) {
+    return this.transport.modelAction<User>(
+      EntityNames.User,
+      ModelOperations.Update,
+      biodata.id,
+      biodata
+    );
   }
 
   /**
@@ -142,9 +173,12 @@ export class UserBioDataFormPageComponent implements OnInit {
     return this.store
       .select(schoolFeature)
       .pipe(exhaustMap(({ details }) => this.selectView(details)))
-      .subscribe((v: SchoolDict) => {
-        this.view$.next(v);
-      }, (err) => this.util.error(err));
+      .subscribe(
+        (v: SchoolDict) => {
+          this.view$.next(v);
+        },
+        err => this.util.error(err)
+      );
   }
 
   /** app view state for different school categories */
@@ -159,6 +193,20 @@ export class UserBioDataFormPageComponent implements OnInit {
       );
   }
 
+  /** gets the user biodata */
+  getBiodata() {
+    return this.route.params.pipe(
+      exhaustMap(({ authId }) =>
+        this.transport.modelAction<User>(
+          EntityNames.User,
+          ModelOperations.Retrieve,
+          {
+            authId
+          }
+        )
+      )
+    );
+  }
 
   /**
    * changes the route to the finished route page
@@ -173,5 +221,16 @@ export class UserBioDataFormPageComponent implements OnInit {
     }
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.user$ = this.getBiodata()
+      .pipe( map(user => {
+        if (user) {
+          user = Object.assign(user, {
+            class: schoolClassValueToKey(user.class)
+          });
+        }
+        return user;
+      }
+      ));
+  }
 }

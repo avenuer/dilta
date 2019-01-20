@@ -3,6 +3,7 @@ import {
   AuthenticationLevels,
   EntityNames,
   ModelOperations,
+  USER_AUTH,
   User,
   schoolClassValueToKey
 } from '@dilta/shared';
@@ -47,8 +48,7 @@ export class UserBiodataProfileComponent implements OnInit {
   ) {}
 
   editBiodata() {
-    this.userBio$.pipe(first())
-      .subscribe(user => this.dir.editUser(user));
+    this.userBio$.pipe(first()).subscribe(user => this.dir.editUser(user));
   }
 
   /** check if edit is allowed */
@@ -56,7 +56,6 @@ export class UserBiodataProfileComponent implements OnInit {
     return this.store.select(AuthFeature).pipe(
       map(({ details }) => details),
       combineLatest(biodata),
-      tap(console.log),
       map(
         ([auth, user]) =>
           Object.assign({
@@ -70,12 +69,23 @@ export class UserBiodataProfileComponent implements OnInit {
   }
 
   deleteBiodata() {
-    this.actr.params
+    const userID$: Observable<string> = this.actr.params.pipe(
+      map(params => params.id)
+    );
+    this.store
+      .select(AuthFeature)
       .pipe(
-        exhaustMap(params => this.transport.execute<boolean>('', params.id)),
+        map(auth => auth.token),
+        combineLatest(userID$),
+        exhaustMap(([authToken, userId]) =>
+          this.transport.execute<string>(USER_AUTH.Delete, authToken, userId)
+        ),
         first()
       )
-      .subscribe(res => {}, err => this.util.error(err));
+      .subscribe(res => {
+        this.util.success('User details', res);
+        this.route.navigate(['academics', 'admins']);
+      }, err => this.util.error(err));
   }
 
   /** gets the user biodata */

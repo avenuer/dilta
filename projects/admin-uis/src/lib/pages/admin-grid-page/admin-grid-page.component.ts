@@ -10,7 +10,6 @@ import {
 } from '@dilta/shared';
 import { first, map } from 'rxjs/operators';
 
-import { AuthLogOut } from 'projects/auth/src/lib/ngrx/auth.action';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TransportService } from '@dilta/electron-client';
@@ -44,7 +43,6 @@ export class AdminGridPageComponent implements OnInit {
   ) {}
 
   newAdmin() {
-    this.store.dispatch(new AuthLogOut());
     this.router.navigate(['auth', 'signup']);
   }
 
