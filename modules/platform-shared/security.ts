@@ -1,4 +1,5 @@
 import { Auth, School } from './models';
+import { Boque } from './pricing';
 
 /** interface for user token */
 export interface AuthTokenUser {
@@ -36,6 +37,14 @@ export interface SchoolEncryptedData {
    * @memberof SchoolEncryptedData
    */
   expiretimestamp: number;
+
+  /**
+   * Boque subscription for the liensce bought
+   *
+   * @type {Boque}
+   * @memberof SchoolEncryptedData
+   */
+  boque: Boque;
 }
 
 /**

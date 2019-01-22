@@ -20,10 +20,9 @@ import {
   bootElectron
 } from '@dilta/electron';
 
-
 const protocol = serve({ directory: 'dist', scheme: 'dilta' });
 // Starts the main-computational process
-const program = bootElectron((err) => {
+const program = bootElectron(err => {
   console.error(err);
   app.exit(1);
 });
@@ -54,11 +53,16 @@ async function createWindow(config: WindowConfig) {
   }
 
   /** show but hide if page not rendered */
-  win.on('ready-to-show', () => {
+  win.on('ready-to-show', async () => {
     if (!win) {
       return;
     }
     win.show();
+    setTimeout(async () => {
+      await (program.injector.get(
+        ElectronService
+      ) as ElectronService).validateLiensceUsage();
+    }, 2000);
   });
 
   // Emitted when the window is closed.

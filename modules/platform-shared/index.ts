@@ -9,3 +9,4 @@ export * from './electron';
 export * from './academics';
 export * from './client-shared';
 export * from './database';
+export * from './pricing';
