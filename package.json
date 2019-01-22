@@ -30,7 +30,7 @@
     "e:rebuild": "npx electron-rebuild",
     "e:package": "rimraf build/package && npx electron-builder",
     "e:build:package": "cross-env-shell ELECTRON_IS_DEV=development \"npm run e:pack && e:package\"",
-    "e:build:ship": "cross-env-shell PLATFORM=desktop ELECTRON_IS_DEV=production \"npm run e:pack && e:package\"",
+    "e:build:ship": "cross-env-shell PLATFORM=desktop ELECTRON_IS_DEV=production \"npm run e:package\"",
     "e:build:cli": "pkg -t node6-win ./dist/cli.js -o ./build/cli",
     "e:clean": "rimraf C:\\Users\\AbiZeus\\AppData\\Local\\Temp\\pubkey.bc\\A3503c69c90b007512d60"
   },

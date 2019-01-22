@@ -18,6 +18,7 @@ export interface Subscription {
 export interface BoquePricing {
   subscription: LiensceSubscription;
   ranges: BoquePrice[];
+  features: string[];
 }
 
 /**
