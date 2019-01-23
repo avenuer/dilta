@@ -1,1 +1,6 @@
-<admin-ui-parent-biodata-form (emitter)="saveParent($event)" [parent]="parent$ | async"  ></admin-ui-parent-biodata-form>
+<admin-ui-parent-biodata-form
+  (emitter)="saveParent($event)"
+  [parent]="parent$ | async"
+  [lgas]="(view$ | async)?.lgas"
+  [states]="(view$ | async)?.states"
+></admin-ui-parent-biodata-form>

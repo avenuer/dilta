@@ -1,86 +1,175 @@
-<form class="form-group" [formGroup]="parentForm">
-  <h3> Parent Form </h3>
-  <div class="form-group">
-    <label class="required">Full Name</label>
-    <input size="75" formControlName="name" type="text" class="form-control">
-    <span *ngIf="!parentForm.controls['name'].valid && parentForm.controls['name'].touched" class="form-error"> <i class="mi mi-Info "></i> Parent Full Name is required </span>
-  </div>
-  <div class="form-group">
-    <label class="required">Phone Number</label>
-    <input formControlName="phoneNo" type="text" class="form-control">
-    <span *ngIf="!parentForm.controls['phoneNo'].valid && parentForm.controls['phoneNo'].touched" class="form-error"> <i class="mi mi-Info "></i> Parent Phone No is required </span>
-  </div>
-  <div class="form-group">
-    <label >Email </label>
-    <input formControlName="email" type="email" class="form-control">
-  </div>
-  <div class="form-group">
-    <label class="required">Profession</label>
-    <input type="text" formControlName="profession" class="form-control">
-    <span *ngIf="!parentForm.controls['profession'].valid && parentForm.controls['profession'].touched" class="form-error"><i class="mi mi-Info "></i> Parent Profession is required. </span>
-  </div>
-  <div class="form-group">
-    <label class="required">Home Address</label>
-    <textarea formControlName="homeAddress" class="form-control entry-text-area" rows="3"></textarea>
-    <span *ngIf="!parentForm.controls['homeAddress'].valid && parentForm.controls['homeAddress'].touched" class="form-error"><i class="mi mi-Info "></i> Parent Home Address is required. </span>
-  </div>
-  <div class="form-group row flex-items-xs-between">
-    <div class="col-xs m-left">
-      <label class="required"> Relationship </label>
-      <div class="select">
-        <select formControlName="relationship">
-              <option> Parent </option>
-              <option> Guardian </option>
-              <option> Other </option>
-            </select>
-        <span *ngIf="!parentForm.controls['relationship'].valid && parentForm.controls['relationship'].touched" class="form-error"> <i class="mi mi-Info "></i> Parent Working category is required </span>
-      </div>
-    </div>
-    <div class="col-xs space-left">
-      <label class="required"> Working Category </label>
-      <div class="select">
-        <select formControlName="workcategory">
-              <option value="civil-servant" > Civil Servant </option>
-              <option  value="nursery" > Others </option>
-            </select>
-        <span *ngIf="!parentForm.controls['workcategory'].valid && parentForm.controls['workcategory'].touched" class="form-error"><i class="mi mi-Info "></i> Parent Working category is required </span>
-      </div>
-    </div>
-  </div>
-  <div class="form-group">
-    <label >Work Address</label>
-    <textarea formControlName="workAddress" class="form-control entry-text-area" rows="3"></textarea>
-  </div>
-  <div class="form-group row flex-items-xs-between">
-    <div class="col-xs m-left">
-      <label class="required"> Home Town </label>
-      <div class="select">
-        <select formControlName="town" class="form-control">
-                <option disabled> Town </option>
-                <option>Ede</option>
-                <option>Owode</option>
-                <option>Oshogbo</option>
-            </select>
-        <span *ngIf="!parentForm.controls['town'].valid && parentForm.controls['town'].touched" class="form-error"> <i class="mi mi-Info "></i> Home Town location is required </span>
-      </div>
-
-    </div>
-    <div class="col-xs space-left">
-      <label class="required"> State </label>
-      <div class="select">
-        <select formControlName="state">
-                <option disabled> State </option>
-                <option>Osun State</option>
-                <option>Oyo State</option>
-                <option>Lagos State</option>
-                <option>Ondo State</option>
-            </select>
-        <span *ngIf="!parentForm.controls['state'].valid && parentForm.controls['state'].touched" class="form-error"><i class="mi mi-Info "></i>state of origin is required </span>
-      </div>
-    </div>
-  </div>
-  <div class="float-right">
-    <button id="save" [disabled]="!parentForm.valid" (click)="emit(parentForm.value)" class="btn btn-primary"> Save</button>
-
-  </div>
-</form>
+<div>
+  <form class="container" [formGroup]="parentForm">
+    <mat-form-field>
+      <mat-label> FullName </mat-label>
+      <input
+        matInput
+        required
+        size="75"
+        id="name"
+        formControlName="name"
+        type="text"
+      />
+      <mat-error
+        *ngIf="
+          !parentForm.controls['name'].valid &&
+          parentForm.controls['name'].touched
+        "
+        >Parent full name is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Primary Single Phone</mat-label>
+      <input
+        matInput
+        required
+        formControlName="phoneNo"
+        type="number"
+        class="form-control"
+      />
+      <mat-error
+        *ngIf="
+          !parentForm.controls['phoneNo'].valid &&
+          parentForm.controls['phoneNo'].touched
+        "
+        >Parent Primary PhoneNo is required</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        formControlName="email"
+        type="email"
+        class="form-control"
+      />
+      <mat-error></mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Profession</mat-label>
+      <textarea
+        matInput
+        required
+        formControlName="profession"
+        type="text"
+        class="form-control"
+      ></textarea>
+      <mat-error
+        *ngIf="
+          !parentForm.controls['profession'].valid &&
+          parentForm.controls['profession'].touched
+        "
+        >Home profession is required</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Home Address</mat-label>
+      <textarea
+        matInput
+        required
+        formControlName="homeAddress"
+        type="text"
+        class="form-control"
+      ></textarea>
+      <mat-error
+        *ngIf="
+          !parentForm.controls['homeAddress'].valid &&
+          parentForm.controls['homeAddress'].touched
+        "
+        >Home Address is required</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label> Relationship </mat-label>
+      <mat-select
+        formControlName="relationship"
+        required
+        placeholder="relationship"
+      >
+        <mat-option [value]="'female'"> Female </mat-option>
+        <mat-option [value]="'male'"> Male </mat-option>
+      </mat-select>
+      <mat-error
+        *ngIf="
+          !parentForm.controls['relationship'].valid &&
+          parentForm.controls['relationship'].touched
+        "
+      >
+        relationship connection is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>  Working Category </mat-label>
+      <mat-select formControlName="workcategory" required placeholder="Working category">
+        <mat-option [value]="'female'"> Female </mat-option>
+        <mat-option [value]="'male'"> Male </mat-option>
+      </mat-select>
+      <mat-error
+        *ngIf="
+          !parentForm.controls['workcategory'].valid &&
+          parentForm.controls['workcategory'].touched
+        "
+      >
+        Parent Working Category is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Work Address</mat-label>
+      <textarea
+        matInput
+        required
+        formControlName="workAddress"
+        type="text"
+        class="form-control"
+      ></textarea>
+      <mat-error
+        *ngIf="
+          !parentForm.controls['workAddress'].valid &&
+          parentForm.controls['workAddress'].touched
+        "
+        >Parent Working Address is required incase of an emergency </mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label> LGA </mat-label>
+      <mat-select formControlName="town" required placeholder="Town LGA">
+        <mat-option [value]="'female'"> Female </mat-option>
+        <mat-option [value]="'male'"> Male </mat-option>
+      </mat-select>
+      <mat-error
+        *ngIf="
+          !parentForm.controls['town'].valid &&
+          parentForm.controls['town'].touched
+        "
+      >
+        Local Govt where the parent are living  is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label> State </mat-label>
+      <mat-select formControlName="state" required placeholder="State">
+        <mat-option [value]="_class" *ngFor="let _class of []">
+          {{ _class }}
+        </mat-option>
+      </mat-select>
+      <mat-error
+        *ngIf="
+          !parentForm.controls['state'].valid &&
+          parentForm.controls['state'].touched
+        "
+        >State where the parent is based is required </mat-error
+      >
+    </mat-form-field>
+    <button
+      *ngIf="!notEditable"
+      id="saver"
+      mat-raised-button
+      color="primary"
+      [disabled]="!parentForm.valid"
+      (click)="emit(parentForm.value)"
+      class="save-btn"
+    >
+      <i class="mi mi-Save "></i> Save
+    </button>
+  </form>
+</div>

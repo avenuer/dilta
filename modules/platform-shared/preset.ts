@@ -1,5 +1,26 @@
 import { cleanNumericEnums } from './shared';
 
+export enum ParentRelationship {
+  Parent,
+  Guardian,
+  others
+}
+
+export const parentRelationships = cleanNumericEnums(
+  Object.keys(ParentRelationship)
+);
+
+export function parentRelationToKey(value: string | number) {
+  let valueKey;
+  value = Number(value);
+  Object.keys(ParentRelationship).forEach(key => {
+    if (ParentRelationship[key] === value) {
+      valueKey = key;
+    }
+  });
+  return valueKey;
+}
+
 /**
  * school Preset containing various courses and interface
  *
@@ -313,7 +334,7 @@ export function schoolClassValueToKey(classValue: number) {
 }
 
 // Error thrown when class not found
-const noClassError = new Error('class requested doesn\'t exist');
+const noClassError = new Error("class requested doesn't exist");
 
 /**
  * maps the school term value to its keys
@@ -339,7 +360,6 @@ export interface LevelPromotionScheme {
   level: SchoolClass;
   nextLevel: SchoolClass;
 }
-
 
 /**
  * shows promotion scheeme for a particular class level

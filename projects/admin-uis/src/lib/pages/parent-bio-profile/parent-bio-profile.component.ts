@@ -1,14 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
-import { Parent, EntityNames, ModelOperations } from '@dilta/shared';
-import { exhaustMap, map } from 'rxjs/operators';
+import {
+  Parent,
+  EntityNames,
+  ModelOperations,
+  parentRelationToKey
+} from '@dilta/shared';
+import { exhaustMap, map, first, combineLatest } from 'rxjs/operators';
 import { TransportService } from '@dilta/electron-client';
 import { Observable } from 'rxjs';
+import { RouterDirection } from '@dilta/client-shared';
 
 export interface ParentBioProfilePM {
   // unique parent id
-  id: string;
+  phoneNo: string;
 }
 
 @Component({
@@ -21,7 +27,7 @@ export class ParentBioProfileComponent implements OnInit {
 
   constructor(
     private actR: ActivatedRoute,
-    private route: Router,
+    private dir: RouterDirection,
     private transport: TransportService
   ) {}
 
@@ -31,15 +37,37 @@ export class ParentBioProfileComponent implements OnInit {
         this.transport.modelAction<Parent>(
           EntityNames.Parent,
           ModelOperations.Retrieve,
-          { id: param.id }
+          { id: param.phoneNo }
         )
+      ),
+      map(parent =>
+        Object.assign(parent, {
+          profession: parentRelationToKey(parent.profession)
+        })
       )
     );
   }
 
-  children(id: string) {
-    this.route.navigate(['student', id]);
+  editParent(parent: Parent) {}
+
+  createParent() {
+    this.actR.params
+      .pipe(
+        map((param: ParentBioProfilePM) => param.phoneNo),
+        combineLatest(this.parent$),
+        map(([phoneNo, parent]) => (parent ? parent : phoneNo)),
+        first()
+      )
+      .subscribe(res => {
+        if (typeof res === 'string') {
+          // create route page
+        }
+      });
   }
+
+  // children(id: string) {
+  //   this.route.navigate(['student', id]);
+  // }
 
   ngOnInit() {
     this.parent$ = this.retrieveParent();
