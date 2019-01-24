@@ -1,4 +1,8 @@
 <div class="container">
-    <button class="printbtn" (click)="print()"  mat-raised-button color="secondary">Print</button>
+  <mat-toolbar class="space-down">
+      <span>Various Classes Information </span>
+      <span class="spacer-full"> </span>
+      <button class="printbtn" (click)="print()"  mat-raised-button color="secondary">Print</button>
+        </mat-toolbar>
   <acada-level-static-details id="print" (level)="viewClass($event)" [stats]="statics$ | async"></acada-level-static-details>
 </div>

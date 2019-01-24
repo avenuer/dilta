@@ -16,6 +16,8 @@ import { SubjectGridPageComponent } from './subject-grid-page/subject-grid-page.
 import { UserBioDataFormPageComponent } from 'projects/admin-uis/src/lib/pages/user-biodata-setup/admin-biodata.component';
 import { UserBiodataProfileComponent } from 'projects/admin-uis/src/lib/pages/user-biodata-profile/user-biodata-profile.component';
 import { UsersHomeDashboardComponent } from './users-home-dashboard/users-home-dashboard.component';
+import { ParentFormEditorComponent } from 'projects/admin-uis/src/lib/pages/parent-form-editor/parent-form-editor.component';
+import { ParentBioProfileComponent } from 'projects/admin-uis/src/lib/pages/parent-bio-profile/parent-bio-profile.component';
 
 const routes: Routes = [
   {
@@ -33,10 +35,13 @@ const routes: Routes = [
       { path: 'reports', component: AcademicReportPageComponent },
       { path: 'record', component: AcademicRecordPageComponent },
       { path: 'records', component: RecordGridPageComponent },
-      { path: 'student', children: [
-        { path: '', component: StudentBioFormEditorComponent },
-        { path: ':id', component: StudentBioFormEditorComponent }
-      ] },
+      {
+        path: 'student',
+        children: [
+          { path: '', component: StudentBioFormEditorComponent },
+          { path: ':id', component: StudentBioFormEditorComponent }
+        ]
+      },
       { path: 'students/:id', component: StudentBioProfileComponent },
       { path: 'subjects/:id', component: SubjectGridPageComponent },
       {
@@ -62,6 +67,14 @@ const routes: Routes = [
       {
         path: 'admin/:id',
         component: UserBiodataProfileComponent
+      },
+      {
+        path: 'parent/:phoneNo',
+        component: ParentBioProfileComponent
+      },
+      {
+        path: 'parents/:phoneNo',
+        component: ParentFormEditorComponent
       }
     ]
   }

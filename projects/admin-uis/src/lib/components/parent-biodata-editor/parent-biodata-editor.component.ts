@@ -1,6 +1,6 @@
 import { EventEmitter, Input, OnInit, Output, Component, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Parent, defaultKeys, parentRelationships } from '@dilta/shared';
+import { Parent, defaultKeys, parentRelationships, workingCategories } from '@dilta/shared';
 
 export const objParentKeys = [
   'name',
@@ -32,6 +32,7 @@ export class ParentBiodataEditorComponent implements OnInit, OnChanges {
   @Output() public emitter = new EventEmitter();
 
   public relationships: string[] = parentRelationships;
+  public workCategories = workingCategories;
   public parentForm: FormGroup;
 
   constructor(private fb: FormBuilder) {}
@@ -47,13 +48,13 @@ export class ParentBiodataEditorComponent implements OnInit, OnChanges {
     // constructing form groups
     return this.fb.group({
       name: [parent.name, required],
-      email: [parent.email],
+      email: [parent.email || ''],
       homeAddress: [parent.homeAddress, required],
       phoneNo: [parent.phoneNo, required],
       profession: [parent.profession, required],
-      town: [parent.town || this.lgas[0], required],
-      relationship: [parent.relationship || this.relationships[0], required],
-      state: [parent.state || this.states[0], required],
+      town: [parent.town, required],
+      relationship: [parent.relationship, required],
+      state: [parent.state, required],
       workAddress: [parent.workAddress],
       workcategory: [parent.workcategory, required]
     });
@@ -64,7 +65,7 @@ export class ParentBiodataEditorComponent implements OnInit, OnChanges {
    * @param value parent form value
    */
   public emit(value: Parent) {
-    this.emitter.emit(value);
+    this.emitter.emit({ ...this.parent, ...value });
   }
 
   ngOnInit() {

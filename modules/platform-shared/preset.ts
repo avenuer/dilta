@@ -13,8 +13,29 @@ export const parentRelationships = cleanNumericEnums(
 export function parentRelationToKey(value: string | number) {
   let valueKey;
   value = Number(value);
-  Object.keys(ParentRelationship).forEach(key => {
+  parentRelationships.forEach(key => {
     if (ParentRelationship[key] === value) {
+      valueKey = key;
+    }
+  });
+  return valueKey;
+}
+
+export enum WorkingCategory {
+  'Civil Servant',
+  'Private Sector',
+  'Entreprenuer',
+  'Trader',
+  'Others'
+}
+
+export const workingCategories = cleanNumericEnums(Object.keys(WorkingCategory));
+
+export function WorkingCategoriesRelationToKey(value: string | number) {
+  let valueKey;
+  value = Number(value);
+  workingCategories.forEach(key => {
+    if (workingCategories[key] === value) {
       valueKey = key;
     }
   });

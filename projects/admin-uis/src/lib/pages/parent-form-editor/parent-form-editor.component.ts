@@ -12,7 +12,7 @@ import {
 import { Store } from '@ngrx/store';
 import { schoolFeature } from 'projects/client-shared/src/lib/ngrx/school';
 import { Observable } from 'rxjs';
-import { exhaustMap, first, map, combineLatest } from 'rxjs/operators';
+import { exhaustMap, first, map, combineLatest, tap } from 'rxjs/operators';
 import { ClientUtilService, RouterDirection } from '@dilta/client-shared';
 
 export interface ParentFormEditorQPM {
@@ -54,21 +54,33 @@ export class ParentFormEditorComponent implements OnInit {
   }
 
   saveParent(parent: Parent) {
-    parent.relationship = ParentRelationship[parent.relationship];
+    if (typeof parent.relationship === 'string') {
+      parent.relationship = ParentRelationship[parent.relationship];
+    }
     this.store
       .select(schoolFeature)
       .pipe(
         map(({ details }) => Object.assign(parent, { school: details.id })),
+        combineLatest(
+          this.actR.params.pipe(
+            map((param: ParentFormEditorQPM) => param.phoneNo)
+          )
+        ),
+        tap(console.log),
+        map(([newParent, phoneNo]) => Object.assign(newParent, { phoneNo })),
         exhaustMap(newParent =>
           newParent.id ? this.update(parent) : this.create(parent)
         ),
         first()
       )
-      .subscribe(this.changeRoute.bind(this), err => this.util.error(err));
+      .subscribe(
+        newParent => this.dir.viewParent(newParent),
+        err => this.util.error(err)
+      );
   }
 
   create(parent: Parent) {
-    return this.transport.modelAction(
+    return this.transport.modelAction<Parent>(
       EntityNames.Parent,
       ModelOperations.Create,
       parent
@@ -76,7 +88,7 @@ export class ParentFormEditorComponent implements OnInit {
   }
 
   update(parent: Parent) {
-    return this.transport.modelAction(
+    return this.transport.modelAction<Parent>(
       EntityNames.Parent,
       ModelOperations.Update,
       parent.id,
@@ -84,12 +96,8 @@ export class ParentFormEditorComponent implements OnInit {
     );
   }
 
-  changeRoute(id: string) {
-    // this.route.navigate(['parent', id]);
-  }
-
   retrieveParent() {
-    return this.actR.queryParams.pipe(
+    return this.actR.params.pipe(
       map((param: ParentFormEditorQPM) => param.phoneNo),
       exhaustMap(phoneNo =>
         this.transport.modelAction<Parent>(
@@ -99,9 +107,11 @@ export class ParentFormEditorComponent implements OnInit {
         )
       ),
       map(parent =>
-        Object.assign(parent, {
-          profession: parentRelationToKey(parent.profession)
-        })
+        parent
+          ? Object.assign(parent, {
+              relationship: parentRelationToKey(parent.relationship)
+            })
+          : parent
       )
     );
   }

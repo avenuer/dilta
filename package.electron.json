@@ -6,7 +6,7 @@
     "email": "abiodunogundijo@gmail.com",
     "url": "http://www.marker.ng"
   },
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "./dist/electron-main.js",
   "scripts": {
     "marker-web:live": "npm run marker-web:prod && ts-node ./projects/marker-web/src/prender.ts",

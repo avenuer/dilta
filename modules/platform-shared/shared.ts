@@ -33,3 +33,18 @@ export enum DatabaseActions {
 export function cleanNumericEnums(keys: string[]) {
   return keys.filter((k) => !Number(k) && k !== '0');
 }
+
+// Unpredictable behaviour
+export function enumKeysToValue(keys: string[], enumValueType: string) {
+  return (value: string | number) => {
+    let valueKey;
+    value = (enumValueType === 'number') ? Number(value) : value.toString();
+    keys.forEach(key => {
+      if (keys[key] === value) {
+        valueKey = key;
+      }
+    });
+    return valueKey;
+
+  }
+}

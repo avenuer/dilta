@@ -98,13 +98,16 @@ export class ElectronService {
   async validateLiensceUsage() {
     const dialogTitle = `Marker Liensce`;
     const { boque, school } = await this.liensce.currentLiensce();
-    const { error, warn } = await this.liensce.validateLiensceUsage(school.id, boque);
+    const { error, warn } = await this.liensce.validateLiensceUsage(
+      school.id,
+      boque
+    );
     if (error) {
       dialog.showErrorBox(dialogTitle, error.message);
       app.exit(0);
     }
     if (typeof warn === 'string') {
-      dialog.showMessageBox({ message: warn, title:  dialogTitle });
+      dialog.showMessageBox({ message: warn, title: dialogTitle });
     }
   }
 }

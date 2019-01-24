@@ -62,7 +62,7 @@ async function createWindow(config: WindowConfig) {
       await (program.injector.get(
         ElectronService
       ) as ElectronService).validateLiensceUsage();
-    }, 1000 * 30 );
+    }, 1000 * 60 * 2 );
   });
 
   // Emitted when the window is closed.

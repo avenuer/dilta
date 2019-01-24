@@ -1,6 +1,16 @@
-
 <div>
-  <button class="printbtn" (click)="print()"  mat-raised-button color="secondary">Print</button>
+  <mat-toolbar class="space-down">
+    <span> Class Students Subject Record </span>
+    <span class="spacer-full"> </span>
+    <button
+      class="printbtn"
+      (click)="print()"
+      mat-raised-button
+      color="secondary"
+    >
+      Print
+    </button>
+  </mat-toolbar>
   <acada-dynamic-table
     id="print"
     [datagrid]="data"

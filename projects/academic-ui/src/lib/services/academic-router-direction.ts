@@ -1,12 +1,5 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  Auth,
-  Manager,
-  Parent,
-  School,
-  Student,
-  User
-} from '@dilta/shared';
+import { Auth, Manager, Parent, School, Student, User } from '@dilta/shared';
 import { RouterDirection, RouterState } from '@dilta/client-shared';
 
 import { AuthLogOut } from 'projects/auth/src/lib/ngrx';
@@ -96,7 +89,7 @@ export class AcademicRouterDirection extends RouterDirection {
    * @memberof AcademicRouterDirection
    */
   parentForm(parent: Parent) {
-
+    this.viewParent(parent);
   }
 
   viewStudentDetails(student: Student) {
@@ -121,5 +114,39 @@ export class AcademicRouterDirection extends RouterDirection {
 
   deletedUser() {
     this.router.navigate(['academics', 'admins']);
+  }
+
+  /**
+   * route direction to create a new parent
+   *
+   * @param {string} parentPhoneNo
+   * @memberof RouterDirection
+   */
+  createParent(parentPhoneNo: string) {
+    this.router.navigate(['academics', 'parents', parentPhoneNo]);
+  }
+
+  /**
+   * route direction to edit parent
+   *
+   * @param {Parent} parent
+   * @memberof RouterDirection
+   */
+  editParent(parent: Parent) {
+    this.createParent(parent.phoneNo as string);
+  }
+
+  /**
+   * route direction to view parent details
+   *
+   * @param {Parent} parent
+   * @memberof RouterDirection
+   */
+  viewParent(parent: Parent | string) {
+    this.router.navigate([
+      'academics',
+      'parent',
+      typeof parent === 'object' ? parent.phoneNo : parent
+    ]);
   }
 }

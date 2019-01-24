@@ -24,7 +24,7 @@
         matInput
         required
         formControlName="phoneNo"
-        type="number"
+        type="text"
         class="form-control"
       />
       <mat-error
@@ -59,7 +59,7 @@
           !parentForm.controls['profession'].valid &&
           parentForm.controls['profession'].touched
         "
-        >Home profession is required</mat-error
+        >Parent profession is required</mat-error
       >
     </mat-form-field>
     <mat-form-field>
@@ -86,8 +86,7 @@
         required
         placeholder="relationship"
       >
-        <mat-option [value]="'female'"> Female </mat-option>
-        <mat-option [value]="'male'"> Male </mat-option>
+        <mat-option *ngFor="let rel of relationships" [value]="rel"> {{ rel }} </mat-option>
       </mat-select>
       <mat-error
         *ngIf="
@@ -95,14 +94,13 @@
           parentForm.controls['relationship'].touched
         "
       >
-        relationship connection is required
+        relationship connection to wards is required
       </mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label>  Working Category </mat-label>
       <mat-select formControlName="workcategory" required placeholder="Working category">
-        <mat-option [value]="'female'"> Female </mat-option>
-        <mat-option [value]="'male'"> Male </mat-option>
+        <mat-option *ngFor="let catg of workCategories" [value]="catg"> {{ catg }} </mat-option>
       </mat-select>
       <mat-error
         *ngIf="
@@ -133,8 +131,7 @@
     <mat-form-field>
       <mat-label> LGA </mat-label>
       <mat-select formControlName="town" required placeholder="Town LGA">
-        <mat-option [value]="'female'"> Female </mat-option>
-        <mat-option [value]="'male'"> Male </mat-option>
+        <mat-option *ngFor="let _lga of lgas" [value]="_lga"> {{ _lga }} </mat-option>
       </mat-select>
       <mat-error
         *ngIf="
@@ -148,7 +145,7 @@
     <mat-form-field>
       <mat-label> State </mat-label>
       <mat-select formControlName="state" required placeholder="State">
-        <mat-option [value]="_class" *ngFor="let _class of []">
+        <mat-option [value]="_class" *ngFor="let _class of states">
           {{ _class }}
         </mat-option>
       </mat-select>

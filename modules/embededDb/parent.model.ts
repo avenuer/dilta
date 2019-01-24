@@ -21,7 +21,7 @@ export const parentSchema = {
       type: 'string'
     },
     relationship: {
-      type: 'string'
+      type: 'number'
     },
     homeAddress: {
       type: 'string'
