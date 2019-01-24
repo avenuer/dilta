@@ -36,7 +36,7 @@ export class SchoolUiSharedModule {}
 const parents = [ParentBiodataEditorComponent];
 
 @NgModule({
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, MaterialModule],
   declarations: parents,
   exports: parents
 })

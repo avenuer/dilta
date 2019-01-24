@@ -36,7 +36,7 @@ export function ProcessIPCTransport(program: DiltaApp, ipc: IpcMain) {
           trace: 'ProcessIPCTransport',
           module: 'Electron Ipc'
         },
-        error
+        {error, ctx}
       );
       event.sender.send(Transport.Response, failureResponse(ctx.id, error));
     }

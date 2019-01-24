@@ -1,15 +1,28 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { TransportService } from '@dilta/electron-client';
-import { EntityNames, ModelOperations, Parent } from '@dilta/shared';
+import {
+  EntityNames,
+  ModelOperations,
+  Parent,
+  parentRelationToKey,
+  ParentRelationship,
+  PresetAction
+} from '@dilta/shared';
 import { Store } from '@ngrx/store';
 import { schoolFeature } from 'projects/client-shared/src/lib/ngrx/school';
-import { Observable, of } from 'rxjs';
-import { exhaustMap, first, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { exhaustMap, first, map, combineLatest, tap } from 'rxjs/operators';
+import { ClientUtilService, RouterDirection } from '@dilta/client-shared';
 
 export interface ParentFormEditorQPM {
   // unique parent id
-  id: string;
+  phoneNo: string;
+}
+
+interface ViewObject {
+  lgas: string[];
+  states: string[];
 }
 
 @Component({
@@ -20,52 +33,91 @@ export interface ParentFormEditorQPM {
 export class ParentFormEditorComponent implements OnInit {
   parent$: Observable<Parent>;
 
+  view$: Observable<ViewObject>;
+
   constructor(
     private store: Store<any>,
     private actR: ActivatedRoute,
-    private route: Router,
-    private transport: TransportService
+    private dir: RouterDirection,
+    private transport: TransportService,
+    private util: ClientUtilService
   ) {}
 
+  createView() {
+    const lgas$ = this.transport.execute<string[]>(PresetAction.Lga);
+    const states$ = this.transport.execute<string[]>(PresetAction.State);
+    return lgas$.pipe(
+      combineLatest(states$),
+      map(([lgas, states]) => Object.assign({ lgas, states }) as ViewObject),
+      first()
+    );
+  }
+
   saveParent(parent: Parent) {
+    if (typeof parent.relationship === 'string') {
+      parent.relationship = ParentRelationship[parent.relationship];
+    }
     this.store
       .select(schoolFeature)
       .pipe(
-        exhaustMap(school =>
-          this.transport.modelAction(
-            EntityNames.Parent,
-            ModelOperations.Create,
-            { ...parent, school: school.details.id }
+        map(({ details }) => Object.assign(parent, { school: details.id })),
+        combineLatest(
+          this.actR.params.pipe(
+            map((param: ParentFormEditorQPM) => param.phoneNo)
           )
+        ),
+        tap(console.log),
+        map(([newParent, phoneNo]) => Object.assign(newParent, { phoneNo })),
+        exhaustMap(newParent =>
+          newParent.id ? this.update(parent) : this.create(parent)
         ),
         first()
       )
-      .subscribe(this.changeRoute.bind(this), this.displayError.bind(this));
+      .subscribe(
+        newParent => this.dir.viewParent(newParent),
+        err => this.util.error(err)
+      );
   }
 
-  changeRoute(id: string) {
-    this.route.navigate(['parent', id]);
+  create(parent: Parent) {
+    return this.transport.modelAction<Parent>(
+      EntityNames.Parent,
+      ModelOperations.Create,
+      parent
+    );
   }
 
-  displayError(err: Error) {}
+  update(parent: Parent) {
+    return this.transport.modelAction<Parent>(
+      EntityNames.Parent,
+      ModelOperations.Update,
+      parent.id,
+      parent
+    );
+  }
 
   retrieveParent() {
-    return this.actR.queryParams.pipe(
-      map((param: ParentFormEditorQPM) => param.id),
-      exhaustMap(id => {
-        if (typeof id !== 'string' || id === '') {
-          return of<Parent>({} as Parent);
-        }
-        return this.transport.modelAction(
+    return this.actR.params.pipe(
+      map((param: ParentFormEditorQPM) => param.phoneNo),
+      exhaustMap(phoneNo =>
+        this.transport.modelAction<Parent>(
           EntityNames.Parent,
           ModelOperations.Retrieve,
-          { id }
-        );
-      })
+          { phoneNo } as Partial<Parent>
+        )
+      ),
+      map(parent =>
+        parent
+          ? Object.assign(parent, {
+              relationship: parentRelationToKey(parent.relationship)
+            })
+          : parent
+      )
     );
   }
 
   ngOnInit() {
+    this.view$ = this.createView();
     this.parent$ = this.retrieveParent();
   }
 }

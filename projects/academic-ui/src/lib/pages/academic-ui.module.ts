@@ -13,7 +13,7 @@ import { AcademicSharedUiModule } from '../components/academic-shared.module';
 import { AcademicRouterDirection } from '../services/academic-router-direction';
 import { AcademicService } from '../services/academic.service';
 import { NgModule } from '@angular/core';
-import { StudentPageModule, UserPageModule } from '@dilta/admin-uis';
+import { StudentPageModule, UserPageModule, ParentPageModule } from '@dilta/admin-uis';
 import { AuthenticationFeatureModule } from '@dilta/client-auth';
 import { MaterialModule, RouterDirection, SchoolFeatureNgrxModule } from '@dilta/client-shared';
 import { ElectronTransportModule } from '@dilta/electron-client';
@@ -32,6 +32,7 @@ import {
     AcademicRoutingModule,
     ElectronTransportModule,
     StudentPageModule,
+    ParentPageModule,
     SchoolFeatureNgrxModule,
     ProcessNgrxModule,
     AuthenticationFeatureModule,

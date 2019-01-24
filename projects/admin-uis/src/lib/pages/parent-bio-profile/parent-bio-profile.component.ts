@@ -1,14 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
-import { Parent, EntityNames, ModelOperations } from '@dilta/shared';
-import { exhaustMap, map } from 'rxjs/operators';
+import {
+  Parent,
+  EntityNames,
+  ModelOperations,
+  parentRelationToKey,
+  PresetAction
+} from '@dilta/shared';
+import { exhaustMap, map, first, combineLatest, tap } from 'rxjs/operators';
 import { TransportService } from '@dilta/electron-client';
 import { Observable } from 'rxjs';
+import { RouterDirection, ClientUtilService } from '@dilta/client-shared';
 
 export interface ParentBioProfilePM {
   // unique parent id
-  id: string;
+  phoneNo: string;
+}
+
+interface ViewObject {
+  lgas: string[];
+  states: string[];
 }
 
 @Component({
@@ -18,30 +30,77 @@ export interface ParentBioProfilePM {
 })
 export class ParentBioProfileComponent implements OnInit {
   parent$: Observable<Parent>;
+  view$: Observable<ViewObject>;
 
   constructor(
     private actR: ActivatedRoute,
-    private route: Router,
-    private transport: TransportService
+    private dir: RouterDirection,
+    private transport: TransportService,
+    private util: ClientUtilService
   ) {}
+
+  createView() {
+    const lgas$ = this.transport.execute<string[]>(PresetAction.Lga);
+    const states$ = this.transport.execute<string[]>(PresetAction.State);
+    return lgas$.pipe(
+      combineLatest(states$),
+      map(([lgas, states]) => Object.assign({ lgas, states }) as ViewObject),
+      first()
+    );
+  }
 
   retrieveParent() {
     return this.actR.params.pipe(
-      exhaustMap((param: ParentBioProfilePM) =>
+      exhaustMap(({ phoneNo }: ParentBioProfilePM) =>
         this.transport.modelAction<Parent>(
           EntityNames.Parent,
           ModelOperations.Retrieve,
-          { id: param.id }
+          { phoneNo }
         )
+      ),
+      map(parent =>
+        parent
+          ? Object.assign(parent, {
+            relationship: parentRelationToKey(parent.relationship)
+            })
+          : parent
       )
     );
   }
 
-  children(id: string) {
-    this.route.navigate(['student', id]);
+  editParent() {
+    this.parent$
+      .pipe(first())
+      .subscribe(
+        parent => this.dir.editParent(parent),
+        err => this.util.error(err)
+      );
   }
 
+  createParent() {
+    this.actR.params
+      .pipe(
+        map((param: ParentBioProfilePM) => param.phoneNo),
+        combineLatest(this.parent$),
+        tap(console.log),
+        map(([phoneNo, parent]) => (parent ? parent : phoneNo)),
+        first()
+      )
+      .subscribe(res => {
+        if (typeof res === 'string') {
+          // create route page
+          this.dir.createParent(res);
+        }
+      });
+  }
+
+  // children(id: string) {
+  //   this.route.navigate(['student', id]);
+  // }
+
   ngOnInit() {
+    this.view$ = this.createView();
     this.parent$ = this.retrieveParent();
+    this.createParent();
   }
 }

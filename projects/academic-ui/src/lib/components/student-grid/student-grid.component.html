@@ -1,11 +1,16 @@
 <div class="container">
-  <mat-form-field *ngIf="config && config.filter">
-    <input
-      matInput
-      (keyup)="filter.emit($event.target.value)"
-      placeholder="search"
-    />
-  </mat-form-field>
+  <div *ngIf="config && config.filter" class="space-down">
+    <mat-card>
+
+      <mat-form-field class="input" >
+        <input
+          matInput
+          (keyup)="filter.emit($event.target.value)"
+          placeholder="search"
+        />
+      </mat-form-field>
+    </mat-card>
+  </div>
 
   <table mat-table [dataSource]="students" class="mat-elevation-z8">
     <!-- (matSortChange)="sort.emit($event)" -->

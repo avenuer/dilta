@@ -123,4 +123,28 @@ export class RouterDirection {
    * @memberof RouterDirection
    */
   viewUserDetails(user: User) {}
+
+  /**
+   * route direction to create a new parent
+   *
+   * @param {string} parentPhoneNo
+   * @memberof RouterDirection
+   */
+  createParent(parentPhoneNo: string) {}
+
+  /**
+   * route direction to edit parent
+   *
+   * @param {Parent} parent
+   * @memberof RouterDirection
+   */
+  editParent(parent: Parent) {}
+
+  /**
+   * route direction to view parent details
+   *
+   * @param {Parent} parent
+   * @memberof RouterDirection
+   */
+  viewParent(parent: Parent | string) {}
 }

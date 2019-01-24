@@ -41,6 +41,12 @@ export class StudentBioProfileComponent implements OnInit {
     );
   }
 
+  viewParent() {
+    this.StudentBio$.pipe(first()).subscribe(student =>
+      this.route.viewParent(student.parentPhone as string)
+    );
+  }
+
   deleteStudent() {
     this.actr.params
       .pipe(

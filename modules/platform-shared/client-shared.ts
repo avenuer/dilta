@@ -140,3 +140,12 @@ export interface PrintDataConfig {
   startY?: number;
   margin?: number;
 }
+
+export const ParentChildren: KeysConfig[] = [
+  { key: 'no', title: 'N/O', type: 'number', editable: false },
+  { key: 'name', title: 'Name', type: 'string', editable: false },
+  { key: 'gender', title: 'gender', type: 'string', editable: false },
+  { key: 'class', title: '1st C.A', type: 'string', editable: false },
+  { key: 'admissionNo', title: 'Admission No', type: 'string', editable: false },
+  { key: 'dob', title: 'D.O.B', type: 'string', editable: false },
+];

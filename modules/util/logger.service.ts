@@ -2,8 +2,12 @@ import { Log } from '@dilta/shared';
 import { format } from 'date-fns';
 import { Injectable } from 'injection-js';
 import { Signale } from 'signale';
-import * as signale from 'signale';
 
+import { createWriteStream } from 'fs';
+import { join } from 'path';
+
+const LogPath = join(process.cwd(), 'dilta-marker.log');
+const fileStream = createWriteStream(LogPath);
 
 /**
  * a wrapper along js logger
@@ -13,14 +17,24 @@ import * as signale from 'signale';
  */
 @Injectable()
 export class Logger {
-  private signale = signale;
   public logger;
 
   public readonly loggerNameSpace = process.env.LOGGER_NAME_SPACE || 'dilta';
   public readonly loglevel = process.env.LOGGER_LEVEL;
 
   constructor() {
-    this.logger = new Signale({ scope: this.loggerNameSpace });
+    this.logger = new Signale({
+      scope: this.loggerNameSpace,
+      stream: process.stdout,
+      types: {
+        error: {
+          stream: [fileStream, process.stderr]
+        },
+        fatal: {
+          stream: [fileStream, process.stderr]
+        },
+      }
+    });
   }
 
   /**
@@ -116,7 +130,7 @@ export class Logger {
     if (!log.module) {
       return this.logger.scope(log.trace);
     }
-    return this.signale.scope(log.module).scope(log.trace);
+    return this.logger.scope(log.module).scope(log.trace);
   }
 
   /**

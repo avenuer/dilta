@@ -1,4 +1,9 @@
 <div class="container">
+    <mat-toolbar class="space-down">
+        <span> View Students Report Card </span>
+        <span class="spacer-full"> </span>
+        <button mat-raised-button color="primary" (click)="showFormAndHideTable = !showFormAndHideTable"> Form </button>
+         </mat-toolbar>
   <mat-card *ngIf="showFormAndHideTable">
       <acada-academic-report (load)="reportSheetConfig($event)"></acada-academic-report>
   </mat-card>

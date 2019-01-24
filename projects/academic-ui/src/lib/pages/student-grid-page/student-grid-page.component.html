@@ -1,12 +1,16 @@
 <div>
-  <button
-    class="printbtn"
-    (click)="print()"
-    mat-raised-button
-    color="secondary"
-  >
-    Print
-  </button>
+    <mat-toolbar class="space-down">
+        <span> School Students </span> <span class="spacer-full"> </span>
+
+        <button
+          class="printbtn"
+          (click)="print()"
+          mat-raised-button
+          color="secondary"
+        >
+          Print
+        </button>
+      </mat-toolbar>
   <acada-student-grid
     id="print"
     (student)="route.viewStudentDetails($event)"
