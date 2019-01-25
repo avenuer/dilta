@@ -1,4 +1,4 @@
-import { SchoolClass, SchoolPreset, TermPreset } from './preset';
+import { SchoolClass, SchoolPreset, TermPreset, ParentRelationship } from './preset';
 
 import { AuthenticationLevels } from './security';
 import { PromotionSheet } from './academics';
@@ -86,7 +86,7 @@ export interface Manager extends Partial<BaseModel> {
 export interface Parent extends Partial<BaseModel> {
   phoneNo: number | string;
   name: string;
-  relationship: string;
+  relationship: ParentRelationship | string;
   homeAddress: string;
   workAddress?: string;
   email?: string;
@@ -180,6 +180,7 @@ export interface Subject extends Partial<BaseModel> {
   exam: number;
   total: number;
   studentId: string;
+  teacherId: string;
   recordId: string;
 }
 

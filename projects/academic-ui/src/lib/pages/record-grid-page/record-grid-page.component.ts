@@ -47,8 +47,8 @@ export class RecordGridPageComponent implements OnInit {
     this.acada.findRecords(query, this._params).subscribe(
       res => {
         this.records = res.data;
-        this.config.paginator.count = res.total;
-        this.config.paginator.length = res.limit;
+        this.config.paginator.count = res.limit;
+        this.config.paginator.length = res.total;
       },
       err => this.util.error(err)
     );

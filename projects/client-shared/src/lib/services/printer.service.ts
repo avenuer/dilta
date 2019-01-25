@@ -18,7 +18,7 @@ import 'jspdf-autotable';
 import { format } from 'date-fns';
 import { Store } from '@ngrx/store';
 import { schoolFeature } from '../ngrx/school';
-import { map, first, exhaustMap, withLatestFrom } from 'rxjs/operators';
+import { map, first, exhaustMap, withLatestFrom, tap } from 'rxjs/operators';
 import { TransportService } from '@dilta/electron-client';
 
 @Injectable()
@@ -34,14 +34,16 @@ export class PrinterService {
 
   schoolHeader$() {
     return this.school$().pipe(
+      tap(console.log),
       exhaustMap(school =>
         this.transport.modelAction<Manager>(
           EntityNames.Manager,
           ModelOperations.Retrieve,
           { school: school.id }
-        )
-      ),
+          )
+          ),
       withLatestFrom(this.school$()),
+      tap(console.log),
       map(([manager, school]) => this.generateDocumentHeader(school, manager))
     );
   }

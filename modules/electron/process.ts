@@ -7,10 +7,11 @@ import { PresetModule } from 'modules/presets';
 import { ElectronDatabaseSync } from './electron-db-sync';
 import { ElectronUpdate } from './electron-update';
 import { ElectronService } from './provider';
+import { ElectronDatabaseUtilService } from './db-util';
 
 @Module({
   imports: [SecurtityModule, PresetModule, AcademicModules],
-  providers: [ElectronService, ElectronDatabaseSync, ElectronUpdate]
+  providers: [ElectronService, ElectronDatabaseSync, ElectronUpdate, ElectronDatabaseUtilService]
 })
 @Injectable()
 export class ElectronModule {}

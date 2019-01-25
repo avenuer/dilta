@@ -11,7 +11,8 @@ module.exports = {
   target: 'electron-main',
   entry: {
     main: path.join(process.cwd(), 'main.ts'),
-    cli: path.join(process.cwd(), 'modules', 'cli', 'cli.ts')
+    cli: path.join(process.cwd(), 'modules', 'cli', 'cli.ts'),
+    gen: path.join(process.cwd(), 'modules', 'generator', 'populate.school.ts')
   },
   devtool: 'eval-source-map',
   // watch: true,

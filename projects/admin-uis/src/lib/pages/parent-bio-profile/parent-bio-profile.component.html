@@ -8,13 +8,16 @@
        </mat-toolbar>
   </div>
 
-  <admin-ui-parent-biodata-form
-    [parent]="parent$ | async"
-    [lgas]="(view$ | async)?.lgas"
-    [states]="(view$ | async)?.states"
-    [notEditable]="true"
-    class="space-down"
-  ></admin-ui-parent-biodata-form>
+  <mat-card>
+    <admin-ui-parent-biodata-form
+      [parent]="parent$ | async"
+      [lgas]="(view$ | async)?.lgas"
+      [states]="(view$ | async)?.states"
+      [notEditable]="true"
+      class="space-down"
+    ></admin-ui-parent-biodata-form>
+  </mat-card>
+
 
   <!-- <div class="container">
     <mat-toolbar> Childrens </mat-toolbar>

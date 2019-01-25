@@ -7,6 +7,7 @@ import {
   Subject,
   SubjectRecords
   } from '@dilta/shared';
+  import { sortBy } from 'lodash';
 
 @Injectable()
 export class RecordOperations {
@@ -41,8 +42,8 @@ export class RecordOperations {
   async subjectRecord(recordId: string): Promise<SubjectRecords> {
     const record = await this.record.retrieve$({ id: recordId });
     if (record) {
-      const records = await this.subject.find$({ recordId });
-      const students = await this.student.find$({ class: record.class });
+      const records = await this.subject.find({ recordId });
+      const students = await this.student.find({ class: record.class });
       const data = this.mapAcademicSubject(recordId,
         this.recordIDMap(records.data),
         students.data
@@ -62,7 +63,7 @@ export class RecordOperations {
     recordMap: Map<string, Subject>,
     students: Student[]
   ): AcademicSubject[] {
-    return students.map(e => {
+    const mappedStudents = students.map(e => {
       const record: Subject = recordMap.has(e.id)
         ? recordMap.get(e.id)
         : {
@@ -71,10 +72,12 @@ export class RecordOperations {
             secondCa: 0,
             total: 0,
             studentId: e.id,
-            recordId: recordId
+            recordId: recordId,
+            teacherId: ''
           };
       return Object.assign({}, { name: e.name }, record);
     });
+    return sortBy(mappedStudents, 'name');
   }
 
   /**

@@ -7,12 +7,10 @@ import {
   OnInit,
   Output,
   ViewEncapsulation
-  } from '@angular/core';
+} from '@angular/core';
 import { errorInvalid, KeysConfig, MathExp } from '@dilta/shared';
 import { isEmpty } from 'lodash';
 import * as math from 'mathjs';
-
-
 
 export interface Map {
   key: KeysConfig;
@@ -49,7 +47,6 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
   allowed for column DynamicDataGridComponent:
   <acada-dynamic-table> </acada-dynamic-table>`);
 
-
   /**
    * expected keys and how they are to be displayed
    * @example [{ key: 'name', editable: false, type: string }]
@@ -68,7 +65,6 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    */
   @Input()
   public datagrid = [];
-
 
   /**
    * mathematical expression to be evalutade for calculaions
@@ -97,6 +93,14 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    */
   @Output()
   public changedData = new EventEmitter();
+
+  /**
+   * emits the error to the parent component to handle
+   *
+   * @memberof DynamicDataGridComponent
+   */
+  @Output()
+  public error = new EventEmitter();
 
   constructor() {}
 
@@ -148,15 +152,20 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
   edited<T>($event: Event, map: Map) {
     try {
       const elem = $event.srcElement as HTMLInputElement;
-      document.getElementById(map.key.key + '_' + map.index + 'input').hidden = true;
+      document.getElementById(
+        map.key.key + '_' + map.index + 'input'
+      ).hidden = true;
       this.datagrid[map.index] = this.updateGrid(
         this.datagrid[map.index],
         map,
         elem.value
       );
-      this.changedData.emit({ data: this.datagrid[map.index], index: map.index });
+      this.changedData.emit({
+        data: this.datagrid[map.index],
+        index: map.index
+      });
     } catch (error) {
-      this.errorHandler(map, (error as Error).message);
+      this.errorHandler(map, error as Error);
     }
   }
 
@@ -169,7 +178,11 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
     const value = Math.floor(input);
     console.log('called', key.type, key.config);
     if (key.type === 'number' && key.config) {
-      console.log(value > key.config.max, key.config.min > value, value > key.config.max || key.config.min > value);
+      console.log(
+        value > key.config.max,
+        key.config.min > value,
+        value > key.config.max || key.config.min > value
+      );
       if (value > key.config.max || key.config.min > value) {
         throw DynamicDataGridComponent.GridValueInputError;
       }
@@ -218,7 +231,7 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
       }
       value[map.key.key] = math.eval(value[map.key.key]);
     } catch (error) {
-      this.errorHandler(map, (error as Error).message);
+      this.errorHandler(map, error as Error);
       value = preValue;
     }
     return value;
@@ -234,7 +247,7 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    * @returns {T} item evaluated object scope
    * @memberof DynamicDataGridComponent
    */
-  evalExpress<T>(previous: T, updated: T,  map: Map): T {
+  evalExpress<T>(previous: T, updated: T, map: Map): T {
     try {
       this.keys.forEach(key => {
         if (key.evaluated) {
@@ -245,7 +258,7 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
       return updated;
     } catch (error) {
       console.log(map);
-      this.errorHandler(map, (error as Error).message);
+      this.errorHandler(map, error as Error);
       return previous;
     }
   }
@@ -256,11 +269,12 @@ export class DynamicDataGridComponent implements OnInit, OnDestroy {
    *
    * @memberof DynamicDataGridComponent
    */
-  errorHandler({ key, index }: Map, mgs: string) {
+  errorHandler({ key, index }: Map, error: Error) {
+    this.error.emit(error);
     const error_id = key.key + '_' + index + 'error';
     console.log(error_id);
     const elem: HTMLSpanElement = document.getElementById(error_id);
-    elem.innerText = mgs;
+    elem.innerText = error.message;
     elem.hidden = false;
     setTimeout(() => {
       elem.hidden = true;

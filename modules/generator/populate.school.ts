@@ -1,81 +1,97 @@
 import * as gen from './school.data';
-import { electronDatabase } from '@dilta/emdb';
-import {
-  Parent,
-  Receipt,
-  Student,
-  User
-  } from '@dilta/shared';
-import { Logger } from '@dilta/util';
-import { RxCollection, RxDatabase } from 'rxdb';
+import { Embededb } from '@dilta/emdb';
+import { Parent, Student, User, Subject, Record } from '@dilta/shared';
+import { RxCollection } from 'rxdb';
+import * as faker from 'faker';
 
-async function generate() {
-  let db: RxDatabase;
-  const data = script();
-  db = await electronDatabase();
-  await uploadData(db.school, data.school, 'school');
-  await uploadData(db.manager, data.manager, 'manager');
-  await uploadData(db.user, data.teachers, 'teachers');
-  await uploadData(db.parent, data.parents, 'parents');
-  await uploadData(db.student, data.students, 'students');
+export async function generateDBdata(schoolId: string, db: Embededb) {
+  // await uploadData(db.school, data.school, 'school');
+  // await uploadData(db.manager_model, manager, 'manager');
+  const admins = generateAdminStaffs(schoolId);
+  const savedTeachers = (await uploadData(
+    db.user_model,
+    admins.teachers
+  )) as User[];
+
+  const studentsAndParents = generateStudentsAndParents(schoolId);
+  const savedParents = (await uploadData(
+    db.parent_model,
+    studentsAndParents.parents
+  )) as Parent[];
+  const savedStudnets = (await uploadData(
+    db.student_model,
+    studentsAndParents.students
+  )) as Student[];
+
+  const recSub = generateRecordAndSubjects(
+    schoolId,
+    savedStudnets,
+    savedTeachers
+  );
+  const savedRecords = (await uploadData(
+    db.record_model,
+    recSub.records
+  )) as Record[];
+  const savedSubjects = (await uploadData(
+    db.subject_model,
+    recSub.subjects
+  )) as Subject[];
+  return `database random data generation done
+    :: Teachers ${savedTeachers.length}
+    :: Parents ${savedParents.length}
+    :: Students ${savedStudnets.length}
+    :: Records ${savedRecords.length}
+    :: Subjects ${savedSubjects.length}`;
 }
-
-function exit() {
-  console.log('finished');
-  process.exit(0);
-}
-
-generate()
-  // .then(() => exit())
-  .catch(console.error);
 
 async function uploadData<T>(
   kol: RxCollection<T>,
-  data: T[] | T,
-  name = 'default'
-) {
-  try {
-    if ((data as T[]).length) {
-      const localArray: T[] = data as any;
-      localArray.forEach(d => saver(kol, d, name));
-      return;
-    }
-    const local: T = data as any;
-    saver(kol, local, name);
-  } catch (e) {
-    throw e;
-  }
+  data: T[] | T
+): Promise<T[] | T> {
+  return (data as T[]).length
+    ? Promise.all((data as T[]).map(d => kol.upsert(d)))
+    : kol.upsert(data as T);
 }
 
-async function saver<T>(koll: RxCollection<T>, data: T, name = 'defalt') {
-  return await koll.upsert(data);
-}
 
-function script() {
-  const school = gen.school();
+function generateAdminStaffs(schoolId: string) {
   const manager = gen.manager();
-  manager.school = school.id;
-  const parents: Parent[] = [];
-  const receipts: Receipt[] = [];
+  manager.school = schoolId;
+
   const teachers = gen
-    .list<User>(gen.admin, 30)
-    .map(t => Object.assign({}, t, { school: school.id }));
+    .list<User>(gen.admin, 40)
+    .map(t => Object.assign({}, t, { school: schoolId }));
+  return { manager, teachers };
+}
+
+function generateStudentsAndParents(schoolId: string) {
+  const parents: Parent[] = [];
   const students = gen.list<Student>(gen.student, 800).map(stud => {
     const parent = gen.parent();
-    const studentReceipt = gen.list<Receipt>(gen.receipt, 8).map(receipt => {
-      const busary = gen.select(teachers);
-      receipt.name = stud.name;
-      receipt.school = school.id;
-      receipt.teacherId = busary.id;
-      receipt.studentId = stud.id;
-      return receipt;
-    });
-    receipts.concat(studentReceipt);
-    parent.school = school.id;
-    stud.school = school.id;
+    parent.school = schoolId;
+    stud.school = schoolId;
     stud.parentPhone = parent.phoneNo;
     parents.push(parent);
     return stud;
   });
-  return { school, manager, parents, receipts, teachers, students };
+  return { parents, students };
+}
+
+function generateRecordAndSubjects(
+  schoolId: string,
+  students: Student[],
+  teachers: User[]
+) {
+  const subjects: Subject[] = [];
+  const records: Record[] = gen.list(gen.genRecord, 100);
+  records.forEach(rec => {
+    const classStudents = students.filter((std) => std.class === rec.class);
+    classStudents.forEach(student => {
+      const subject = gen.scoreGen(student.id, rec.id);
+      subject.school = schoolId;
+      subject.teacherId = gen.select(teachers).id;
+      subjects.push(subject);
+    });
+  });
+  return { subjects, records };
 }

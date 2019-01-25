@@ -1,4 +1,9 @@
-button {
-  margin-bottom: 3%;
-  // margin-top: 3%;
+// button {
+//   margin-bottom: 3%;
+//   // margin-top: 3%;
+// }
+
+.spaced {
+  display: flex;
+  justify-content: space-between;
 }

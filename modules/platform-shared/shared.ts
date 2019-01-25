@@ -20,7 +20,8 @@ export enum SettingTypes {
 }
 
 export enum DatabaseActions {
-  Synchronization = 'Database [Synchronization]'
+  Synchronization = 'Database [Synchronization]',
+  GenerateData = 'Database [GenerateData]',
 }
 
 /**

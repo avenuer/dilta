@@ -13,11 +13,9 @@ import {
   ParentUiSharedModule,
   SchoolUiSharedModule,
   StudentUiSharedModule
-  } from '../components/modules';
+} from '../components/modules';
 import { NgModule } from '@angular/core';
 import { ClientSharedModule, MaterialModule } from '@dilta/client-shared';
-import { DyanmicDatagridModule } from 'projects/academic-ui/src/lib/components/dynamic-datagrid/dynamic-datagrid.module';
-
 
 const parents = [ParentBioProfileComponent, ParentFormEditorComponent];
 
@@ -36,9 +34,18 @@ const students = [StudentBioFormEditorComponent, StudentBioProfileComponent];
 })
 export class StudentPageModule {}
 
-const users = [UserBioDataFormPageComponent, UserBiodataProfileComponent, AdminGridPageComponent];
+const users = [
+  UserBioDataFormPageComponent,
+  UserBiodataProfileComponent,
+  AdminGridPageComponent
+];
 @NgModule({
-  imports: [AdminUiSharedModule, ClientSharedModule, UserRouteModule, MaterialModule, DyanmicDatagridModule],
+  imports: [
+    AdminUiSharedModule,
+    ClientSharedModule,
+    UserRouteModule,
+    MaterialModule
+  ],
   exports: users,
   declarations: users
 })
@@ -46,7 +53,12 @@ export class UserPageModule {}
 
 const schools = [SchoolDataFormComponent, ManagerDataFormComponent];
 @NgModule({
-  imports: [SchoolUiSharedModule, SchoolRouteModule, MaterialModule, ClientSharedModule],
+  imports: [
+    SchoolUiSharedModule,
+    SchoolRouteModule,
+    MaterialModule,
+    ClientSharedModule
+  ],
   exports: [...schools, SchoolUiSharedModule],
   declarations: schools
 })

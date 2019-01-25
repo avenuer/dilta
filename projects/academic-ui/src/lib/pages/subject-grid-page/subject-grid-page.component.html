@@ -16,6 +16,7 @@
     [datagrid]="data"
     [mathExp]="expression"
     [keys]="keys"
+    (error)="error($event)"
     (sender)="emitted($event)"
     (changedData)="updateSubjectRecord($event)"
   ></acada-dynamic-table>

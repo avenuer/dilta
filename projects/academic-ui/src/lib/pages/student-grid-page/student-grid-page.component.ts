@@ -29,7 +29,7 @@ export class StudentGridPageComponent implements OnInit {
     }
   };
 
-  private _params = { limit: 10, skip: 0, sort: 'id' };
+  private _params = { limit: 10, skip: 0, sort: 'name' };
 
   private queryObj: SearchFindRequest<Student> = {} as any;
 

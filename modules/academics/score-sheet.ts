@@ -18,6 +18,8 @@ import {
   SchoolClass
 } from '@dilta/shared';
 import { gradePreset, classPositionPreset } from 'modules/presets';
+import { writeFileSync } from 'fs';
+import { join } from 'path';
 
 /***
  * 1. Collates all records that matches the class and session
@@ -62,12 +64,12 @@ export class ScoreSheet {
   }
 
   async classRecords({ term, session, level }: AcadmicRecordSheet) {
-    const { data } = await this.record.find$({ class: level, term, session });
+    const { data } = await this.record.find({ class: level, term, session });
     return data;
   }
 
   async studentCounts(level: SchoolClass) {
-    const { total } = await this.student.find$({ class: level });
+    const { total } = await this.student.find({ class: level });
     return total;
   }
 
@@ -112,7 +114,7 @@ export class ScoreSheet {
    * @memberof ScoreSheet
    */
   async classSheets(recordId: string, studentId?: string): Promise<ClassSheet> {
-    const { data } = await this.subject.find$({ recordId: recordId });
+    const { data } = await this.subject.find({ recordId: recordId });
     // this sort from highest to lowest
     const sorted = data.sort((a, b) => b.total - a.total);
     // retrieves the student position
@@ -129,7 +131,7 @@ export class ScoreSheet {
       },
       { total: 0 }
     );
-    const avg = sorted.length > 0 ? sum.total / sorted.length : 0;
+    const avg = sorted.length > 0 ? Math.round(sum.total / sorted.length) : 0;
     return { max, min, avg, classPosition };
   }
 
@@ -151,7 +153,15 @@ export class ScoreSheet {
     });
     score = score
       ? score
-      : { total: 0, firstCa: 0, exam: 0, secondCa: 0, recordId, studentId };
+      : {
+          total: 0,
+          firstCa: 0,
+          exam: 0,
+          secondCa: 0,
+          recordId,
+          studentId,
+          teacherId: ''
+        };
     const grade = gradePreset(score.total);
     return { ...grade, ...score };
   }
@@ -209,15 +219,17 @@ export class ScoreSheet {
    * @memberof ScoreSheet
    */
   studentCumulativeRecord(sheets: RecordSheet[]): CumulativeRecordData {
-    if (sheets.length === 0) {
-      return { average: 0, grade: gradePreset(0).grade, total: 0 };
+    let total = 0;
+    for (let i = 0; i < sheets.length; i++) {
+      total += sheets[i].total;
+      console.log(sheets[i].total);
     }
-    const total =
-      sheets.length === 1
-        ? sheets[0].total
-        : (sheets as any).reduce((prev, curr) => prev.total + curr.total);
-    const average = sheets.length > 1 ? total / sheets.length : total;
+    const average =
+      total !== 0
+        ? Math.round(sheets.length > 1 ? total / sheets.length : total)
+        : total;
     const grade = gradePreset(average).grade;
+    console.log(average, grade, total);
     return { average, grade, total };
   }
 

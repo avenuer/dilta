@@ -1,19 +1,25 @@
 <div class="container">
-  <button
-    class="printbtn"
-    (click)="print()"
-    mat-raised-button
-    color="secondary"
+  <div>
+    <mat-toolbar class="spaced">
+      <button
+        class="printbtn"
+        (click)="print()"
+        mat-raised-button
+        color="secondary"
+      >
+        Print
+      </button>
+      <button (click)="newAdmin()" mat-raised-button color="primary">
+        Create Admin
+      </button>
+    </mat-toolbar>
+  </div>
+  <admin-ui-user-biodata-grid
+    [config]="config"
+    [users]="users"
+    (emitter)="dir.viewUserDetails($event)"
+    (paginator)="paginator($event)"
+    (search)="search($event)"
   >
-    Print
-  </button>
-  <button (click)="newAdmin()" mat-raised-button color="primary">
-    Create Admin
-  </button>
-  <acada-dynamic-table
-  id="print"
-  (sender)="dir.viewUserDetails($event)"
-    [datagrid]="users"
-    [keys]="keys"
-  ></acada-dynamic-table>
+  </admin-ui-user-biodata-grid>
 </div>

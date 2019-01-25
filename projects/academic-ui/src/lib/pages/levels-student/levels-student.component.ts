@@ -32,7 +32,7 @@ export class LevelsStudentComponent implements OnInit {
 
   private level: number;
 
-  private _params = { limit: 10, skip: 0, sort: 'id' };
+  private _params = { limit: 10, skip: 0, sort: 'name' };
 
   private queryObj: SearchFindRequest<Student>;
 

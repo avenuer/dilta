@@ -11,7 +11,8 @@ import {
   Student,
   schoolClassValueToKey
 } from '@dilta/shared';
-import { exhaustMap, first, map } from 'rxjs/operators';
+import { exhaustMap, first, map, skipWhile } from 'rxjs/operators';
+import { isUndefined } from 'lodash';
 
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -103,7 +104,8 @@ export class StudentBioFormEditorComponent implements OnInit {
    */
   retrieveStudent() {
     return this.avr.params.pipe(
-      map(param => (param as any).id || ''),
+      map(param => (param as any).id),
+      skipWhile(isUndefined),
       exhaustMap(id => {
         return this.transport.modelAction<Student>(
           EntityNames.Student,

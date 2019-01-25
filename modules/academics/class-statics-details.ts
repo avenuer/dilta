@@ -14,7 +14,7 @@ export class ClassStaticsDetails {
 
   @Action(AcademicActions.ClassStatDetails)
   async collateDetails() {
-    const { data } = await this.student.find$({});
+    const { data } = await this.student.find({  });
     return this.remapClassToText(this.classTotal(data));
   }
 

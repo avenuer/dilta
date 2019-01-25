@@ -72,11 +72,12 @@ export class SubjectGridPageComponent implements OnInit {
    */
   updateSubjectRecord({
     index,
-    data
+    view
   }: {
-    data: AcademicSubject;
+    view: AcademicSubject & { no: number };
     index: number;
   }) {
+    const { no, ...data } = view;
     this.acada
       .teacherAndSchoolId()
       .pipe(
@@ -97,6 +98,10 @@ export class SubjectGridPageComponent implements OnInit {
   }
 
   emitted(data: Subject) {}
+
+  error(error: Error) {
+    this.util.error(error);
+  }
 
   /**
    * retrieve the student details and records
@@ -130,10 +135,14 @@ export class SubjectGridPageComponent implements OnInit {
     };
   }
 
+  dataToIndex(records: AcademicSubject[]) {
+    return records.map((rec, index) => Object.assign(rec, { no: index + 1 }));
+  }
+
   print() {
     this.retriveRecords().subscribe(
       ({ data, record }) => {
-        this.printer.printTable(SubjectGridConfig, data, {
+        this.printer.printTable(SubjectGridConfig, this.dataToIndex(data), {
           filename: `${record.subject}  ${record.class} ${
             record.term
           } term ${format(Date.now(), DateFormat)}`,
@@ -148,7 +157,7 @@ export class SubjectGridPageComponent implements OnInit {
   ngOnInit() {
     this.retriveRecords().subscribe(
       resp => {
-        this.data = resp.data;
+        this.data = this.dataToIndex(resp.data);
         this.record = resp.record;
       },
       err => this.util.error(err)

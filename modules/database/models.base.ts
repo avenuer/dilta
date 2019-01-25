@@ -5,14 +5,14 @@ import {
   defaultPreInsert,
   defaultPreSave,
   Embededb
-  } from '@dilta/emdb';
+} from '@dilta/emdb';
 import {
   BaseModel,
   EntityNames,
   FindQueryParam,
   FindResponse,
   SearchFindRequest
-  } from '@dilta/shared';
+} from '@dilta/shared';
 import { autobind } from 'core-decorators';
 import { RxCollection } from 'rxdb';
 import { sortBy } from 'lodash';
@@ -119,7 +119,7 @@ export class ModelBase<T extends Partial<BaseModel>> implements DBModel<T> {
    */
   async find(
     query: Partial<T>,
-    { skip, limit, sort }: FindQueryParam
+    { skip, limit, sort }: FindQueryParam = { skip: 0 } as any
   ): Promise<FindResponse<T>> {
     let matchDocs = await this.collection
       .find(query)
@@ -128,11 +128,12 @@ export class ModelBase<T extends Partial<BaseModel>> implements DBModel<T> {
     if (sort) {
       matchDocs = sortBy(matchDocs, sort);
     }
+    const total = matchDocs.length;
     return {
       skip,
       limit,
-      data: matchDocs.slice(skip, limit + skip),
-      total: matchDocs.length
+      total,
+      data: matchDocs.slice(skip || 0, limit ? limit + skip : total)
     };
   }
 

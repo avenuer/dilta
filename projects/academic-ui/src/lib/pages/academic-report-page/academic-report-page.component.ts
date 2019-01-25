@@ -58,7 +58,7 @@ export class AcademicReportPageComponent implements OnInit {
    * @private
    * @memberof AcademicReportPageComponent
    */
-  private _params = { limit: 10, skip: 0, sort: 'id' };
+  private _params = { limit: 10, skip: 0, sort: 'name' };
 
   /**
    * Query for search

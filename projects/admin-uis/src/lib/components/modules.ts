@@ -10,15 +10,26 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '@dilta/client-shared';
 import { NgxUploaderModule } from 'ngx-uploader';
+import { DyanmicDatagridModule } from 'projects/academic-ui/src/lib/components/dynamic-datagrid/dynamic-datagrid.module';
+import { AdminUserBiodataGridComponent } from './admin-grid/admin-grid.component';
+import { MatPaginatorModule } from '@angular/material';
 
 const admins = [
   AdminBiodataEditorComponent,
   LargeUserProfileComponent,
-  SmallUserProfileComponent
+  SmallUserProfileComponent,
+  AdminUserBiodataGridComponent
 ];
 
 @NgModule({
-  imports: [ReactiveFormsModule, CommonModule, NgxUploaderModule, MaterialModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    NgxUploaderModule,
+    MaterialModule,
+    DyanmicDatagridModule,
+    MatPaginatorModule
+  ],
   declarations: admins,
   exports: [...admins, MaterialModule]
 })
@@ -27,7 +38,12 @@ export class AdminUiSharedModule {}
 const schools = [ManagersBiodataEditorComponent, SchoolBiodataEditorComponent];
 
 @NgModule({
-  imports: [ReactiveFormsModule, MaterialModule, CommonModule, NgxUploaderModule],
+  imports: [
+    ReactiveFormsModule,
+    MaterialModule,
+    CommonModule,
+    NgxUploaderModule
+  ],
   declarations: schools,
   exports: [...schools, MaterialModule]
 })

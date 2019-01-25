@@ -2,7 +2,7 @@ export const DateFormat = 'DD-MMM-YYYY';
 
 export enum AppliationOutputDir {
   program = 'dilta',
-  setup = 'setup',
+  setup = 'setup'
 }
 
 /**
@@ -46,43 +46,105 @@ export const AcademicReportCardGridConfig: KeysConfig[] = [
   { key: 'avg', title: 'Class Average', type: 'number', editable: false },
   { key: 'classPosition', title: 'Position', type: 'string', editable: false },
   { key: 'grade', title: 'Grade', type: 'string', editable: false },
-  { key: 'comment', title: 'Remarks', type: 'string', editable: false },
+  { key: 'comment', title: 'Remarks', type: 'string', editable: false }
 ];
 
 export const LevelStaticDetailsGridConfig: KeysConfig[] = [
   { key: 'no', title: 'N/O', type: 'number', editable: false, send: true },
-  { key: 'name', title: 'Class', type: 'string', editable: false, send: true  },
-  { key: 'male', title: 'Male', type: 'string', editable: false, send: true  },
-  { key: 'female', title: 'Female', type: 'string', editable: false, send: true  },
-  { key: 'total', title: 'Total', type: 'string', editable: false, send: true  },
+  { key: 'name', title: 'Class', type: 'string', editable: false, send: true },
+  { key: 'male', title: 'Male', type: 'string', editable: false, send: true },
+  {
+    key: 'female',
+    title: 'Female',
+    type: 'string',
+    editable: false,
+    send: true
+  },
+  { key: 'total', title: 'Total', type: 'string', editable: false, send: true }
 ];
 
 export const StudentGridConfig: KeysConfig[] = [
   { key: 'no', title: 'N/O', type: 'number', editable: false, send: true },
-  { key: 'name', title: 'Name', type: 'string', editable: false, send: true  },
-  { key: 'gender', title: 'Gender', type: 'string', editable: false, send: true  },
-  { key: 'parentPhone', title: 'Parent PhoneNo', type: 'string', editable: false, send: true  },
-  { key: 'admissionNo', title: 'Admission No', type: 'string', editable: false, send: true  },
-  { key: 'dob', title: 'Date of Birth', type: 'string', editable: false, send: true  },
+  { key: 'name', title: 'Name', type: 'string', editable: false, send: true },
+  {
+    key: 'gender',
+    title: 'Gender',
+    type: 'string',
+    editable: false,
+    send: true
+  },
+  {
+    key: 'parentPhone',
+    title: 'Parent PhoneNo',
+    type: 'string',
+    editable: false,
+    send: true
+  },
+  {
+    key: 'admissionNo',
+    title: 'Admission No',
+    type: 'string',
+    editable: false,
+    send: true
+  },
+  {
+    key: 'dob',
+    title: 'Date of Birth',
+    type: 'string',
+    editable: false,
+    send: true
+  }
 ];
 
 export const RecordGridConfig: KeysConfig[] = [
   { key: 'no', title: 'N/O', type: 'number', editable: false, send: true },
-  { key: 'class', title: 'Class', type: 'string', editable: false, send: true  },
-  { key: 'subject', title: 'Subject', type: 'string', editable: false, send: true  },
-  { key: 'term', title: 'Term', type: 'string', editable: false, send: true  },
-  { key: 'session', title: 'Session', type: 'string', editable: false, send: true  },
+  { key: 'class', title: 'Class', type: 'string', editable: false, send: true },
+  {
+    key: 'subject',
+    title: 'Subject',
+    type: 'string',
+    editable: false,
+    send: true
+  },
+  { key: 'term', title: 'Term', type: 'string', editable: false, send: true },
+  {
+    key: 'session',
+    title: 'Session',
+    type: 'string',
+    editable: false,
+    send: true
+  }
 ];
 
 export const UsersGridConfig: KeysConfig[] = [
   { key: 'no', title: 'N/O', type: 'number', editable: false, send: true },
-  { key: 'name', title: 'Name', type: 'string', editable: false, send: true  },
-  { key: 'phoneNo', title: 'Phone No', type: 'string', editable: false, send: true  },
-  { key: 'gender', title: 'Gender', type: 'string', editable: false, send: true  },
-  { key: 'address', title: 'Address', type: 'string', editable: false, send: true  },
+  { key: 'name', title: 'Name', type: 'string', editable: false, send: true },
+  {
+    key: 'phoneNo',
+    title: 'Phone No',
+    type: 'string',
+    editable: false,
+    send: true
+  },
+  {
+    key: 'gender',
+    title: 'Gender',
+    type: 'string',
+    editable: false,
+    send: true
+  },
+  { key: 'class', title: 'Class', type: 'string', editable: false, send: true },
+  {
+    key: 'subject',
+    title: 'Subject',
+    type: 'string',
+    editable: false,
+    send: true
+  }
 ];
 
 export const SubjectGridConfig: KeysConfig[] = [
+  { key: 'no', title: 'N/O', type: 'number', editable: false, send: true },
   { key: 'name', title: 'Name', send: true, editable: false, type: 'string' },
   {
     key: 'firstCa',
@@ -146,6 +208,11 @@ export const ParentChildren: KeysConfig[] = [
   { key: 'name', title: 'Name', type: 'string', editable: false },
   { key: 'gender', title: 'gender', type: 'string', editable: false },
   { key: 'class', title: '1st C.A', type: 'string', editable: false },
-  { key: 'admissionNo', title: 'Admission No', type: 'string', editable: false },
-  { key: 'dob', title: 'D.O.B', type: 'string', editable: false },
+  {
+    key: 'admissionNo',
+    title: 'Admission No',
+    type: 'string',
+    editable: false
+  },
+  { key: 'dob', title: 'D.O.B', type: 'string', editable: false }
 ];
