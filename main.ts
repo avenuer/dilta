@@ -35,8 +35,9 @@ let win: BrowserWindow | null;
 
 async function createWindow(config: WindowConfig) {
   // Create the browser window.
+  const devConfig = { width: 503, height: 671, show: false };
   win = new BrowserWindow(
-    config.config || { width: 503, height: 671, show: false }
+   (isDev) ? devConfig:  config.config || devConfig
   );
   // off toolbars
   win.setMenu(null);

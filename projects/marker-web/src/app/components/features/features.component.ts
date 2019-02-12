@@ -34,18 +34,18 @@ export class FeaturesComponent implements OnInit {
     //   title: `Graphical Analysis`,
     //   info: `Marker provides graphical analysis of student data with charts.`
     // },
-    {
-      icon: 'sms_mobile_login.png',
-      title: `Data Storage and Privacy`,
-      info: `Marker allows continuous storage of offline application data online for cloud storage,
-    dilta allow so has a high regard for data privacy concerns.`
-    },
-    {
-      icon: 'sms_mobile_home.png',
-      title: `Cross-Platform Accessiblity and Updates`,
-      info: ` Data synced are available online and can be viewed with Marker's mobile application
-    and continuous update is guaranteed for the application.`
-    }
+    // {
+    //   icon: 'sms_mobile_login.png',
+    //   title: `Data Storage and Privacy`,
+    //   info: `Marker allows continuous storage of offline application data online for cloud storage,
+    // dilta allow so has a high regard for data privacy concerns.`
+    // },
+    // {
+    //   icon: 'sms_mobile_home.png',
+    //   title: `Cross-Platform Accessiblity and Updates`,
+    //   info: ` Data synced are available online and can be viewed with Marker's mobile application
+    // and continuous update is guaranteed for the application.`
+    // }
     // { icon: '', title: ``, info: `` },
   ];
 

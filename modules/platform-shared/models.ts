@@ -1,4 +1,10 @@
-import { SchoolClass, SchoolPreset, TermPreset, ParentRelationship } from './preset';
+import {
+  SchoolClass,
+  SchoolPreset,
+  TermPreset,
+  ParentRelationship,
+  GradesComment
+} from './preset';
 
 import { AuthenticationLevels } from './security';
 import { PromotionSheet } from './academics';
@@ -22,6 +28,7 @@ export enum EntityNames {
   Setting = 'preference_model',
   Expense = 'expense_model',
   Promotion = 'promotion_model',
+  academic_setting = 'academic_setting_model'
 }
 
 /**
@@ -187,8 +194,7 @@ export interface Subject extends Partial<BaseModel> {
 /**
  * Promotion Models, show the histroy of student academic promotions.
  */
-export type Promotion = PromotionSheet  & Partial<BaseModel>;
-
+export type Promotion = PromotionSheet & Partial<BaseModel>;
 
 /**
  * teachers biodata information recored stored in the database's interface
@@ -318,3 +324,46 @@ export interface SettingPreference {
    */
   inputs?: { [k in keyof any]: string }[];
 }
+
+export interface RecordScoreConfig {
+  title: string;
+  max: number;
+}
+
+/**
+ * configuration for academic records and settings
+ *
+ * @interface RecordSheetConfig
+ */
+export interface RecordSheetConfig {
+  firstCa: RecordScoreConfig;
+  secondCa?: RecordScoreConfig;
+  exam: RecordScoreConfig;
+}
+
+export interface GradingRange {
+  min: number;
+  max: number;
+}
+
+export interface GradingConfig {
+  A: GradingRange;
+  B: GradingRange;
+  C: GradingRange;
+  D: GradingRange;
+  E: GradingRange;
+  F: GradingRange;
+}
+
+/**
+ * Academic setting and configuration
+ *
+ * @export
+ * @interface AcademicConfig
+ * @extends {Partial<BaseModel>}
+ */
+export interface AcademicSetting extends Partial<BaseModel> {
+  record: RecordSheetConfig;
+  grade: GradingConfig;
+}
+

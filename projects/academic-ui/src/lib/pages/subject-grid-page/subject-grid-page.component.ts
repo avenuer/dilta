@@ -1,7 +1,7 @@
 import { AcademicService } from '../../services/academic.service';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ClientUtilService, PrinterService } from '@dilta/client-shared';
+import { ActivatedRoute, Params } from '@angular/router';
+import { ClientUtilService, PrinterService, RouterDirection } from '@dilta/client-shared';
 import { TransportService } from '@dilta/electron-client';
 import {
   AcademicActions,
@@ -14,7 +14,8 @@ import {
   DateFormat,
   schoolClassValueToKey,
   schoolTermValueToKey,
-  SubjectGridConfig
+  SubjectGridConfig,
+  SubjectRecordDeletedStatus
 } from '@dilta/shared';
 import { exhaustMap, first } from 'rxjs/operators';
 import { format } from 'date-fns';
@@ -61,8 +62,37 @@ export class SubjectGridPageComponent implements OnInit {
     private transport: TransportService,
     private acada: AcademicService,
     private printer: PrinterService,
-    public util: ClientUtilService
+    public util: ClientUtilService,
+    private dir: RouterDirection
   ) {}
+
+  deleteRecord() {
+    this.route.params
+      .pipe(
+        exhaustMap((params: Params) =>
+          this.transport.execute<SubjectRecordDeletedStatus>(
+            AcademicActions.DeleteSubjectRecord,
+            params.id
+          )
+        ),
+        first()
+      )
+      .subscribe(
+        res => this.alertDeleteSuccess(res),
+        err => this.util.error(err)
+      );
+  }
+
+  alertDeleteSuccess({
+    isAllSubjectDeleted,
+    isRecordDeleted
+  }: SubjectRecordDeletedStatus) {
+    const message = `${isRecordDeleted ? 'record has been deleted;' : ''} ${
+      isAllSubjectDeleted ? 'students subject records are deleted also' : ''
+    }`;
+    this.util.success(`Record Delete`, message);
+    this.dir.deletedRecord();
+  }
 
   /**
    * Updates the action to update the particular record
@@ -72,26 +102,26 @@ export class SubjectGridPageComponent implements OnInit {
    */
   updateSubjectRecord({
     index,
-    view
+    data
   }: {
-    view: AcademicSubject & { no: number };
+    data: AcademicSubject & { no: number };
     index: number;
   }) {
-    const { no, ...data } = view;
+    const { no, ...record } = data;
     this.acada
       .teacherAndSchoolId()
       .pipe(
         exhaustMap(Ids => {
           return this.transport.execute<AcademicSubject>(
             AcademicActions.UpdateSubjectRecord,
-            { ...data, ...Ids }
+            { ...record, ...Ids }
           );
         })
       )
       .pipe(first())
       .subscribe(
         subject => {
-          this.data[index] = subject;
+          this.data[index] = { ...subject, no } as any;
         },
         err => this.util.error(err)
       );

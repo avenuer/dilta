@@ -11,7 +11,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SchoolPageModule, UserPageModule } from '@dilta/admin-uis';
 import { AuthPagesModule } from '@dilta/client-auth';
-import { ClientSharedModule, MaterialModule, RouterDirection } from '@dilta/client-shared';
+import { ClientSharedModule, MaterialModule, RouterDirection, AcademicSettingModule } from '@dilta/client-shared';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -43,6 +43,7 @@ const direction: ClassProvider = {
     ReactiveFormsModule,
     SnotifyModule.forRoot(),
     ClientSharedModule,
+    AcademicSettingModule,
     ProcessNgrxModule,
     SchoolPageModule,
     AuthPagesModule,

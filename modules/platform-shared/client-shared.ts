@@ -1,3 +1,5 @@
+import { RecordSheetConfig } from './models';
+
 export const DateFormat = 'DD-MMM-YYYY';
 
 export enum AppliationOutputDir {
@@ -142,6 +144,85 @@ export const UsersGridConfig: KeysConfig[] = [
     send: true
   }
 ];
+
+export const defaultSubjectConfig: RecordSheetConfig = {
+  exam: {
+    max: 70,
+    title: 'Examination'
+  },
+  firstCa: {
+    max: 15,
+    title: 'First C.A'
+  },
+  secondCa: {
+    max: 15,
+    title: 'Second C.A'
+  }
+};
+
+export interface SubjectGridFactory {
+  config: KeysConfig[];
+  expression: string;
+}
+
+export function subjectGridFactory({
+  secondCa,
+  firstCa,
+  exam
+}: RecordSheetConfig): SubjectGridFactory {
+  let expression = 'firstCa + exam = total';
+  const keyConfigs: KeysConfig[] = [
+    { key: 'no', title: 'N/O', type: 'number', editable: false, send: true },
+    { key: 'name', title: 'Name', send: true, editable: false, type: 'string' },
+    {
+      key: 'firstCa',
+      title: firstCa.title,
+      send: false,
+      editable: true,
+      type: 'number',
+      config: {
+        max: firstCa.max,
+        min: 0
+      }
+    }
+  ];
+  if (typeof secondCa === 'object' && secondCa) {
+    expression = 'firstCa + secondCa + exam = total';
+    keyConfigs.push({
+      title: secondCa.title,
+      key: 'secondCa',
+      send: false,
+      editable: true,
+      type: 'number',
+      config: {
+        max: secondCa.max,
+        min: 0
+      }
+    });
+  }
+  keyConfigs.push(
+    {
+      title: exam.title,
+      key: 'exam',
+      send: false,
+      editable: true,
+      type: 'number',
+      config: {
+        max: exam.max,
+        min: 0
+      }
+    },
+    {
+      title: 'Total',
+      key: 'total',
+      send: false,
+      editable: false,
+      type: 'number',
+      evaluated: true
+    }
+  );
+  return { config: keyConfigs, expression };
+}
 
 export const SubjectGridConfig: KeysConfig[] = [
   { key: 'no', title: 'N/O', type: 'number', editable: false, send: true },

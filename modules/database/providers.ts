@@ -14,7 +14,8 @@ import {
   Student,
   Subject,
   User,
-  Promotion
+  Promotion,
+  AcademicSetting
   } from '@dilta/shared';
 
 /** Token For RXDB leveldown instance */
@@ -224,6 +225,23 @@ export class PromotionService extends ModelBase<Promotion> {
   }
 }
 
+
+/**
+ * Academic setting for configuration for dynamic view.
+ *
+ * @export
+ * @class AcademicSettingService
+ * @extends {ModelBase<AcademicSetting>}
+ */
+@Injectable()
+export class AcademicSettingService extends ModelBase<AcademicSetting> {
+  constructor(
+    @Inject(EmbededDatabaseToken) public database: Promise<Embededb>
+  ) {
+    super(EntityNames.academic_setting, database);
+  }
+}
+
 /** Provider Token Mapping  */
 const embededDBProvider: FactoryProvider = {
   provide: EmbededDatabaseToken,
@@ -243,5 +261,6 @@ export const databaseServices = [
   SettingService,
   ExpenseService,
   RecordService,
-  PromotionService
+  PromotionService,
+  AcademicSettingService
 ];

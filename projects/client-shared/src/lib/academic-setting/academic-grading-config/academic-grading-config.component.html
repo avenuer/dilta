@@ -1,0 +1,102 @@
+<div class="container">
+  <form [formGroup]="gradingForm" class="container">
+    <div class="config-row">
+      <mat-form-field>
+        <input matInput required size="75" value="Grade" disabled type="text" />
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          required
+          size="75"
+          value="Minimum Range"
+          disabled
+          type="text"
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          required
+          size="75"
+          value="Maximum Range"
+          disabled
+          type="text"
+        />
+      </mat-form-field>
+    </div>
+    <div *ngFor="let grade of grades" class="container">
+      <div class="config-row">
+        <mat-form-field>
+          <input
+            matInput
+            required
+            size="75"
+            [value]="grade"
+            disabled
+            type="text"
+          />
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            required
+            size="75"
+            [formControlName]="grade.toLowerCase() + '_min'"
+            type="number"
+          />
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            required
+            size="75"
+            [formControlName]="grade.toLowerCase() + '_max'"
+            type="number"
+          />
+        </mat-form-field>
+      </div>
+      <div
+        *ngIf="
+          gradingForm.controls[grade.toLowerCase() + '_min'].touched ||
+          gradingForm.controls[grade.toLowerCase() + '_max'].touched
+        "
+        class="error"
+      >
+        <mat-error
+          *ngIf="!gradingForm.controls[grade.toLowerCase() + '_max'].valid"
+        >
+          Maximum score for {{ grade }} is required
+        </mat-error>
+        <mat-error
+          *ngIf="!gradingForm.controls[grade.toLowerCase() + '_min'].valid"
+        >
+          minimum score for {{ grade }} is required
+        </mat-error>
+        <mat-error
+          *ngIf="
+            gradingForm.controls[grade.toLowerCase() + '_min'].value >=
+            gradingForm.controls[grade.toLowerCase() + '_max'].value
+          "
+        >
+          {{ grade }} maximum score should be greater than minimum score
+        </mat-error>
+      </div>
+    </div>
+    <div class="error">
+
+      <button
+        *ngIf="!notEditable"
+        id="saver"
+        mat-raised-button
+        color="primary"
+        [disabled]="!gradingForm.valid"
+        (click)="emit(gradingForm.value)"
+        class="save-btn"
+      >
+        Save
+      </button>
+    </div>
+  </form>
+</div>
+

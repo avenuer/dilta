@@ -1,5 +1,5 @@
 import { Action, Injectable } from '@dilta/core';
-import { RecordService, StudentService, SubjectService } from '@dilta/database';
+import { RecordService, StudentService, SubjectService, AcademicSettingService } from '@dilta/database';
 import {
   StudentReportSheet,
   AcadmicRecordSheet,
@@ -18,8 +18,6 @@ import {
   SchoolClass
 } from '@dilta/shared';
 import { gradePreset, classPositionPreset } from 'modules/presets';
-import { writeFileSync } from 'fs';
-import { join } from 'path';
 
 /***
  * 1. Collates all records that matches the class and session
@@ -34,7 +32,8 @@ export class ScoreSheet {
   constructor(
     private record: RecordService,
     private subject: SubjectService,
-    private student: StudentService
+    private student: StudentService,
+    private setting: AcademicSettingService
   ) {}
 
   /**
@@ -54,12 +53,14 @@ export class ScoreSheet {
     const cumulative = this.studentCumulativeRecord(scoreSheet);
     const student = await this.student.retrieve$({ id: sheet.studentId });
     const totalStudents = await this.studentCounts(sheet.level);
+    const settings = await this.setting.retrieve$({ school: student.school });
     return {
       scoreSheet,
       cumulative,
       biodata: student,
       ...sheet,
-      totalStudents
+      totalStudents,
+      settings
     };
   }
 

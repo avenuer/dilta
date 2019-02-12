@@ -149,4 +149,8 @@ export class AcademicRouterDirection extends RouterDirection {
       typeof parent === 'object' ? parent.phoneNo : parent
     ]);
   }
+
+  deletedRecord() {
+    this.router.navigate(['academics']);
+  }
 }

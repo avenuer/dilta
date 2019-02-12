@@ -1,5 +1,5 @@
 export enum PlatformShared {
-  ApplicationName = 'Dilta'
+  ApplicationName = 'Marker'
 }
 
 export enum Platform {
@@ -46,6 +46,5 @@ export function enumKeysToValue(keys: string[], enumValueType: string) {
       }
     });
     return valueKey;
-
-  }
+  };
 }

@@ -50,4 +50,6 @@ export class PresetService {
   schoolPreset(preset: string) {
     return dictSchool(preset);
   }
+
+  academicSetting() {}
 }

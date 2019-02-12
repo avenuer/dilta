@@ -30,6 +30,7 @@ export interface CollectionMaps {
   preference_model: RxCollection<Settings>;
   expense_model: RxCollection<Expense>;
   record_model: RxCollection<Record>;
+  academic_setting_model: RxCollection<Record>;
 }
 
 /** interface mapping the mainframe object to its key value type info  */

@@ -1,16 +1,23 @@
 <div>
-  <mat-toolbar class="space-down">
-    <span> Class Students Subject Record </span>
-    <span class="spacer-full"> </span>
-    <button
-      class="printbtn"
-      (click)="print()"
-      mat-raised-button
-      color="secondary"
-    >
-      Print
-    </button>
-  </mat-toolbar>
+      <mat-toolbar>
+        <button
+          (click)="deleteRecord()"
+          mat-raised-button
+          color="danger"
+        >
+          Delete
+        </button>
+        <span class="spacer-full"> </span>
+        <span > Class Students Subject Record </span>
+        <span class="spacer-full"> </span>
+        <button
+          (click)="print()"
+          mat-raised-button
+          color="secondary"
+        >
+          Print
+        </button>
+      </mat-toolbar>
   <acada-dynamic-table
     id="print"
     [datagrid]="data"

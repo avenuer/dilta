@@ -1,7 +1,7 @@
 import { RouterState } from './router-state.service';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Auth, Manager, Parent, School, Student, User } from '@dilta/shared';
+import { Auth, Manager, Parent, School, Student, User, AcademicSetting } from '@dilta/shared';
 import { Authsuccess } from 'projects/auth/src/lib/ngrx/auth.reducer';
 
 /**
@@ -147,4 +147,20 @@ export class RouterDirection {
    * @memberof RouterDirection
    */
   viewParent(parent: Parent | string) {}
+
+
+  /**
+   * route direction after deleting a subject record
+   *
+   * @memberof RouterDirection
+   */
+  deletedRecord() {}
+
+  /**
+   * route to redirect after academic setting
+   *
+   * @param {AcademicSetting} setting
+   * @memberof RouterDirection
+   */
+  academicSettingForm(setting: AcademicSetting) {}
 }

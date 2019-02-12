@@ -1,4 +1,4 @@
-import { Record, Student, Subject } from './models';
+import { Record, Student, Subject, RecordSheetConfig, AcademicSetting } from './models';
 import { TermPreset, GradeSheet, SchoolClass, Grades } from './preset';
 
 export interface GridConfig {
@@ -25,11 +25,13 @@ export interface AcademicSubject extends Subject {
 export interface SubjectRecords {
   record: Record;
   data: AcademicSubject[];
+  config: RecordSheetConfig;
 }
 
 export enum AcademicActions {
   SubjectRecord = '[ACADEMIC]  FIND SubjectRecords',
   UpdateSubjectRecord = '[ACADEMIC]  UPDATE SubjectRecords',
+  DeleteSubjectRecord = '[ACADEMIC]  DELETE SubjectRecords',
   StudentReportSheet = '[ACADEMIC]  GET StudentReportSheet',
   ClassStatDetails = '[ACADEMIC]  GET ClassStatDetails',
   PromoteClass = '[ACADEMIC]  GET PromoteClass',
@@ -88,6 +90,7 @@ export interface StudentReportSheet extends StudentSheet {
   scoreSheet: RecordSheet[];
   cumulative?: CumulativeRecordData;
   totalStudents: number;
+  settings: AcademicSetting;
 }
 
 export interface GenderDistrubution {
@@ -99,4 +102,10 @@ export interface GenderDistrubution {
 export interface ClassDetailedStat extends GenderDistrubution {
   value: SchoolClass | any;
   name: string;
+}
+
+
+export interface SubjectRecordDeletedStatus {
+  isRecordDeleted: boolean;
+  isAllSubjectDeleted: boolean;
 }

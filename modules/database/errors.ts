@@ -15,6 +15,7 @@ export class EmbeddedRxDBError extends Error {
 
   /** formats RxDBErrors to a single  meanfull Error */
   static cleanError(err: RxError) {
+    console.log(err);
     const { cleanField, changeFinalDetailError } = EmbeddedRxDBError;
     if (!isArray(err.parameters.errors)) {
       return changeFinalDetailError(err);
