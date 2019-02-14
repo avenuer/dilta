@@ -4,8 +4,6 @@ import { PageEvent } from '@angular/material';
 import { Router } from '@angular/router';
 import {
   ClientUtilService,
-  PrinterService,
-  schoolFeature
 } from '@dilta/client-shared';
 import {
   GridConfig,
@@ -13,8 +11,7 @@ import {
   Student,
   StudentSheet
 } from '@dilta/shared';
-import { Store } from '@ngrx/store';
-import { first } from 'rxjs/operators';
+
 
 @Component({
   selector: 'acada-academic-report-page',

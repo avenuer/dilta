@@ -76,10 +76,11 @@
       <mat-label> Does school does a second C.A test? </mat-label>
       <mat-checkbox
         required
-        formControlName="allowSecond_Ca"
+        [checked]="true"
+        (change)="allowSecond_Ca = !allowSecond_Ca"
       ></mat-checkbox>
     </div>
-    <mat-form-field *ngIf="recordForm.controls['allowSecond_Ca'].value === true">
+    <mat-form-field *ngIf="allowSecond_Ca">
         <mat-label> Second C.A title </mat-label>
         <input
           matInput
@@ -97,7 +98,7 @@
           Second C.A label is required and for record sheet and report card
         </mat-error>
       </mat-form-field>
-      <mat-form-field *ngIf="recordForm.controls['allowSecond_Ca'].value === true">
+      <mat-form-field *ngIf="allowSecond_Ca">
         <mat-label> Second C.A Max Score </mat-label>
         <input
           matInput

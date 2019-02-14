@@ -170,7 +170,7 @@ export function subjectGridFactory({
   firstCa,
   exam
 }: RecordSheetConfig): SubjectGridFactory {
-  let expression = 'firstCa + exam = total';
+  let expression = 'firstCa + exam';
   const keyConfigs: KeysConfig[] = [
     { key: 'no', title: 'N/O', type: 'number', editable: false, send: true },
     { key: 'name', title: 'Name', send: true, editable: false, type: 'string' },
@@ -187,7 +187,7 @@ export function subjectGridFactory({
     }
   ];
   if (typeof secondCa === 'object' && secondCa) {
-    expression = 'firstCa + secondCa + exam = total';
+    expression = 'firstCa + secondCa + exam';
     keyConfigs.push({
       title: secondCa.title,
       key: 'secondCa',

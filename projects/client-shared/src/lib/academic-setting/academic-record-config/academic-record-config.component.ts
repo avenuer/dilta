@@ -25,6 +25,7 @@ export class AcademicRecordConfigComponent implements OnInit, OnChanges {
   @Input() recordConfig: RecordSheetConfig;
   @Output() emitter = new EventEmitter();
 
+  public allowSecond_Ca = true;
   public recordForm: FormGroup;
 
   constructor(private fb: FormBuilder) {}
@@ -49,17 +50,16 @@ export class AcademicRecordConfigComponent implements OnInit, OnChanges {
       return defaultConfigView;
     }
     const { exam, firstCa, secondCa } = config;
-    const allowSecond_Ca = typeof secondCa === 'object';
+    this.allowSecond_Ca = typeof secondCa === 'object';
     return {
-      allowSecond_Ca,
       exam_max_range: exam.max,
       exam_title: exam.title,
       firstCa_max_range: firstCa.max,
       firstCa_title: firstCa.title,
-      secondCa_max_range: allowSecond_Ca
+      secondCa_max_range: this.allowSecond_Ca
         ? secondCa.max
         : defaultConfigView.secondCa_max_range,
-      secondCa_title: allowSecond_Ca
+      secondCa_title: this.allowSecond_Ca
         ? secondCa.title
         : defaultConfigView.secondCa_title
     };
@@ -71,7 +71,6 @@ export class AcademicRecordConfigComponent implements OnInit, OnChanges {
 
   viewToConfig(view: RecordConfigView): RecordSheetConfig {
     const {
-      allowSecond_Ca,
       exam_title,
       firstCa_max_range,
       firstCa_title,
@@ -89,11 +88,13 @@ export class AcademicRecordConfigComponent implements OnInit, OnChanges {
         title: firstCa_title
       }
     };
-    if (allowSecond_Ca) {
+    if (this.allowSecond_Ca) {
       config.secondCa = {
         max: secondCa_max_range,
         title: secondCa_title
       };
+    } else {
+      config.secondCa = undefined;
     }
     return config;
   }
@@ -105,7 +106,10 @@ export class AcademicRecordConfigComponent implements OnInit, OnChanges {
   ngOnChanges() {
     if (this.recordConfig && typeof this.recordConfig === 'object') {
       Object.entries(this.recordConfig).forEach(([key, value]) => {
-        this.recordForm.get(key).setValue(value);
+        const form = this.recordForm.get(key);
+        if (form) {
+          form.setValue(value);
+        }
       });
     }
   }
@@ -114,7 +118,6 @@ export class AcademicRecordConfigComponent implements OnInit, OnChanges {
 interface RecordConfigView {
   firstCa_max_range: number;
   firstCa_title: string;
-  allowSecond_Ca: boolean;
   secondCa_max_range?: number;
   secondCa_title?: string;
   exam_max_range: number;
@@ -124,7 +127,6 @@ interface RecordConfigView {
 const defaultConfigView: RecordConfigView = {
   firstCa_max_range: 15,
   firstCa_title: '1st C.A',
-  allowSecond_Ca: true,
   secondCa_title: '2nd C.A',
   secondCa_max_range: 15,
   exam_max_range: 70,

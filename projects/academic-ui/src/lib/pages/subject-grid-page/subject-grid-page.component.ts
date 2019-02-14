@@ -15,7 +15,8 @@ import {
   schoolClassValueToKey,
   schoolTermValueToKey,
   SubjectGridConfig,
-  SubjectRecordDeletedStatus
+  SubjectRecordDeletedStatus,
+  subjectGridFactory
 } from '@dilta/shared';
 import { exhaustMap, first } from 'rxjs/operators';
 import { format } from 'date-fns';
@@ -187,6 +188,9 @@ export class SubjectGridPageComponent implements OnInit {
   ngOnInit() {
     this.retriveRecords().subscribe(
       resp => {
+        const { config, expression } = subjectGridFactory(resp.config);
+        this.keys = config;
+        this.expression = expression;
         this.data = this.dataToIndex(resp.data);
         this.record = resp.record;
       },

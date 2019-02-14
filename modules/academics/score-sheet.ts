@@ -1,5 +1,10 @@
 import { Action, Injectable } from '@dilta/core';
-import { RecordService, StudentService, SubjectService, AcademicSettingService } from '@dilta/database';
+import {
+  RecordService,
+  StudentService,
+  SubjectService,
+  AcademicSettingService
+} from '@dilta/database';
 import {
   StudentReportSheet,
   AcadmicRecordSheet,
@@ -9,13 +14,13 @@ import {
   StudentRecordSheet,
   Subject,
   AcademicActions,
-  DifferentTermScores,
   Record,
   StudentRecordMergeSheet,
   TermPreset,
   StudentRecordMergeTermSheet,
   CumulativeRecordData,
-  SchoolClass
+  SchoolClass,
+  GradingConfig
 } from '@dilta/shared';
 import { gradePreset, classPositionPreset } from 'modules/presets';
 
@@ -46,14 +51,16 @@ export class ScoreSheet {
   @Action(AcademicActions.StudentReportSheet)
   async studentSheet(sheet: StudentSheet): Promise<StudentReportSheet> {
     const records = await this.classRecords(sheet);
+    const student = await this.student.retrieve$({ id: sheet.studentId });
+    const settings = await this.setting.retrieve$({ school: student.school });
     const recordScoreSheets = await Promise.all(
-      records.map(async rec => this.mergeRecordScores(sheet, rec))
+      records.map(async rec =>
+        this.mergeRecordScores(sheet, rec, settings.grade)
+      )
     );
     const scoreSheet = this.differentTermScores(sheet, recordScoreSheets);
-    const cumulative = this.studentCumulativeRecord(scoreSheet);
-    const student = await this.student.retrieve$({ id: sheet.studentId });
+    const cumulative = this.studentCumulativeRecord(scoreSheet, settings.grade);
     const totalStudents = await this.studentCounts(sheet.level);
-    const settings = await this.setting.retrieve$({ school: student.school });
     return {
       scoreSheet,
       cumulative,
@@ -84,9 +91,14 @@ export class ScoreSheet {
    */
   async mergeRecordScores(
     sheet: StudentSheet,
-    rec: Record
+    rec: Record,
+    grading: GradingConfig
   ): Promise<StudentRecordMergeSheet> {
-    const recordScore = await this.RecordScores(rec.id, sheet.studentId);
+    const recordScore = await this.RecordScores(
+      rec.id,
+      sheet.studentId,
+      grading
+    );
     return { ...rec, ...recordScore };
   }
 
@@ -100,9 +112,10 @@ export class ScoreSheet {
    */
   async RecordScores(
     recordId: string,
-    studentId: string
+    studentId: string,
+    grading: GradingConfig
   ): Promise<RecordSheet> {
-    const student = await this.studentRecordSheet(recordId, studentId);
+    const student = await this.studentRecordSheet(recordId, studentId, grading);
     const classSheet = await this.classSheets(recordId, studentId);
     return { ...student, ...classSheet };
   }
@@ -146,7 +159,8 @@ export class ScoreSheet {
    */
   async studentRecordSheet(
     recordId: string,
-    studentId: string
+    studentId: string,
+    grading: GradingConfig
   ): Promise<StudentRecordSheet> {
     let score: Subject = await this.subject.retrieve$({
       recordId,
@@ -163,7 +177,7 @@ export class ScoreSheet {
           studentId,
           teacherId: ''
         };
-    const grade = gradePreset(score.total);
+    const grade = gradePreset(grading, score.total);
     return { ...grade, ...score };
   }
 
@@ -219,7 +233,7 @@ export class ScoreSheet {
    * @returns {CumulativeRecordData}
    * @memberof ScoreSheet
    */
-  studentCumulativeRecord(sheets: RecordSheet[]): CumulativeRecordData {
+  studentCumulativeRecord(sheets: RecordSheet[], grading: GradingConfig): CumulativeRecordData {
     let total = 0;
     for (let i = 0; i < sheets.length; i++) {
       total += sheets[i].total;
@@ -229,7 +243,7 @@ export class ScoreSheet {
       total !== 0
         ? Math.round(sheets.length > 1 ? total / sheets.length : total)
         : total;
-    const grade = gradePreset(average).grade;
+    const grade = gradePreset(grading, average).grade;
     console.log(average, grade, total);
     return { average, grade, total };
   }

@@ -27,7 +27,6 @@ export class AcademicSettingComponent implements OnInit {
     private util: ClientUtilService
   ) {}
 
-
   /**
    * changes the step to the next and calls configure
    *
@@ -40,7 +39,6 @@ export class AcademicSettingComponent implements OnInit {
     return this.configure.bind(this);
   }
 
-
   /**
    * sets the key property on the setting, validates it and upload it
    *
@@ -51,13 +49,18 @@ export class AcademicSettingComponent implements OnInit {
   configure(key: string, value: any) {
     this.academic[key] = value;
     if (this.academic.record && this.academic.grade) {
-      console.clear();
-      console.log(JSON.stringify(this.academic));
-      this.upload(this.academic).pipe(first())
-        .subscribe((val) => this.dir.academicSettingForm(val), (err) => this.util.error(err));
+      this.setting$
+        .pipe(
+          map(setting => Object.assign({}, setting, this.academic)),
+          exhaustMap(setting => this.upload(setting))
+        )
+        .pipe(first())
+        .subscribe(
+          val => this.dir.academicSettingForm(val),
+          err => this.util.error(err)
+        );
     }
   }
-
 
   /**
    * checks whether to upload or create the setting
@@ -67,9 +70,10 @@ export class AcademicSettingComponent implements OnInit {
    * @memberof AcademicSettingComponent
    */
   upload(setting: AcademicSetting) {
-    return setting.id ? this.updateSettings(setting) : this.createSettings(setting);
+    return setting.id
+      ? this.updateSettings(setting)
+      : this.createSettings(setting);
   }
-
 
   /**
    * retrieve the existing setting for the school
@@ -78,18 +82,16 @@ export class AcademicSettingComponent implements OnInit {
    * @memberof AcademicSettingComponent
    */
   retrieveSettings() {
-    return this.store
-      .select(schoolFeature)
-      .pipe(
-        map(feature => feature.details),
-        exhaustMap(({ id }) =>
-          this.transport.modelAction<AcademicSetting>(
-            EntityNames.academic_setting,
-            ModelOperations.Retrieve,
-            { school: id } as Partial<AcademicSetting>
-          )
+    return this.store.select(schoolFeature).pipe(
+      map(feature => feature.details),
+      exhaustMap(({ id }) =>
+        this.transport.modelAction<AcademicSetting>(
+          EntityNames.academic_setting,
+          ModelOperations.Retrieve,
+          { school: id } as Partial<AcademicSetting>
         )
-      );
+      )
+    );
   }
 
   /**
@@ -100,18 +102,16 @@ export class AcademicSettingComponent implements OnInit {
    * @memberof AcademicSettingComponent
    */
   createSettings(setting: AcademicSetting) {
-    return this.store
-      .select(schoolFeature)
-      .pipe(
-        map(feature => feature.details),
-        exhaustMap(({ id }) =>
-          this.transport.modelAction<AcademicSetting>(
-            EntityNames.academic_setting,
-            ModelOperations.Create,
-            { ...setting, school: id } as Partial<AcademicSetting>
-          )
+    return this.store.select(schoolFeature).pipe(
+      map(feature => feature.details),
+      exhaustMap(({ id }) =>
+        this.transport.modelAction<AcademicSetting>(
+          EntityNames.academic_setting,
+          ModelOperations.Create,
+          { ...setting, school: id } as Partial<AcademicSetting>
         )
-      );
+      )
+    );
   }
 
   /**
@@ -125,7 +125,8 @@ export class AcademicSettingComponent implements OnInit {
     return this.transport.modelAction<AcademicSetting>(
       EntityNames.academic_setting,
       ModelOperations.Update,
-      setting.id, setting
+      setting.id,
+      setting
     );
   }
 

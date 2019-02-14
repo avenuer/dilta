@@ -8,8 +8,10 @@ import {
   SchoolPreset,
   SchoolPresetBio,
   Setting,
-  SettingTypes
-  } from '@dilta/shared';
+  SettingTypes,
+  GradingConfig,
+  GradingRange
+} from '@dilta/shared';
 import { format, getYear } from 'date-fns';
 import { uniq } from 'lodash';
 import * as uuidRandom from 'uuid/v4';
@@ -104,9 +106,11 @@ export function dictSchool(
   const { levels, permision } = _schoolPresetBios[preset];
   const schoolClasses: string[] = levels.map(level => level.name);
   const schoolSubjects = uniq(
-    levels.map(level => level.courses).reduce((p, c) => {
-      return [...p, ...c];
-    }, [])
+    levels
+      .map(level => level.courses)
+      .reduce((p, c) => {
+        return [...p, ...c];
+      }, [])
   );
   return {
     classes: schoolClasses,
@@ -237,21 +241,6 @@ function busarySetting({ memberclassesInputs }) {
   };
 }
 
-interface ScoreMax {
-  max: number;
-  symbol: string;
-}
-
-// scores max grades
-const scores: ScoreMax[] = [
-  { max: 39, symbol: 'F' },
-  { max: 44, symbol: 'E' },
-  { max: 49, symbol: 'D' },
-  { max: 59, symbol: 'C' },
-  { max: 69, symbol: 'B' },
-  { max: 100, symbol: 'A' }
-];
-
 /**
  * grade preset returns the comment on the student score.
  *
@@ -259,21 +248,21 @@ const scores: ScoreMax[] = [
  * @param {number} score
  * @returns {string}
  */
-export function gradePreset(score: number): GradeSheet {
-  const preset = scores.reduce((prev, curr) => {
-    if (score >= (prev.max + 1) && score <= (curr.max + 1) ) {
-      return curr;
+export function gradePreset(grading: GradingConfig, score: number): GradeSheet {
+  let gradeKey: string;
+  Object.entries(grading).forEach(([key, value]: [string, GradingRange]) => {
+    if (!gradeKey) {
+      if (score >= value.min && score <= value.max) {
+        gradeKey = key;
+      }
     }
-    return prev;
   });
 
- return {
-    comment: GradesComment[preset.symbol],
-    grade: Grades[preset.symbol]
+  return {
+    comment: GradesComment[gradeKey],
+    grade: Grades[gradeKey]
   };
-
 }
-
 
 /**
  * maps student poistion in the class to comment

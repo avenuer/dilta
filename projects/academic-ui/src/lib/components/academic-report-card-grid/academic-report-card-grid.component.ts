@@ -17,7 +17,7 @@ export class AcademicReportCardGridComponent implements OnInit {
 
   @Input() term: TermPreset;
 
-  public keys: KeysConfig[] = AcademicReportCardGridConfig;
+  @Input() keys: KeysConfig[] = AcademicReportCardGridConfig;
 
   constructor() {}
 

@@ -84,7 +84,10 @@ export class AcademicGradingConfigComponent implements OnInit, OnChanges {
     if (this.gradingConfig && typeof this.gradingConfig === 'object') {
       Object.entries(this.configView(this.gradingConfig)).forEach(
         ([key, value]) => {
-          this.gradingForm.get(key).setValue(value);
+          const form = this.gradingForm.get(key);
+          if (form) {
+            form.setValue(value);
+          }
         }
       );
     }
