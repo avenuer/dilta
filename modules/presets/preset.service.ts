@@ -1,7 +1,7 @@
 import { dictSchool, schoolCategories } from './schools.preset';
 import { localGovts, states } from './states.presets';
 import { Action, Injectable } from '@dilta/core';
-import { PresetAction } from '@dilta/shared';
+import { PresetAction, SchoolCategories } from '@dilta/shared';
 
 @Injectable()
 export class PresetService {
@@ -40,16 +40,15 @@ export class PresetService {
   }
 
   /**
-   * school categories
+   * school preset configurations
    *
    * @param {string} preset
    * @returns
    * @memberof PresetService
    */
   @Action(PresetAction.SchoolPreset)
-  schoolPreset(preset: string) {
+  schoolPreset(preset: SchoolCategories) {
     return dictSchool(preset);
   }
 
-  academicSetting() {}
 }
