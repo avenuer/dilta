@@ -1,6 +1,6 @@
-import { CollectionConfig } from './shared.model';
+import { CollectionConfig } from '../shared.model';
 import { EntityNames } from '@dilta/shared';
-import { baseModel } from './shared.model';
+import { baseModel } from '../shared.model';
 /** key to retrieve the collection form the db intialize object */
 
 export const academicSettingSchema = {

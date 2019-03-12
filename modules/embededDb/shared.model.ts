@@ -47,7 +47,7 @@ export function updateBaseModel<T extends BaseModel>(doc: any): T {
  * @param {T} doc
  * @returns {BaseModel}
  */
-function generateBase<T extends BaseModel>(doc: T): BaseModel {
+export function generateBase<T extends BaseModel>(doc: T): BaseModel {
   const date = Date.now();
   return {
     ...doc as Object,

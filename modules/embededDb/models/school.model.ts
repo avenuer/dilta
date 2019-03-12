@@ -1,4 +1,4 @@
-import { baseModel, CollectionConfig } from './shared.model';
+import { baseModel, CollectionConfig } from '../shared.model';
 import { EntityNames } from '@dilta/shared';
 /** key to retrieve the collection form the db intialize object */
 const SCHOOL_NAME = 'school';

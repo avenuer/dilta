@@ -1,24 +1,24 @@
-import { authModel } from './auth.model';
-import { ExpenseModel } from './expense.model';
-import { managerModel } from './manager.model';
-import { parentModel } from './parent.model';
-import { receiptModel } from './receipt.model';
-import { schoolModel } from './school.model';
-import { SettingModel } from './setting.model';
+import { authModel } from './models/auth.model';
+import { ExpenseModel } from './models/expense.model';
+import { managerModel } from './models/manager.model';
+import { parentModel } from './models/parent.model';
+import { receiptModel } from './models/receipt.model';
+import { schoolModel } from './models/school.model';
+import { SettingModel } from './models/setting.model';
 import { CollectionConfig, defaultModelMiddleWare } from './shared.model';
-import { studentModel } from './student.model';
-import { subjectModel } from './subject.model';
-import { userModel } from './user.model';
-import { recordModel } from './record.model';
+import { studentModel } from './models/student.model';
+import { subjectModel } from './models/subject.model';
+import { userModel } from './models/user.model';
+import { recordModel } from './models/record.model';
 import * as RxDB from 'rxdb';
 import { RxDatabase } from 'rxdb';
 import { Logger } from 'modules/util';
-import { promotionModel } from './promotion.model';
-import { academicSettingsModel } from './academic-settings.model';
+import { promotionModel } from './models/promotion.model';
+import { academicSettingsModel } from './models/academic-settings.model';
 
 /** Logger For Database Scope */
 /** the database name for rxdb */
-const DB_NAME = 'carddemodb';
+export const DB_NAME = 'carddemodb';
 
 /** collection configurations to be created on the database */
 export const Kollections = [

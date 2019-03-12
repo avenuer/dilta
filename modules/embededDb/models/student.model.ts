@@ -1,4 +1,4 @@
-import { CollectionConfig, baseModel } from './shared.model';
+import { CollectionConfig, baseModel } from '../shared.model';
 
 import { EntityNames } from '@dilta/shared';
 
