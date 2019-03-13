@@ -1,13 +1,12 @@
 import {
   SchoolClass,
-  SchoolPreset,
   TermPreset,
   ParentRelationship,
-  GradesComment
 } from './preset';
 
 import { AuthenticationLevels } from './security';
 import { PromotionSheet } from './academics';
+import { SchoolCategories } from './shared';
 
 /**
  * entity name mapping to avoid magical variables
@@ -136,7 +135,7 @@ export interface School extends Partial<BaseModel> {
   name: string;
   email?: string;
   description: string;
-  category: keyof SchoolPreset;
+  category: SchoolCategories;
   address: string;
   town: string;
   state: string;

@@ -18,8 +18,18 @@ export function parentRelationToKey(value: string | number) {
       valueKey = key;
     }
   });
+  if (!value) {
+    throw parentRelationToKeyError;
+  }
   return valueKey;
 }
+
+/**
+ * error thrown if the value doesn't match any key on ParentRelationship enum
+ */
+export const parentRelationToKeyError = new Error(
+  `key for the inputed value doesn't exit on ParentRelationship`
+);
 
 export enum WorkingCategory {
   'Civil Servant',
@@ -29,7 +39,9 @@ export enum WorkingCategory {
   'Others'
 }
 
-export const workingCategories = cleanNumericEnums(Object.keys(WorkingCategory));
+export const workingCategories = cleanNumericEnums(
+  Object.keys(WorkingCategory)
+);
 
 export function WorkingCategoriesRelationToKey(value: string | number) {
   let valueKey;
@@ -39,98 +51,18 @@ export function WorkingCategoriesRelationToKey(value: string | number) {
       valueKey = key;
     }
   });
+  if (!value) {
+    throw WorkingCategoriesRelationToKeyError;
+  }
   return valueKey;
 }
 
 /**
- * school Preset containing various courses and interface
- *
- * @export
- * @interface SchoolPresetBio
+ * error thrown if the value doesn't match any key on WorkingCategory enum
  */
-
-export interface SchoolPresetBio {
-  /**
-   * name of the type of presets
-   *
-   * @type {string}
-   * @memberof SchoolPresetBio
-   */
-  name: string;
-  /**
-   * level presets
-   *
-   * @type {Level}
-   * @memberof SchoolPresetBio
-   */
-  levels: Level[];
-
-  /**
-   * authorization per level for the school
-   *
-   * @type {Permission[]}
-   * @memberof SchoolPresetBio
-   */
-  permision: Permission[];
-}
-
-/**
- * interface documentation for all
- * presets available
- *
- * @export
- * @interface SchoolPreset
- */
-export interface SchoolPreset {
-  [key: string]: SchoolPresetBio;
-}
-
-/**
- * interface for the individual level presets
- *
- * @export
- * @interface Level
- */
-export interface Level {
-  /**
-   * name of the level
-   *
-   * @type {string[]}
-   * @memberof Level
-   */
-  name: string;
-  /**
-   * courses over at the level
-   *
-   * @type {string[]}
-   * @memberof Level
-   */
-  courses: string[];
-}
-
-/**
- * permission interface for authorization for each level
- *
- * @export
- * @interface Permission
- */
-export interface Permission {
-  /**
-   * name of the level
-   *
-   * @type {string}
-   * @memberof Permission
-   */
-  name: string;
-
-  /**
-   * value for the permision level
-   *
-   * @type {string}
-   * @memberof Permission
-   */
-  value?: string | number;
-}
+export const WorkingCategoriesRelationToKeyError = new Error(
+  `key for the inputed value doesn't exit on WorkingCategory`
+);
 
 /**
  * school dictonary interface after transformations
@@ -287,9 +219,9 @@ export enum SpecialCasesPreset {
 }
 
 // type for student class.
-export type SchoolClass = NuseryPrimarySchoolClassPreset &
-  JuniorSecondaryClassPreset &
-  SeniorSecondarySchoolClassPreset &
+export type SchoolClass = NuseryPrimarySchoolClassPreset |
+  JuniorSecondaryClassPreset |
+  SeniorSecondarySchoolClassPreset |
   SpecialCasesPreset;
 
 /** all school classes available */
@@ -355,7 +287,7 @@ export function schoolClassValueToKey(classValue: number) {
 }
 
 // Error thrown when class not found
-const noClassError = new Error("class requested doesn't exist");
+export const noClassError = new Error(`class requested doesn't exist`);
 
 /**
  * maps the school term value to its keys
@@ -373,8 +305,16 @@ export function schoolTermValueToKey(termValue: number) {
       termKey = key;
     }
   });
+  if (!termKey) {
+    throw noTermKeyError;
+  }
   return termKey;
 }
+
+/**
+ * School Term macthing key or value not found
+ */
+export const noTermKeyError = new Error(`School Term macthing key or value not found`);
 
 export interface LevelPromotionScheme {
   prevLevel: SchoolClass;
@@ -403,13 +343,21 @@ export function levelPromotion(level: SchoolClass): LevelPromotionScheme {
  * @param {SchoolClass} level
  * @returns
  */
-function nextLevel(level: SchoolClass) {
-  if (level === SpecialCasesPreset.Left) {
-    return level === NuseryPrimarySchoolClassPreset['Primary Six'] ||
-      level === JuniorSecondaryClassPreset['JSS Three'] ||
-      level > 500
-      ? ((SpecialCasesPreset.Graduated as any) as SchoolClass)
-      : (((level + 1) as any) as SchoolClass);
+export function nextLevel(level: SchoolClass): SchoolClass {
+  // if students is in school else just change to left or graduated
+  if (level !== SpecialCasesPreset.Left && level !== SpecialCasesPreset.Graduated) {
+    // promotes all students in terminal classes to the next class
+    // note: departments cannot be determined for promoted JSS students
+    if (level === NuseryPrimarySchoolClassPreset['Primary Six'] ||
+    level === JuniorSecondaryClassPreset['JSS Three'] || level > 500) {
+      return SpecialCasesPreset.Graduated;
+    }
+    // all students in lower classes below the SSS classes are promoted below
+    if (level < 300) {
+      return level + 1;
+    }
+    // SSS classes are promoted with the code below
+    return level + 100;
   }
   return level;
 }
@@ -420,7 +368,7 @@ function nextLevel(level: SchoolClass) {
  * @param {SchoolClass} level
  * @returns
  */
-function prevLevel(level: SchoolClass) {
+export function prevLevel(level: SchoolClass) {
   if (
     level !== SpecialCasesPreset.Left &&
     level !== SpecialCasesPreset.Graduated

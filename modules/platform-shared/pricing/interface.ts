@@ -89,7 +89,7 @@ export const planRanges: Subscription[] = [
 );
 
 /**
- * calculates the various
+ * calculates the various subscription prices
  *
  * @export
  * @param {number} basePrice

@@ -2,10 +2,22 @@ export enum PlatformShared {
   ApplicationName = 'Marker'
 }
 
+/**
+ * different school cat
+ *
+ * @export
+ * @enum {number}
+ */
+export enum SchoolCategories {
+  'Crech' = 'crech',
+  'Nusery and Primary School' = 'Nusery and Primary School',
+  'Secondary School' = 'Secondary School'
+}
+
 export enum Platform {
   Desktop = 'desktop',
   Server = 'server',
-  Client = 'client',
+  Client = 'client'
 }
 
 /**
@@ -21,7 +33,7 @@ export enum SettingTypes {
 
 export enum DatabaseActions {
   Synchronization = 'Database [Synchronization]',
-  GenerateData = 'Database [GenerateData]',
+  GenerateData = 'Database [GenerateData]'
 }
 
 /**
@@ -32,19 +44,31 @@ export enum DatabaseActions {
  * @returns
  */
 export function cleanNumericEnums(keys: string[]) {
-  return keys.filter((k) => !Number(k) && k !== '0');
+  return keys.filter(k => !Number(k) && k !== '0');
 }
 
-// Unpredictable behaviour
-export function enumKeysToValue(keys: string[], enumValueType: string) {
-  return (value: string | number) => {
-    let valueKey;
-    value = (enumValueType === 'number') ? Number(value) : value.toString();
-    keys.forEach(key => {
-      if (keys[key] === value) {
+
+/**
+ * returns the key for any enum object
+ *
+ * @export
+ * @template T Enum Object Interface
+ * @param {T} enumObj
+ * @param {string} enumValueType
+ * @returns
+ */
+export function enumKeysToValue<T>(enumObj: T, enumValueType: string) {
+  return (value: string | number, error: Error) => {
+    let valueKey: string;
+    value = enumValueType === 'number' ? Number(value) : value.toString();
+    Object.keys(enumObj).forEach(key => {
+      if (enumObj[key] === value) {
         valueKey = key;
       }
     });
+    if (!valueKey) {
+      throw error;
+    }
     return valueKey;
   };
 }

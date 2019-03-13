@@ -179,7 +179,7 @@ export function failureResponse(reqId: string, err: Error | string): ApiResponse
   return {
     reqId,
     code: API_STATUS_CODE.Failure,
-    error: err.toString(),
+    error: (err instanceof Error) ? err.message : err.toString(),
     status: API_STATUS_RESPONSE.Failure,
     time: Date.now()
   };

@@ -1,4 +1,5 @@
 import { RecordSheetConfig } from './models';
+import { TermPreset } from './preset';
 
 export const DateFormat = 'DD-MMM-YYYY';
 
@@ -222,6 +223,56 @@ export function subjectGridFactory({
     }
   );
   return { config: keyConfigs, expression };
+}
+
+export function academicReportConfigFactory(
+  { secondCa }: RecordSheetConfig,
+  term: TermPreset
+): KeysConfig[] {
+  let keys = [
+    { key: 'no', title: 'N/O', type: 'number', editable: false },
+    { key: 'subject', title: 'Subject', type: 'string', editable: false },
+    { key: 'firstCa', title: '1st C.A', type: 'number', editable: false }
+  ];
+  if (typeof secondCa === 'object') {
+    keys.push({
+      key: 'secondCa',
+      title: '2nd C.A',
+      type: 'number',
+      editable: false
+    });
+  }
+  keys = [
+    ...keys,
+    { key: 'exam', title: 'Exam', type: 'number', editable: false },
+    { key: 'total', title: 'Total', type: 'number', editable: false },
+    { key: 'avg', title: 'Average', type: 'number', editable: false },
+    {
+      key: 'classPosition',
+      title: 'Position',
+      type: 'string',
+      editable: false
+    },
+    { key: 'grade', title: 'Grade', type: 'string', editable: false },
+    { key: 'comment', title: 'Remarks', type: 'string', editable: false }
+  ];
+  if (term > TermPreset.First) {
+    keys.push({
+      key: 'firstTerm',
+      title: '1st Term',
+      type: 'number',
+      editable: false
+    });
+  }
+  if (term > TermPreset.Second) {
+    keys.push({
+      key: 'secondTerm',
+      title: '2nd Term',
+      type: 'number',
+      editable: false
+    });
+  }
+  return keys;
 }
 
 export const SubjectGridConfig: KeysConfig[] = [

@@ -1,6 +1,13 @@
 import { Record, Student, Subject, RecordSheetConfig, AcademicSetting } from './models';
 import { TermPreset, GradeSheet, SchoolClass, Grades } from './preset';
 
+
+/**
+ * Table GridConfiguration
+ *
+ * @export
+ * @interface GridConfig
+ */
 export interface GridConfig {
   filter?: boolean;
   sortable?: boolean;
