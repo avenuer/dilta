@@ -39,16 +39,16 @@ export interface KeysConfig {
 export type MathExp = string;
 
 export const AcademicReportCardGridConfig: KeysConfig[] = [
-  { key: 'no', title: 'N/O', type: 'number', editable: false },
+  // { key: 'no', title: 'N/O', type: 'number', editable: false },
   { key: 'subject', title: 'Subject', type: 'string', editable: false },
   { key: 'firstCa', title: '1st C.A', type: 'number', editable: false },
   { key: 'secondCa', title: '2nd C.A', type: 'number', editable: false },
   { key: 'exam', title: 'Examination', type: 'number', editable: false },
   { key: 'total', title: 'Total', type: 'number', editable: false },
   { key: 'avg', title: 'Class Average', type: 'number', editable: false },
-  { key: 'classPosition', title: 'Position', type: 'string', editable: false },
+  // { key: 'classPosition', title: 'Position', type: 'string', editable: false },
   { key: 'grade', title: 'Grade', type: 'string', editable: false },
-  { key: 'comment', title: 'Remarks', type: 'string', editable: false }
+  // { key: 'comment', title: 'Remarks', type: 'string', editable: false }
 ];
 
 export const LevelStaticDetailsGridConfig: KeysConfig[] = [
@@ -279,9 +279,14 @@ export interface PrintData<T> {
 
 export interface PrintDataConfig {
   filename: string;
-  map?: (doc: any) => any;
+  map?: (doc: any, height: number) => PrinterDocHeader;
   startY?: number;
   margin?: number;
+}
+
+export interface PrinterDocHeader {
+  doc: any;
+  height: number;
 }
 
 export const ParentChildren: KeysConfig[] = [

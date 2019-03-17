@@ -11,7 +11,8 @@ import {
   Manager,
   KeysConfig,
   DateFormat,
-  PrintDataConfig
+  PrintDataConfig,
+  PrinterDocHeader
 } from '@dilta/shared';
 import * as Jspdf from 'jspdf';
 import 'jspdf-autotable';
@@ -20,6 +21,8 @@ import { Store } from '@ngrx/store';
 import { schoolFeature } from '../ngrx/school';
 import { map, first, exhaustMap, withLatestFrom, tap } from 'rxjs/operators';
 import { TransportService } from '@dilta/electron-client';
+
+
 
 @Injectable()
 export class PrinterService {
@@ -48,32 +51,41 @@ export class PrinterService {
     );
   }
 
-  generateDocumentHeader(school: School, manager: Manager) {
+  generateDocumentHeader(school: School, manager: Manager): PrinterDocHeader {
+    const moveHeight = setHeight(10);
     const doc = new Jspdf();
-
-    doc.addImage(school.logo, 'JPEG', 90, 10, 32, 32);
-    doc.setFontSize(15).text(school.name, 100, 60, {
+    doc.addImage(school.logo, 'JPEG', 90, moveHeight(0), 32, 32);
+    doc.setFontSize(16).text(school.name, 100, moveHeight(38), {
       align: 'center',
       maxWidth: 100
     });
     doc
-      .setFontSize(10)
-      .text([`${school.address}, ${school.town}, ${school.state}.`], 100, 67, {
+      .setFontSize(8)
+      .text([`${school.address}, ${school.town}, ${school.state}.\r`], 100, moveHeight(3), {
+        align: 'center',
+        maxWidth: 100
+      });
+    doc
+      .setFontSize(8)
+      .text([
+      `contact: ${manager.sMPhone}, ${manager.propPhone}`], 100, moveHeight(3), {
         align: 'center',
         maxWidth: 100
       });
 
-    return doc;
+    return { doc, height: moveHeight(10) };
   }
 
   printTable<T>(keys: KeysConfig[], data: T[], config: PrintDataConfig) {
-    this.schoolHeader$().subscribe(doc => {
+    this.schoolHeader$().subscribe(({ height, doc }) => {
       const { columns, rows } = this.tableFormat(keys, data);
       if (config.map) {
-        doc = config.map(doc);
+        const mapped = config.map(doc, height);
+        doc = mapped.doc;
+        height = mapped.height;
       }
       doc.autoTable(columns, rows, {
-        startY: config.startY || 86,
+        startY: config.startY || height,
         margin: config.margin || 10
       });
       doc.autoPrint();
@@ -83,42 +95,56 @@ export class PrinterService {
 
   reportCard(sheet: StudentReportSheet) {
     this.schoolHeader$()
-      .pipe(first())
-      .subscribe(doc => {
-        doc.setFontSize(15).text('SCORE CARD', 10, 85);
+    .pipe(first())
+    .subscribe(({doc, height }) => {
+      const startheight = setHeight(height);
+        doc.setFontSize(14).text('SCORE CARD', 10, startheight(0));
         doc
-          .setFontSize(12)
+          .setFontSize(8)
           .text(
             `${schoolTermValueToKey(sheet.term)} Term  of ${
               sheet.session
             } Academic Year`,
             10,
-            92
+            startheight(3)
           );
-        doc.setFontSize(10).text(`Pupil's information`, 10, 97);
-        doc.line(10, 100, 200, 100);
+        doc.setFontSize(9).text(`Pupil's information`, 10, startheight(3));
+        let line = startheight(3);
+        doc.line(10, line, 200, line);
         doc.setFontSize(12);
+        line = startheight(5);
         doc
-          .text(`Name: ${sheet.biodata.name}`, 10, 107)
-          .text(`Admission No: ${sheet.biodata.admissionNo}`, 130, 107);
-        doc.line(10, 110, 200, 110);
+          .text(`Name: ${sheet.biodata.name}`, 10, line)
+          .text(`Admission No: ${sheet.biodata.admissionNo}`, 130, line);
+        line = startheight(3);
+        doc.line(10, line, 200, line);
+        line = startheight(5);
         doc
-          .text(`Sex: ${sheet.biodata.gender}`, 10, 117)
-          .text(`Number In Class: ${sheet.totalStudents}`, 130, 117);
-        doc.line(10, 120, 200, 120);
+        .text(`Sex: ${sheet.biodata.gender}`, 10, line)
+        .text(`Number In Class: ${sheet.totalStudents}`, 130, line);
+        line = startheight(3);
+        doc.line(10, line, 200, line);
+        line = startheight(5);
         doc
-          .text(
-            `Date of Birth: ${format(sheet.biodata.dob, DateFormat)}`,
-            10,
-            127
+        .text(
+          `Date of Birth: ${format(sheet.biodata.dob, DateFormat)}`,
+          10,
+          line
           )
-          .text(`Class:  ${schoolClassValueToKey(sheet.level)}`, 130, 127);
-        doc.line(10, 130, 200, 130);
-        doc
-          .text(`Cumulative Total:  ${sheet.cumulative.total}`, 10, 137)
-          .text(`Cumulative Grade:  ${sheet.cumulative.grade}`, 65, 137)
-          .text(`Class Average: ${sheet.cumulative.average}`, 130, 137);
-        doc.line(10, 140, 200, 140);
+          .text(`Class:  ${schoolClassValueToKey(sheet.level)}`, 130, line);
+          line = startheight(3);
+          doc.line(10, line, 200, line);
+          line = startheight(5);
+          doc
+          .text(`Cumulative Total:  ${sheet.cumulative.total}`, 10, line)
+          // .text(`Cumulative Grade:  ${sheet.cumulative.grade}`, 65, line)
+          .text(`Class Average: ${sheet.cumulative.average}`, 130, line);
+          line = startheight(3);
+          doc.line(10, line, 200, line);
+          line = startheight(2);
+        doc.line(10, line, 200, line);
+        doc.setFontSize(8).text(`Cognitive, Affective and Psychomotor`, 10, startheight(3));
+
 
         // append table-with spacing
         // doc
@@ -129,7 +155,7 @@ export class PrinterService {
           sheet.scoreSheet
         );
         doc.autoTable(columns, rows, {
-          startY: 143,
+          startY: startheight(3),
           margin: 10,
           showHeader: 'firstPage'
         });
@@ -151,4 +177,19 @@ export class PrinterService {
       rows: data.map((v, index) => Object.assign(v, { no: index + 1 }))
     };
   }
+}
+
+
+/**
+ * increments the inner intial value with the passed value
+ *
+ * @export
+ * @param {number} inital
+ * @returns
+ */
+export function setHeight(inital: number) {
+  return (increaseBy: number) => {
+    inital += increaseBy;
+    return inital;
+  };
 }

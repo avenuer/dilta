@@ -32,7 +32,7 @@ export class AcademicReportCardGridComponent implements OnInit {
     // this.reportSheet.scoreSheet.forEach(e => e.)
     if (term === TermPreset.Second || term === TermPreset.Third) {
       this.keys.push({
-        key: '',
+        key: 'firstTerm',
         title: '1st Term',
         type: 'number',
         editable: false
@@ -40,7 +40,7 @@ export class AcademicReportCardGridComponent implements OnInit {
     }
     if (term === TermPreset.Third) {
       this.keys.push({
-        key: '',
+        key: 'secondTerm',
         title: '2nd Term',
         type: 'number',
         editable: false

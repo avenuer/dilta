@@ -1,7 +1,7 @@
 import { AcademicService } from '../../services/academic.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { ClientUtilService, PrinterService, RouterDirection } from '@dilta/client-shared';
+import { ClientUtilService, PrinterService, RouterDirection, setHeight } from '@dilta/client-shared';
 import { TransportService } from '@dilta/electron-client';
 import {
   AcademicActions,
@@ -16,7 +16,9 @@ import {
   schoolTermValueToKey,
   SubjectGridConfig,
   SubjectRecordDeletedStatus,
-  subjectGridFactory
+  subjectGridFactory,
+  PrintDataHeader,
+  PrinterDocHeader
 } from '@dilta/shared';
 import { exhaustMap, first } from 'rxjs/operators';
 import { format } from 'date-fns';
@@ -152,17 +154,23 @@ export class SubjectGridPageComponent implements OnInit {
   }
 
   formatPrint(record: Record) {
-    return doc => {
-      doc.setFontSize(12);
+    return (doc, height) => {
+      const moveDown = setHeight(height);
+      let line = moveDown(0);
       doc
-        .text(`Subject: ${record.subject}`, 10, 87)
-        .text(`Term: ${schoolTermValueToKey(record.term)}`, 130, 87);
-      doc.line(10, 89, 200, 89);
+      .setFontSize(12)
+        .text(`Subject: ${record.subject}`, 10, line)
+        .text(`Term: ${schoolTermValueToKey(record.term)}`, 130, line);
+      line = moveDown(2);
+      doc.line(10, line, 200, line);
+      line = moveDown(5);
       doc
-        .text(`Class:  ${schoolClassValueToKey(record.class)}`, 10, 94)
-        .text(`Session:  ${record.session}`, 130, 94);
-      doc.line(10, 96, 200, 96);
-      return doc;
+      .setFontSize(12)
+      .text(`Class:  ${schoolClassValueToKey(record.class)}`, 10, line)
+      .text(`Session:  ${record.session}`, 130, line);
+      line = moveDown(2);
+      doc.line(10, line, 200, line);
+      return {doc, height: moveDown(2) } as PrinterDocHeader;
     };
   }
 
@@ -175,10 +183,9 @@ export class SubjectGridPageComponent implements OnInit {
       ({ data, record }) => {
         this.printer.printTable(SubjectGridConfig, this.dataToIndex(data), {
           filename: `${record.subject}  ${record.class} ${
-            record.term
+            schoolTermValueToKey(record.term)
           } term ${format(Date.now(), DateFormat)}`,
-          map: this.formatPrint(record),
-          startY: 105
+          map: this.formatPrint(record)
         });
       },
       err => this.util.error(err)

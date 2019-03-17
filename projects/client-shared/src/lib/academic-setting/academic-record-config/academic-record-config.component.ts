@@ -25,6 +25,7 @@ export class AcademicRecordConfigComponent implements OnInit, OnChanges {
   @Input() recordConfig: RecordSheetConfig;
   @Output() emitter = new EventEmitter();
 
+  public notEditable = false;
   public allowSecond_Ca = true;
   public recordForm: FormGroup;
 
