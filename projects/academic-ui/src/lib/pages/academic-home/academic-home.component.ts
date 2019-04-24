@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ClientUtilService } from '@dilta/client-shared';
+import { ClientUtilService, PrinterService } from '@dilta/client-shared';
 import { Store } from '@ngrx/store';
 import { TransportService } from '@dilta/electron-client';
 import { AuthLogOut } from 'projects/auth/src/lib/ngrx';
@@ -10,14 +10,14 @@ import { first } from 'rxjs/operators';
 @Component({
   selector: 'acada-academic-home',
   templateUrl: './academic-home.component.html',
-  styleUrls: ['./academic-home.component.scss']
+  styleUrls: ['./academic-home.component.scss'],
 })
 export class AcademicHomeComponent implements OnInit {
   constructor(
     private store: Store<any>,
     private router: Router,
     private util: ClientUtilService,
-    private transport: TransportService
+    private transport: TransportService,
   ) {}
 
   changeRoute(path: string) {

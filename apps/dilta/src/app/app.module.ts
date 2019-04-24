@@ -35,6 +35,7 @@ import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
     AcademicPageModule,
   ],
   providers: [SnotifyService, { provide: 'SnotifyToastConfig', useValue: ToastDefaults }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: []
 })
 export class AppModule { }

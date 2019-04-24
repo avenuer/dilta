@@ -12,21 +12,27 @@ import {
   KeysConfig,
   DateFormat,
   PrintDataConfig,
-  PrinterDocHeader
+  PrinterDocHeader,
+  updateReportKeys,
 } from '@dilta/shared';
 import * as Jspdf from 'jspdf';
-import 'jspdf-autotable';
 import { format } from 'date-fns';
 import { Store } from '@ngrx/store';
+import 'jspdf-autotable';
 import { schoolFeature } from '../ngrx/school';
 import { map, first, exhaustMap, withLatestFrom, tap } from 'rxjs/operators';
 import { TransportService } from '@dilta/electron-client';
-
-
+import { MatDialog } from '@angular/material';
+import { PdfViewerDialogComponent, DialogData, PdfDialogActions } from '../components/pdf-viewer/pdf-viewer.components';
 
 @Injectable()
 export class PrinterService {
-  constructor(private store: Store<any>, private transport: TransportService) {}
+
+  constructor(
+    private store: Store<any>,
+    public dialog: MatDialog,
+    private transport: TransportService
+  ) {}
 
   school$() {
     return this.store.select(schoolFeature).pipe(
@@ -43,8 +49,8 @@ export class PrinterService {
           EntityNames.Manager,
           ModelOperations.Retrieve,
           { school: school.id }
-          )
-          ),
+        )
+      ),
       withLatestFrom(this.school$()),
       tap(console.log),
       map(([manager, school]) => this.generateDocumentHeader(school, manager))
@@ -61,23 +67,24 @@ export class PrinterService {
     });
     doc
       .setFontSize(8)
-      .text([`${school.address}, ${school.town}, ${school.state}.\r`], 100, moveHeight(3), {
-        align: 'center',
-        maxWidth: 100
-      });
-    doc
-      .setFontSize(8)
-      .text([
-      `contact: ${manager.sMPhone}, ${manager.propPhone}`], 100, moveHeight(3), {
-        align: 'center',
-        maxWidth: 100
-      });
+      .text(
+        [
+          `${school.address}, ${school.town}, ${school.state}.\r`,
+          `contact: ${manager.sMPhone}, ${manager.propPhone}`
+        ],
+        100,
+        moveHeight(6),
+        {
+          align: 'center',
+          maxWidth: 100
+        }
+      );
 
     return { doc, height: moveHeight(10) };
   }
 
   printTable<T>(keys: KeysConfig[], data: T[], config: PrintDataConfig) {
-    this.schoolHeader$().subscribe(({ height, doc }) => {
+    this.schoolHeader$().subscribe(async ({ height, doc }) => {
       const { columns, rows } = this.tableFormat(keys, data);
       if (config.map) {
         const mapped = config.map(doc, height);
@@ -88,6 +95,7 @@ export class PrinterService {
         startY: config.startY || height,
         margin: config.margin || 10
       });
+      // this.printPdfUrl(await fileBase64(doc.output('blob') as any));
       doc.autoPrint();
       doc.save(`${config.filename}.pdf`);
     });
@@ -95,9 +103,9 @@ export class PrinterService {
 
   reportCard(sheet: StudentReportSheet) {
     this.schoolHeader$()
-    .pipe(first())
-    .subscribe(({doc, height }) => {
-      const startheight = setHeight(height);
+      .pipe(first())
+      .subscribe(({ doc, height }) => {
+        const startheight = setHeight(height);
         doc.setFontSize(14).text('SCORE CARD', 10, startheight(0));
         doc
           .setFontSize(8)
@@ -120,38 +128,39 @@ export class PrinterService {
         doc.line(10, line, 200, line);
         line = startheight(5);
         doc
-        .text(`Sex: ${sheet.biodata.gender}`, 10, line)
-        .text(`Number In Class: ${sheet.totalStudents}`, 130, line);
+          .text(`Sex: ${sheet.biodata.gender}`, 10, line)
+          .text(`Number In Class: ${sheet.totalStudents}`, 130, line);
         line = startheight(3);
         doc.line(10, line, 200, line);
         line = startheight(5);
         doc
-        .text(
-          `Date of Birth: ${format(sheet.biodata.dob, DateFormat)}`,
-          10,
-          line
+          .text(
+            `Date of Birth: ${format(sheet.biodata.dob, DateFormat)}`,
+            10,
+            line
           )
           .text(`Class:  ${schoolClassValueToKey(sheet.level)}`, 130, line);
-          line = startheight(3);
-          doc.line(10, line, 200, line);
-          line = startheight(5);
-          doc
-          .text(`Cumulative Total:  ${sheet.cumulative.total}`, 10, line)
-          // .text(`Cumulative Grade:  ${sheet.cumulative.grade}`, 65, line)
-          .text(`Class Average: ${sheet.cumulative.average}`, 130, line);
-          line = startheight(3);
-          doc.line(10, line, 200, line);
-          line = startheight(2);
+        line = startheight(3);
         doc.line(10, line, 200, line);
-        doc.setFontSize(8).text(`Cognitive, Affective and Psychomotor`, 10, startheight(3));
-
+        line = startheight(5);
+        doc
+          .text(`Cumulative Grade:  ${sheet.cumulative.grade}`, 10, line)
+          // .text(`Cumulative Grade:  ${sheet.cumulative.grade}`, 65, line)
+          .text(`Cumulative Average: ${sheet.cumulative.average}`, 130, line);
+        line = startheight(2);
+        doc.line(10, line, 200, line);
+        line = startheight(2);
+        doc.line(10, line, 200, line);
+        doc
+          .setFontSize(8)
+          .text(`Cognitive, Affective and Psychomotor`, 10, startheight(3));
 
         // append table-with spacing
         // doc
         //   .line(148, 251, 180, 251)
         //   .text([`Mrs Akinde S.T`, `Adminstrator`], 150, 250);
         const { columns, rows } = this.tableFormat(
-          AcademicReportCardGridConfig,
+          updateReportKeys(sheet.term, AcademicReportCardGridConfig),
           sheet.scoreSheet
         );
         doc.autoTable(columns, rows, {
@@ -177,8 +186,37 @@ export class PrinterService {
       rows: data.map((v, index) => Object.assign(v, { no: index + 1 }))
     };
   }
-}
 
+  openDialog(link: string): void {
+    const dialogRef = this.dialog.open(PdfViewerDialogComponent, {
+      data: { link } as DialogData
+    });
+
+    dialogRef.afterClosed().subscribe((result: PdfDialogActions) => {
+      if (result === PdfDialogActions.Print) {
+        this.printPdfUrl(link);
+      }
+    });
+  }
+
+  // TODO: Open pdf in electron pdf plugin and display the pdf preview before printing
+  printPdfUrl(url: string) {
+    console.log(url);
+    const { require, process } = window as any;
+    if (require && process) {
+      console.log(require && process, 'called');
+      const electron = require('electron');
+      const { BrowserWindow, getCurrentWindow } = electron.remote;
+    const win = new BrowserWindow({ parent: getCurrentWindow(), width: 800, height: 600,  webPreferences: {
+      plugins: true
+    } });
+    win.loadURL(url);
+    win.show();
+return;
+    }
+    return window.open(url, '_blank');
+  }
+}
 
 /**
  * increments the inner intial value with the passed value

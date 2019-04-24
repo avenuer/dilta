@@ -1,4 +1,4 @@
-<div class="container">
+<div *ngIf="alreadySet" class="container">
   <acada-dynamic-table
     [datagrid]="data"
     [keys]="keys"

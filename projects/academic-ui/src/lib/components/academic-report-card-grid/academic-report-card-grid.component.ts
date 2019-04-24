@@ -1,9 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input,  OnChanges } from '@angular/core';
 import {
   TermPreset,
   RecordSheet,
   KeysConfig,
-  AcademicReportCardGridConfig
+  AcademicReportCardGridConfig,
+  updateReportKeys,
+  fixDuplicateKeys
 } from '@dilta/shared';
 
 @Component({
@@ -11,42 +13,17 @@ import {
   templateUrl: './academic-report-card-grid.component.html',
   styleUrls: ['./academic-report-card-grid.component.scss']
 })
-export class AcademicReportCardGridComponent implements OnInit {
+export class AcademicReportCardGridComponent implements OnInit, OnChanges {
   @Input()
   scoreSheet: RecordSheet[];
 
   @Input() term: TermPreset;
 
-  @Input() keys: KeysConfig[] = AcademicReportCardGridConfig;
+  @Input() keys: KeysConfig[] = [];
+
+  public alreadySet = false;
 
   constructor() {}
-
-  /**
-   * Updates the table to configure displayed
-   * tables different terms
-   *
-   * @param {TermPreset} term
-   * @memberof AcademicReportCardGridComponent
-   */
-  updateKeys(term: TermPreset) {
-    // this.reportSheet.scoreSheet.forEach(e => e.)
-    if (term === TermPreset.Second || term === TermPreset.Third) {
-      this.keys.push({
-        key: 'firstTerm',
-        title: '1st Term',
-        type: 'number',
-        editable: false
-      });
-    }
-    if (term === TermPreset.Third) {
-      this.keys.push({
-        key: 'secondTerm',
-        title: '2nd Term',
-        type: 'number',
-        editable: false
-      });
-    }
-  }
 
   get data() {
     const scores = this.scoreSheet ? this.scoreSheet : [];
@@ -54,6 +31,14 @@ export class AcademicReportCardGridComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.updateKeys(this.term);
+    // this.keys = updateReportKeys(this.term, this.keys);
+  }
+
+  ngOnChanges() {
+    // Hack: fix duplicate
+    if (this.term && !this.alreadySet && (this.keys.length < 13)) {
+      this.keys = updateReportKeys(this.term, [...AcademicReportCardGridConfig]);
+      this.alreadySet = true;
+    }
   }
 }
