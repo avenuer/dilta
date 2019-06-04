@@ -1,0 +1,14 @@
+productName: Marker
+appId: io.dilta.marker
+copyright: Copyright © 2019 Dilta Consult
+directories:
+  output: build/package
+files:
+  - dist/**/*
+mac:
+  icon: build/icons/icon.icns
+win:
+  icon: build/icons/icon.ico
+  target: NSIS
+linux:
+  icon: build/icons/icon.png

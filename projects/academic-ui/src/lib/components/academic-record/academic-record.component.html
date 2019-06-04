@@ -1,0 +1,41 @@
+<div class="container">
+  <form [formGroup]="recordForm" class="container">
+    <mat-form-field>
+      <mat-label>Class</mat-label>
+      <mat-select formControlName="class" required placeholder="Class">
+        <mat-option *ngFor="let schClass of schoolClasses" [value]="schClass" > {{ schClass }} </mat-option>
+      </mat-select>
+      <mat-error *ngIf="!recordForm.controls['class'].valid && recordForm.controls['class'].touched">
+        Class is required </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Subject</mat-label>
+      <input required matInput formControlName="subject" type="text">
+      <mat-error *ngIf="!recordForm.controls['subject'].valid && recordForm.controls['subject'].touched">
+        Subject is required </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Term</mat-label>
+      <mat-select formControlName="term" required placeholder="Term">
+        <mat-option *ngFor="let schTerm of schoolTerms" [value]="schTerm" > {{ schTerm }} </mat-option>
+      </mat-select>
+      <mat-error *ngIf="!recordForm.controls['term'].valid && recordForm.controls['term'].touched">
+        Term is required </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Session</mat-label>
+      <input required matInput formControlName="session" type="text">
+      <mat-error *ngIf="!recordForm.controls['session'].valid && recordForm.controls['session'].touched">
+        Session is required </mat-error>
+    </mat-form-field>
+
+    <div class="action-btns">
+      <button mat-raised-button color="primary" type="submit" [disabled]="!recordForm.valid" (click)="create.emit(remapAndClean(recordForm.value))"
+        >Create</button>
+        <span class="spacer-full"></span>
+      <button mat-raised-button color="secondary" type="submit" [disabled]="!recordForm.valid" (click)="load.emit(remapAndClean(recordForm.value))"
+        >Load</button>
+
+    </div>
+  </form>
+</div>

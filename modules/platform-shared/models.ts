@@ -1,4 +1,13 @@
-import { SchoolPreset } from './preset';
+import {
+  SchoolClass,
+  SchoolPreset,
+  TermPreset,
+  ParentRelationship,
+  GradesComment
+} from './preset';
+
+import { AuthenticationLevels } from './security';
+import { PromotionSheet } from './academics';
 
 /**
  * entity name mapping to avoid magical variables
@@ -7,16 +16,19 @@ import { SchoolPreset } from './preset';
  * @enum {number}
  */
 export enum EntityNames {
-  User = 'user',
-  Manager = 'manager',
-  School = 'school',
-  Auth = 'auth',
-  Parent = 'parent',
-  Score = 'score',
-  Student = 'student',
-  Receipt = 'receipt',
-  Setting = 'preference',
-  Expense = 'expense'
+  User = 'user_model',
+  Manager = 'manager_model',
+  School = 'school_model',
+  Auth = 'auth_model',
+  Parent = 'parent_model',
+  Subject = 'subject_model',
+  Student = 'student_model',
+  Record = 'record_model',
+  Receipt = 'receipt_model',
+  Setting = 'preference_model',
+  Expense = 'expense_model',
+  Promotion = 'promotion_model',
+  academic_setting = 'academic_setting_model'
 }
 
 /**
@@ -33,7 +45,6 @@ export enum ModelOperations {
   Update = 'update$'
 }
 
-
 /**
  * Formats Action for model operations
  *
@@ -42,7 +53,10 @@ export enum ModelOperations {
  * @param {ModelOperations} operation
  * @returns
  */
-export function modelActionFormat(model: EntityNames, operation: ModelOperations) {
+export function modelActionFormat(
+  model: EntityNames,
+  operation: ModelOperations
+) {
   return `[Model] ${model} ${operation}`;
 }
 
@@ -79,7 +93,7 @@ export interface Manager extends Partial<BaseModel> {
 export interface Parent extends Partial<BaseModel> {
   phoneNo: number | string;
   name: string;
-  relationship: string;
+  relationship: ParentRelationship | string;
   homeAddress: string;
   workAddress?: string;
   email?: string;
@@ -103,7 +117,7 @@ export interface Receipt extends Partial<BaseModel> {
   studentId: string | Student;
   session: string;
   term: string;
-  class: string;
+  class: SchoolClass;
 }
 
 interface Item {
@@ -137,31 +151,50 @@ export interface School extends Partial<BaseModel> {
  */
 export interface Student extends Partial<BaseModel> {
   name: string;
-  class: string;
+  class: SchoolClass;
   gender: string;
   dob: number;
   bloodgroup?: string;
   prevschool?: string;
   parentPhone: number | string;
+  admissionNo: string;
+}
+
+/**
+ * record of subjects and students
+ *
+ * @export
+ * @interface Record
+ * @extends {Partial<BaseModel>}
+ */
+export interface Record extends Partial<BaseModel> {
+  subject: string;
+  teacherId: string;
+  class: SchoolClass;
+  session: string;
+  term: TermPreset;
 }
 
 /**
  * subject records information recored stored in the database's interface
  *
  * @export
- * @interface Score
+ * @interface Subject
  */
-export interface Score extends Partial<BaseModel> {
-  subject: string;
-  teacherId: string;
-  class: string;
-  session: string;
-  term: string;
+export interface Subject extends Partial<BaseModel> {
   firstCa: number;
   secondCa: number;
   exam: number;
+  total: number;
   studentId: string;
+  teacherId: string;
+  recordId: string;
 }
+
+/**
+ * Promotion Models, show the histroy of student academic promotions.
+ */
+export type Promotion = PromotionSheet & Partial<BaseModel>;
 
 /**
  * teachers biodata information recored stored in the database's interface
@@ -176,7 +209,7 @@ export interface User extends Partial<BaseModel> {
   address: string;
   image: File | string;
   authId: string | Auth;
-  class?: string;
+  class?: SchoolClass;
   subject?: string;
   phoneNos?: string;
   email?: string;
@@ -191,7 +224,7 @@ export interface User extends Partial<BaseModel> {
 export interface Auth extends Partial<BaseModel> {
   username: string;
   password: string;
-  level: string;
+  level: AuthenticationLevels;
 }
 
 /**
@@ -291,3 +324,46 @@ export interface SettingPreference {
    */
   inputs?: { [k in keyof any]: string }[];
 }
+
+export interface RecordScoreConfig {
+  title: string;
+  max: number;
+}
+
+/**
+ * configuration for academic records and settings
+ *
+ * @interface RecordSheetConfig
+ */
+export interface RecordSheetConfig {
+  firstCa: RecordScoreConfig;
+  secondCa?: RecordScoreConfig;
+  exam: RecordScoreConfig;
+}
+
+export interface GradingRange {
+  min: number;
+  max: number;
+}
+
+export interface GradingConfig {
+  A: GradingRange;
+  B: GradingRange;
+  C: GradingRange;
+  D: GradingRange;
+  E: GradingRange;
+  F: GradingRange;
+}
+
+/**
+ * Academic setting and configuration
+ *
+ * @export
+ * @interface AcademicConfig
+ * @extends {Partial<BaseModel>}
+ */
+export interface AcademicSetting extends Partial<BaseModel> {
+  record: RecordSheetConfig;
+  grade: GradingConfig;
+}
+

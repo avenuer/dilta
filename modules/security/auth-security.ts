@@ -1,9 +1,10 @@
+import { AuthService, UserService } from '@dilta/database';
+import { sign, verify } from 'jsonwebtoken';
+
+import { Auth } from '@dilta/shared';
 import { AuthBcryptSecurity } from './auth-bcrypt';
 import { Injectable } from '@dilta/core';
-import { AuthService } from '@dilta/database';
-import { Auth } from '@dilta/shared';
 import { autobind } from 'core-decorators';
-import { sign, verify } from 'jsonwebtoken';
 
 const JWT_ALGORITHM = process.env.JWT_ALGORITHM;
 const AUDIENCE = process.env.AUDIENCE;
@@ -18,7 +19,11 @@ const JWT_OPTIONS = {
 @autobind()
 @Injectable()
 export class AuthSecurity {
-  constructor(public auth: AuthService, private crypt: AuthBcryptSecurity) {}
+  constructor(
+    public auth: AuthService,
+    private crypt: AuthBcryptSecurity,
+    public user: UserService
+  ) {}
 
   /**
    * clean the auth details and generate jwt token
@@ -35,8 +40,11 @@ export class AuthSecurity {
 
   /** saves the user authentication */
   async save(auth: Auth) {
-    const password = await  this.crypt.hashPassword(auth.password);
-    console.log(password);
+    const existingUser = await this.auth.retrieve$({ username: auth.username });
+    if (existingUser) {
+      throw new Error(`account with username ${existingUser.username} already exists`);
+    }
+    const password = await this.crypt.hashPassword(auth.password);
     auth.password = password;
     auth = await this.auth.create$(auth);
     return auth;
@@ -81,4 +89,28 @@ export class AuthSecurity {
       });
     });
   }
+
+  async removeUser(userId: string) {
+    const user = await this.user.retrieve$({ id: userId });
+    if (user) {
+      const isAuthDelete = await this.auth.delete$({
+        id: user.authId as string
+      });
+      const isUserDelete = await this.user.delete$({ id: user.id });
+      if (isAuthDelete && isUserDelete) {
+        return `${
+          user.name
+        } Authentication and biodata details successfully deleted`;
+      }
+      throw userAccountDeleteError;
+    }
+    throw userDetailsNotFoundError;
+  }
 }
+
+export const userDetailsNotFoundError = new Error(
+  `User Details not Found while removing user`
+);
+export const userAccountDeleteError = new Error(
+  `User Biodata and Authentication Account details not successfully deleted`
+);

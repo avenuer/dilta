@@ -1,40 +1,40 @@
 <div>
   <form class="container" [formGroup]="adminForm">
     <div class="image-group">
-      <img class="svg-container" [src]="img" />
-      <input type="file" ngFileSelect [options]="uploadOptions" (uploadOutput)="fil($event.file)" [uploadInput]="uploadInput">
+      <img class="svg-container" [src]="adminForm.get('image').valueChanges | async" />
+      <input *ngIf="!notEditable" type="file" ngFileSelect [options]="uploadOptions" (uploadOutput)="fil($event.file)" [uploadInput]="uploadInput">
     </div>
     <mat-form-field>
       <mat-label> FullName </mat-label>
-      <input matInput required size="75" id="name" formControlName="name" type="text">
+      <input  matInput required size="75" id="name" formControlName="name" type="text">
       <mat-error *ngIf="!adminForm.controls['name'].valid && adminForm.controls['name'].touched"> Name is required
       </mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Primary Single Phone</mat-label>
-      <input matInput required formControlName="phoneNo" type="number" class="form-control">
+      <input  matInput required formControlName="phoneNo" type="number" class="form-control">
       <mat-error *ngIf="!adminForm.controls['phoneNo'].valid && adminForm.controls['phoneNo'].touched">Primary PhoneNo
         is required</mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Email</mat-label>
-      <input matInput formControlName="email" type="email" class="form-control">
+      <input  matInput formControlName="email" type="email" class="form-control">
       <mat-error></mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Home Address</mat-label>
-      <textarea matInput required formControlName="address" type="text" class="form-control"></textarea>
+      <textarea  matInput required formControlName="address" type="text" class="form-control"></textarea>
       <mat-error *ngIf="!adminForm.controls['address'].valid && adminForm.controls['address'].touched">Home Address is
         required</mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label> Secondary PhoneNos </mat-label>
-      <input matInput formControlName="phoneNos" type="text" class="form-control">
+      <input  matInput formControlName="phoneNos" type="text" class="form-control">
       <mat-error></mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label> Gender </mat-label>
-      <mat-select formControlName="gender" required placeholder="LGA">
+      <mat-select  formControlName="gender" required placeholder="Gender">
         <mat-option [value]="'female'" > Female </mat-option>
         <mat-option [value]="'male'" > Male </mat-option>
       </mat-select>
@@ -43,20 +43,19 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label> Class</mat-label>
-      <!-- <mat-select formControlName="class" required placeholder="LGA">
-        <mat-option *ngFor="let _class of classes"> {{ _class }} </mat-option>
-      </mat-select> -->
-      <input matInput formControlName="class" required type="text">
+      <mat-select  formControlName="class" required placeholder="Class">
+        <mat-option [value]="_class" *ngFor="let _class of classes"> {{ _class }} </mat-option>
+      </mat-select>
       <mat-error *ngIf="!adminForm.controls['class'].valid && adminForm.controls['class'].touched">class in charge of
         is required</mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Subject</mat-label>
-      <input matInput required formControlName="subject" type="text">
+      <input  matInput required formControlName="subject" type="text">
       <mat-error *ngIf="!adminForm.controls['subject'].valid && adminForm.controls['subject'].touched"> Subject in
         charge of is required </mat-error>
     </mat-form-field>
-    <button id="saver" mat-raised-button color="primary" [disabled]="!adminForm.valid" (click)="emit(adminForm.value)" class="save-btn"><i class="mi mi-Save "></i>
+    <button *ngIf="!notEditable" id="saver" mat-raised-button color="primary" [disabled]="!adminForm.valid" (click)="emit(adminForm.value)" class="save-btn"><i class="mi mi-Save "></i>
       Save</button>
   </form>
 </div>

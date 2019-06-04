@@ -4,20 +4,32 @@ import { ManagersBiodataEditorComponent } from './managers-biodata-editor/manage
 import { ParentBiodataEditorComponent } from './parent-biodata-editor/parent-biodata-editor.component';
 import { SchoolBiodataEditorComponent } from './school-biodata-editor/school-biodata-editor.component';
 import { SmallUserProfileComponent } from './small-user-profile/small-user-profile.component';
+import { StudentBiodataEditorComponent } from './student-biodata-editor/student-biodata-editor.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '@dilta/client-shared';
 import { NgxUploaderModule } from 'ngx-uploader';
+import { DyanmicDatagridModule } from 'projects/academic-ui/src/lib/components/dynamic-datagrid/dynamic-datagrid.module';
+import { AdminUserBiodataGridComponent } from './admin-grid/admin-grid.component';
+import { MatPaginatorModule } from '@angular/material';
 
 const admins = [
   AdminBiodataEditorComponent,
   LargeUserProfileComponent,
-  SmallUserProfileComponent
+  SmallUserProfileComponent,
+  AdminUserBiodataGridComponent
 ];
 
 @NgModule({
-  imports: [ReactiveFormsModule, CommonModule, NgxUploaderModule, MaterialModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    NgxUploaderModule,
+    MaterialModule,
+    DyanmicDatagridModule,
+    MatPaginatorModule
+  ],
   declarations: admins,
   exports: [...admins, MaterialModule]
 })
@@ -26,7 +38,12 @@ export class AdminUiSharedModule {}
 const schools = [ManagersBiodataEditorComponent, SchoolBiodataEditorComponent];
 
 @NgModule({
-  imports: [ReactiveFormsModule, MaterialModule, CommonModule, NgxUploaderModule],
+  imports: [
+    ReactiveFormsModule,
+    MaterialModule,
+    CommonModule,
+    NgxUploaderModule
+  ],
   declarations: schools,
   exports: [...schools, MaterialModule]
 })
@@ -35,8 +52,17 @@ export class SchoolUiSharedModule {}
 const parents = [ParentBiodataEditorComponent];
 
 @NgModule({
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, MaterialModule],
   declarations: parents,
   exports: parents
 })
 export class ParentUiSharedModule {}
+
+const students = [StudentBiodataEditorComponent];
+
+@NgModule({
+  imports: [ReactiveFormsModule, MaterialModule],
+  declarations: students,
+  exports: students
+})
+export class StudentUiSharedModule {}

@@ -1,0 +1,133 @@
+<div class="container">
+  <form [formGroup]="recordForm" class="container">
+    <mat-form-field>
+      <mat-label> Examination Title </mat-label>
+      <input
+        matInput
+        required
+        size="75"
+        formControlName="exam_title"
+        type="text"
+      />
+      <mat-error
+        *ngIf="
+          !recordForm.controls['exam_title'].valid &&
+          recordForm.controls['exam_title'].touched
+        "
+      >
+        Examination Label title is required for record sheet
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label> Examination Max score </mat-label>
+      <input
+        matInput
+        required
+        size="75"
+        formControlName="exam_max_range"
+        type="number"
+      />
+      <mat-error
+        *ngIf="
+          !recordForm.controls['exam_max_range'].valid &&
+          recordForm.controls['exam_max_range'].touched
+        "
+      >
+        Examination Max score is required for record sheet and report card
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label> First C.A title </mat-label>
+      <input
+        matInput
+        required
+        size="75"
+        formControlName="firstCa_title"
+        type="text"
+      />
+      <mat-error
+        *ngIf="
+          !recordForm.controls['firstCa_title'].valid &&
+          recordForm.controls['firstCa_title'].touched
+        "
+      >
+        First C.A label is required and for record sheet and report card
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label> First C.A Max Score </mat-label>
+      <input
+        matInput
+        required
+        size="75"
+        formControlName="firstCa_max_range"
+        type="number"
+      />
+      <mat-error
+        *ngIf="
+          !recordForm.controls['firstCa_max_range'].valid &&
+          recordForm.controls['firstCa_max_range'].touched
+        "
+      >
+        First C.A maximum assessments score.
+      </mat-error>
+    </mat-form-field>
+    <div>
+      <mat-label> Does school does a second C.A test? </mat-label>
+      <mat-checkbox
+        required
+        [checked]="true"
+        (change)="allowSecond_Ca = !allowSecond_Ca"
+      ></mat-checkbox>
+    </div>
+    <mat-form-field *ngIf="allowSecond_Ca">
+        <mat-label> Second C.A title </mat-label>
+        <input
+          matInput
+          required
+          size="75"
+          formControlName="secondCa_title"
+          type="text"
+        />
+        <mat-error
+          *ngIf="
+            !recordForm.controls['secondCa_title'].valid &&
+            recordForm.controls['secondCa_title'].touched
+          "
+        >
+          Second C.A label is required and for record sheet and report card
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field *ngIf="allowSecond_Ca">
+        <mat-label> Second C.A Max Score </mat-label>
+        <input
+          matInput
+          required
+          size="75"
+          formControlName="secondCa_max_range"
+          type="number"
+        />
+        <mat-error
+          *ngIf="
+            !recordForm.controls['secondCa_max_range'].valid &&
+            recordForm.controls['secondCa_max_range'].touched
+          "
+        >
+          Second C.A maximum assessments score.
+        </mat-error>
+      </mat-form-field>
+      <div class="act-btn">
+        <button
+        *ngIf="!notEditable"
+        id="saver"
+        mat-raised-button
+        color="primary"
+        [disabled]="!recordForm.valid"
+        (click)="emit(recordForm.value)"
+        class="save-btn"
+      >
+        Save
+      </button>
+      </div>
+  </form>
+</div>

@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { RouterDirection } from '@dilta/client-shared';
-import { TransportService } from '@dilta/electron-client';
+import { ClientUtilService, RouterDirection } from '@dilta/client-shared';
+import { AbstractTransportService } from '@dilta/electron-client';
 import { EntityNames, Manager, ModelOperations } from '@dilta/shared';
-import { BehaviorSubject, Subscription } from 'rxjs';
 import { exhaustMap, first } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 /**
  * this components provides ui for setting up the
@@ -21,19 +21,14 @@ import { exhaustMap, first } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ManagerDataFormComponent implements OnInit {
-  /**
-   * err displayed to the component view
-   *
-   * @private
-   * @type {string}
-   * @memberof AdminSetupComponent
-   */
-  public err$ = new BehaviorSubject(undefined);
+
+  public managers$: Observable<Manager>;
 
   constructor(
     private dir: RouterDirection,
-    private transport: TransportService,
-    private route: ActivatedRoute
+    private transport: AbstractTransportService,
+    private route: ActivatedRoute,
+    private util: ClientUtilService
   ) {}
 
   /**
@@ -45,33 +40,46 @@ export class ManagerDataFormComponent implements OnInit {
   saveManagers($event: Manager) {
     this.route.params
       .pipe(
-        exhaustMap(({ id }) =>
-          this.transport.modelAction<Manager>(
-            EntityNames.Manager,
-            ModelOperations.Create,
-            {
-              ...$event,
-              id: id,
-              school: id
-            }
-          )
-        ),
+        exhaustMap(({ id }) => {
+          $event.school = id;
+          return $event.id
+            ? this.updateManager($event)
+            : this.createManager($event);
+        }),
         first()
       )
-      .subscribe(this.changeRoute.bind(this), this.displayError.bind(this));
+      .subscribe(this.changeRoute.bind(this), err => this.util.error(err));
   }
 
   /**
-   * display the error to the observable
+   * Action dispatched to create managers
    *
-   * @param {Error} e
-   * @memberof AdminSetupComponent
+   * @param {Manager} details
+   * @returns
+   * @memberof ManagerDataFormComponent
    */
-  displayError(e: Error) {
-    this.err$.next(e.message);
-    setTimeout(() => {
-      this.err$.next(undefined);
-    }, 3000);
+  createManager(details: Manager) {
+    return this.transport.modelAction<Manager>(
+      EntityNames.Manager,
+      ModelOperations.Create,
+      details
+    );
+  }
+
+  /**
+   * Action dispatched to update managers
+   *
+   * @param {Manager} details
+   * @returns
+   * @memberof ManagerDataFormComponent
+   */
+  updateManager(details: Manager) {
+    return this.transport.modelAction<Manager>(
+      EntityNames.Manager,
+      ModelOperations.Update,
+      details.id,
+      details
+    );
   }
 
   /**
@@ -81,9 +89,24 @@ export class ManagerDataFormComponent implements OnInit {
    */
   changeRoute(manager?: Manager) {
     if (manager) {
+      this.util.success('Manager', `Manager's Information saved Successfully`);
       this.dir.managerForm(manager);
     }
   }
 
-  ngOnInit() {}
+  getManagers() {
+    return this.route.params.pipe(
+      exhaustMap(({ id }) =>
+        this.transport.modelAction<Manager>(
+          EntityNames.Manager,
+          ModelOperations.Retrieve,
+          { school: id }
+        )
+      )
+    );
+  }
+
+  ngOnInit() {
+    this.managers$ = this.getManagers();
+  }
 }

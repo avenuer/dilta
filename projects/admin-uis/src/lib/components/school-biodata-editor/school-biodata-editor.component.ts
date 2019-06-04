@@ -3,15 +3,12 @@ import {
   EventEmitter,
   Input,
   OnInit,
-  Output
-  } from '@angular/core';
+  Output,
+  OnChanges,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {
-  defaultKeys,
-  errorInvalid,
-  fileBase64,
-  School
-  } from '@dilta/shared';
+import { defaultKeys, errorInvalid, fileBase64, School } from '@dilta/shared';
 import { isEmpty } from 'lodash';
 import { UploadInput } from 'ngx-uploader';
 
@@ -33,9 +30,10 @@ export const objSchoolKeys = [
 @Component({
   selector: 'admin-ui-school-biodata-form',
   templateUrl: './school-biodata-editor.component.html',
-  styleUrls: ['./school-biodata-editor.component.scss']
+  styleUrls: ['./school-biodata-editor.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SchoolBiodataEditorComponent implements OnInit {
+export class SchoolBiodataEditorComponent implements OnInit, OnChanges {
   public static inputError = new Error(`expected a valid School Object as input
   for SchoolBiodataEditorComponent <admin-ui-school-biodata-form></admin-ui-school-biodata-form>`);
   public static statesError = new Error(`expected states Input to
@@ -64,11 +62,8 @@ export class SchoolBiodataEditorComponent implements OnInit {
   public uploadInput = new EventEmitter<UploadInput>();
 
   public schoolForm: FormGroup;
-  public img: string;
 
-  constructor(private fb: FormBuilder) {
-    this.schoolForm = this.form(this.school);
-  }
+  constructor(private fb: FormBuilder) {}
 
   /**
    * does error validations
@@ -101,14 +96,10 @@ export class SchoolBiodataEditorComponent implements OnInit {
     }
     return this.fb.group({
       name: [school.name, required],
-      email: [school.email || '' ],
+      email: [school.email || ''],
       description: [
         school.description,
-        Validators.compose([
-          required,
-          Validators.minLength(60),
-          Validators.maxLength(150)
-        ])
+        Validators.compose([required, Validators.maxLength(150)])
       ],
       category: [school.category, required],
       address: [school.address, required],
@@ -135,8 +126,7 @@ export class SchoolBiodataEditorComponent implements OnInit {
    * and sets the form image value
    */
   setImg(img) {
-    this.img = img;
-    this.schoolForm.get('logo').setValue(this.img);
+    this.schoolForm.get('logo').setValue(img);
   }
 
   /**
@@ -150,5 +140,16 @@ export class SchoolBiodataEditorComponent implements OnInit {
   ngOnInit() {
     // this.errorDetector();
     this.schoolForm = this.form(this.school);
+  }
+
+  ngOnChanges() {
+    if (this.school && (typeof this.school === 'object')) {
+      Object.keys(this.school).forEach((key) => {
+        const control = this.schoolForm.get(key);
+        if (control) {
+          control.setValue(this.school[key]);
+        }
+      });
+    }
   }
 }

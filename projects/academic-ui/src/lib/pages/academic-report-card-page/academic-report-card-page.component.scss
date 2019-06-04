@@ -1,0 +1,26 @@
+.tabled-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.striped {
+  background-color: rgb(199, 193, 193);
+  border-color: rgb(199, 193, 193);
+  hr {
+    font: bolder;
+  }
+}
+
+.school {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .logo {
+    height: 128px;
+    width: 128px;
+    border-radius: 50%;
+  }
+
+}
+

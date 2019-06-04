@@ -3,4 +3,22 @@ export enum ElectronActions {
   Exit = '[Electron] Service Exit',
   // action to relaunch application
   Relaunch = '[Electron] Service Relaunch',
+  // action to update
+  Update = '[Electron] Service Update',
+  // database sync
+  DatabaseSync = '[Electron] Service DatabaseSync',
+  // reset liensce
+  LiensceReset = '[Electron] Service LiensceReset',
+}
+
+export interface ElectronOperations<res> {
+  operation: ElectronActions;
+  data: res;
+}
+
+
+export enum Synchronization {
+  Upload = '[Database] Synchronization Upload',
+  Download = '[Database] Synchronization Download',
+  Both = '[Database] Synchronization Both',
 }

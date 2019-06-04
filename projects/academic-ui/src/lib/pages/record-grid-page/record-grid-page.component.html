@@ -1,0 +1,21 @@
+<div>
+  <mat-toolbar class="space-down">
+    <span> Subject Records Created </span> <span class="spacer-full"> </span>
+    <button
+      class="printbtn"
+      (click)="print()"
+      mat-raised-button
+      color="secondary"
+    >
+      Print
+    </button>
+  </mat-toolbar>
+  <acada-record-grid
+    id="print"
+    [records]="records"
+    [config]="config"
+    (record)="acada.viewRecord($event)"
+    (filter)="search($event)"
+    (paginator)="paginator($event)"
+  ></acada-record-grid>
+</div>

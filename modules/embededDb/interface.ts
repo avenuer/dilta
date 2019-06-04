@@ -5,10 +5,11 @@ import {
   Parent,
   Receipt,
   School,
-  Score,
+  Subject,
   Settings,
   Student,
-  User
+  User,
+  Record
 } from '@dilta/shared';
 import { RxCollection, RxDatabase } from 'rxdb';
 
@@ -18,16 +19,18 @@ import { RxCollection, RxDatabase } from 'rxdb';
  *
  */
 export interface CollectionMaps {
-  manager: RxCollection<Manager>;
-  parent: RxCollection<Parent>;
-  receipt: RxCollection<Receipt>;
-  school: RxCollection<School>;
-  student: RxCollection<Student>;
-  score: RxCollection<Score>;
-  user: RxCollection<User>;
-  auth: RxCollection<Auth>;
-  preference: RxCollection<Settings>;
-  expense: RxCollection<Expense>;
+  manager_model: RxCollection<Manager>;
+  parent_model: RxCollection<Parent>;
+  receipt_model: RxCollection<Receipt>;
+  school_model: RxCollection<School>;
+  student_model: RxCollection<Student>;
+  subject_model: RxCollection<Subject>;
+  user_model: RxCollection<User>;
+  auth_model: RxCollection<Auth>;
+  preference_model: RxCollection<Settings>;
+  expense_model: RxCollection<Expense>;
+  record_model: RxCollection<Record>;
+  academic_setting_model: RxCollection<Record>;
 }
 
 /** interface mapping the mainframe object to its key value type info  */

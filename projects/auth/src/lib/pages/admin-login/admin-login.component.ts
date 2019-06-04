@@ -1,10 +1,19 @@
-import { AuthFeature, AuthLogin, Authsuccess } from '../../ngrx';
+import { AuthFeature, AuthLogin, Authsuccess, AuthLogOut } from '../../ngrx';
 import { Component, OnInit } from '@angular/core';
-import { RouterDirection } from '@dilta/client-shared';
-import { Login } from '@dilta/shared';
+import {
+  ClientUtilService,
+  RouterDirection,
+  SchoolActionSuccess
+} from '@dilta/client-shared';
+import {
+  Login,
+  School,
+  ElectronActions,
+  ElectronOperations
+} from '@dilta/shared';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { distinct, first } from 'rxjs/operators';
+import { AbstractTransportService } from '@dilta/electron-client';
 
 @Component({
   selector: 'auth-admin-login',
@@ -12,9 +21,12 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./admin-login.component.scss']
 })
 export class AuthUserLoginComponent implements OnInit {
-  public err$ = new BehaviorSubject(undefined);
-
-  constructor(private store: Store<any>, private dir: RouterDirection) {}
+  constructor(
+    private store: Store<any>,
+    private dir: RouterDirection,
+    private util: ClientUtilService,
+    private transport: AbstractTransportService
+  ) {}
 
   /**
    * dispath ation to login
@@ -24,6 +36,18 @@ export class AuthUserLoginComponent implements OnInit {
    */
   login(evnt: Login) {
     this.store.dispatch(new AuthLogin(evnt));
+    this.store
+      .select(AuthFeature)
+      .pipe(distinct())
+      .subscribe(state => {
+        if (state.error) {
+          this.util.error(state.error);
+          return;
+        }
+        if (state.details) {
+          this.changeRoute(state);
+        }
+      });
   }
 
   /**
@@ -34,45 +58,24 @@ export class AuthUserLoginComponent implements OnInit {
    * @memberof AuthUserLoginBase
    */
   changeRoute(auth: Authsuccess) {
+    console.log(auth);
     if (!auth.details) {
       return;
     }
+    this.store.dispatch(new SchoolActionSuccess(auth.details.school as School));
+    this.util.success('Authentication', 'user successfully login');
     this.dir.loginForm(auth);
   }
 
-  /**
-   * displays the error to the child component
-   *
-   * @param {Error} err
-   * @memberof AuthUserLoginBase
-   */
-  displayError(err: Error) {
-    this.err$.next(err.message);
-    setTimeout(() => {
-      this.err$.next(undefined);
-    }, 4000);
+  resetLiensce() {
+    this.transport
+      .execute<ElectronOperations<string>>(ElectronActions.LiensceReset)
+      .pipe(first())
+      .subscribe(
+        ({ data, operation }) => this.util.success(operation, data),
+        err => this.util.error(err)
+      );
   }
 
-  /**
-   * listens for auth feature changes
-   *
-   * @memberof AuthUserLoginBase
-   */
-  onValue() {
-    this.store
-      .select(AuthFeature)
-      .pipe(
-        map(store => {
-          if (store.error) {
-            throw store.error;
-          }
-          return store;
-        })
-      )
-      .subscribe(this.changeRoute.bind(this), this.displayError.bind(this));
-  }
-
-  ngOnInit() {
-    this.onValue();
-  }
+  ngOnInit() {}
 }

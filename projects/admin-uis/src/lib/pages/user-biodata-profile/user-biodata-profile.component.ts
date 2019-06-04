@@ -1,14 +1,28 @@
-import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { User, EntityNames, ModelOperations } from '@dilta/shared';
-import { map, exhaustMap, combineLatest } from 'rxjs/operators';
+import {
+  AuthenticationLevels,
+  EntityNames,
+  ModelOperations,
+  USER_AUTH,
+  User,
+  schoolClassValueToKey
+} from '@dilta/shared';
+import { ClientUtilService, RouterDirection } from '@dilta/client-shared';
+import { Component, OnInit } from '@angular/core';
+import { combineLatest, exhaustMap, first, map, tap } from 'rxjs/operators';
+
 import { AuthFeature } from 'projects/auth/src/lib/ngrx';
-import { TransportService } from '@dilta/electron-client';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { AbstractTransportService } from '@dilta/electron-client';
 
 export interface UserBiodataParam {
   id: string;
+}
+
+interface ViewConditions {
+  canEdit: boolean;
+  canDelete: boolean;
 }
 
 @Component({
@@ -17,7 +31,7 @@ export interface UserBiodataParam {
   styleUrls: ['./user-biodata-profile.component.scss']
 })
 export class UserBiodataProfileComponent implements OnInit {
-  public isEditable$: Observable<boolean>;
+  public view$: Observable<ViewConditions>;
 
   /** allows editable */
 
@@ -28,22 +42,50 @@ export class UserBiodataProfileComponent implements OnInit {
     private store: Store<any>,
     private actr: ActivatedRoute,
     private route: Router,
-    private transport: TransportService
+    private transport: AbstractTransportService,
+    private util: ClientUtilService,
+    private dir: RouterDirection
   ) {}
 
-  onEdit($event: boolean) {
-    if ($event) {
-      this.route.navigate(['biodata']);
-    }
+  editBiodata() {
+    this.userBio$.pipe(first()).subscribe(user => this.dir.editUser(user));
   }
 
   /** check if edit is allowed */
-  isEditable(biodata: Observable<User>) {
+  editableAndDeleteable(biodata: Observable<User>) {
     return this.store.select(AuthFeature).pipe(
       map(({ details }) => details),
       combineLatest(biodata),
-      map(([auth, user]) => user.id === user.authId)
+      map(
+        ([auth, user]) =>
+          Object.assign({
+            canEdit: auth.id === user.authId,
+            canDelete:
+              auth.level === AuthenticationLevels.Administrator &&
+              auth.id !== user.authId
+          }) as ViewConditions
+      )
     );
+  }
+
+  deleteBiodata() {
+    const userID$: Observable<string> = this.actr.params.pipe(
+      map(params => params.id)
+    );
+    this.store
+      .select(AuthFeature)
+      .pipe(
+        map(auth => auth.token),
+        combineLatest(userID$),
+        exhaustMap(([authToken, userId]) =>
+          this.transport.execute<string>(USER_AUTH.Delete, authToken, userId)
+        ),
+        first()
+      )
+      .subscribe(res => {
+        this.util.success('User details', res);
+        this.route.navigate(['academics', 'admins']);
+      }, err => this.util.error(err));
   }
 
   /** gets the user biodata */
@@ -57,12 +99,17 @@ export class UserBiodataProfileComponent implements OnInit {
             id
           }
         )
+      ),
+      map(user =>
+        Object.assign(user, {
+          class: schoolClassValueToKey(user.class)
+        })
       )
     );
   }
 
   ngOnInit() {
     this.userBio$ = this.getBiodata();
-    this.isEditable$ = this.isEditable(this.userBio$);
+    this.view$ = this.editableAndDeleteable(this.userBio$);
   }
 }

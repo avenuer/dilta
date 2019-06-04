@@ -5,8 +5,17 @@ import {
   Receipt,
   School,
   Student,
-  User
-  } from '@dilta/shared';
+  User,
+  NuseryPrimarySchoolClassPreset,
+  Subject,
+  cleanNumericEnums,
+  parentRelationships,
+  parentRelationToKey,
+  ParentRelationship,
+  Record,
+  schoolTerms,
+  TermPreset
+} from '@dilta/shared';
 import { getDate } from 'date-fns';
 import * as faker from 'faker';
 import { pick } from 'shuffle-array';
@@ -86,17 +95,9 @@ export function manager(): Manager {
 
 export const managerList = (amount?: number) => list<Manager>(manager, amount);
 
-export const classes = [
-  'pry1',
-  'pry2',
-  'pry3',
-  'pry4',
-  'pry5',
-  'pry6',
-  'nus1',
-  'nus2',
-  'nus3'
-];
+export const classes = cleanNumericEnums(
+  Object.keys(NuseryPrimarySchoolClassPreset)
+);
 export const genders = ['Male', 'Female'];
 export const bloodgroups = ['A', 'B', 'AB', 'O'];
 
@@ -104,19 +105,18 @@ export function student(): Student {
   return {
     dob: getDate(faker.date.past(3)),
     school: faker.random.uuid(),
-    class: select(classes),
+    class: NuseryPrimarySchoolClassPreset[select(classes)],
     bloodgroup: select(bloodgroups),
     gender: select(genders),
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
     parentPhone: faker.phone.phoneNumber(),
     prevschool: faker.company.companyName(),
+    admissionNo: faker.phone.phoneNumber(),
     ...baseModel()
-  };
+  } as any;
 }
 
 export const studentList = (amount?: number) => list<Student>(student, amount);
-
-export const relationships = ['Guardian', 'Parent'];
 
 export function parent(): Parent {
   return {
@@ -126,7 +126,7 @@ export function parent(): Parent {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
     phoneNo: faker.phone.phoneNumber(),
     profession: faker.name.jobDescriptor(),
-    relationship: select(relationships) as any,
+    relationship: ParentRelationship.Parent,
     state: faker.address.state(),
     town: faker.address.city(),
     workAddress: faker.address.secondaryAddress(),
@@ -144,7 +144,7 @@ export function receipt(): Receipt {
   return {
     school: faker.random.uuid(),
     name: faker.name.findName(),
-    class: select(classes) as any,
+    class: NuseryPrimarySchoolClassPreset[select(classes)] as any,
     createdAt: getDate(Date()),
     date: getDate(Date()),
     session: select(sessions) as any,
@@ -163,7 +163,7 @@ export function receipt(): Receipt {
       }
     ],
     ...baseModel()
-  };
+  } as any;
 }
 
 export const receiptList = (amount = 5) => list<Receipt>(receipt, amount);
@@ -176,7 +176,10 @@ export const subjects = [
   'physics',
   'economics',
   'geography',
-  'government',
+  'chemistry',
+  'yoruba',
+  'agric science',
+  'economics',
   'literature'
 ];
 export const levels = ['owner', 'manager', 'busar', 'teacher'];
@@ -186,7 +189,7 @@ export function admin(): User {
     authId: faker.internet.userName(),
     school: faker.random.uuid(),
     address: faker.address.streetAddress(),
-    class: select(classes) as any,
+    class: NuseryPrimarySchoolClassPreset[select(classes)] as any,
     subject: select(subjects) as any,
     email: faker.internet.email(),
     gender: faker.helpers.randomize(genders)[0],
@@ -195,81 +198,41 @@ export function admin(): User {
     phoneNo: faker.phone.phoneNumber(),
     phoneNos: faker.phone.phoneNumber(),
     ...baseModel()
-  };
+  } as any;
 }
 
 export const adminsList = (amount = 5) => list<User>(admin, amount);
 
-export interface Score extends Partial<BaseModel> {
-  student: string;
-  fa: number;
-  sa: number;
-  exam: number;
-  id: string;
-  session: string;
-  subject: string;
-  class: string;
-  term: string;
-}
+export function scoreGen(studentId: string, recordId: string): Subject {
+  const firstCa = faker.random.number({ min: 0, max: 15 });
+  const secondCa = faker.random.number({ min: 0, max: 15 });
+  const exam = faker.random.number({ min: 0, max: 70 });
 
-export function scoreGen(): Score {
   return {
-    class: select(classes) as any,
-    subject: select(subjects) as any,
-    student: faker.random.uuid(),
-    fa: faker.random.number({ min: 0, max: 15 }),
-    sa: faker.random.number({ min: 0, max: 15 }),
-    exam: faker.random.number({ min: 0, max: 70 }),
-    session: select(sessions) as any,
-    term: select(terms) as any,
+    studentId,
+    recordId,
+    teacherId: faker.random.uuid(),
+    firstCa,
+    secondCa,
+    exam,
+    total: firstCa + secondCa + exam,
     ...baseModel()
   };
 }
 // ...baseModel()
 
-export const examList = (no = 5) => list<Score>(scoreGen, no);
-// accounts doesnt use erasers...methodlogy
-interface SchoolMetaData {
-  personal_ID: string;
-  school_ID: string;
-}
+export const examList = (no = 5) => list<Subject>(scoreGen, no);
+// accounts doesnt use erasers...ideology
 
-export function teacher() {
+export function genRecord(): Record {
   return {
-    universalId: faker.random.uuid(),
-    name: faker.name.findName()
-  };
+    class: NuseryPrimarySchoolClassPreset[select(classes)],
+    teacherId: faker.random.uuid(),
+    session: sessions[0] || select(sessions),
+    subject: select(subjects),
+    term: TermPreset.First || TermPreset[select(schoolTerms)],
+    ...baseModel()
+  } as any;
 }
 
 // export const managerList = (amount?: number) => list(manager, amount);
-
-// export function busarRevenueSummary() {
-//   return <BusarRevenueSummary>{
-//     currentMonthHighestCategory: faker.commerce.product(),
-//     currentMonthHighestCategoryRevenue: faker.random.number(500000),
-//     currentMonthHighestClass: select(classes) as any,
-//     currentMonthLowestClass: select(classes) as any,
-//     currentMonthHighestRevenue: faker.random.number(2000000),
-//     currentMonthLowestRevenue: faker.random.number(20000),
-//     currentMonthPercentage: faker.random.number(90),
-//     currentMonthRevenue: faker.random.number(20000),
-//     expectedTermSchoolFees: faker.random.number(20000000),
-//     highestMonthPercentage: faker.random.number(70),
-//     previousMonthRevenue: faker.random.number(20000),
-//     totalTermSchoolFees: faker.random.number(20000000)
-//   };
-// }
-
-// export function busarExpenseSummary() {
-//   return <BusarExpenseSummary>{
-//     currentMonth: faker.random.number(500000),
-//     currentMonthCapital: faker.random.number(300000),
-//     currentMonthHighestCategory: faker.commerce.product(),
-//     currentMonthHighestCategoryExpense: faker.random.number(300000),
-//     currentMonthLowestCategory: faker.commerce.product(),
-//     currentMonthLowestCategoryExpense: faker.random.number(90000),
-//     currentMonthRecurrent: faker.random.number(60000),
-//     preivousMonth: faker.random.number(30000),
-//     totalTerm: faker.random.number(20000000)
-//   };
-// }

@@ -1,0 +1,65 @@
+<mat-toolbar color="primary">
+  <div class="mobile-bar">
+    <a mat-flat-button color="primary" (click)="changeRoute('home')">
+      Home
+    </a>
+    <a mat-button class="show-mobile" [matMenuTriggerFor]="mobile">Menu</a>
+  </div>
+  <div class="desktop-bar">
+    <a mat-flat-button color="primary" (click)="changeRoute('home')">
+      Home
+    </a>
+    <a mat-flat-button color="primary" (click)="changeRoute('levels')">
+      Classes
+    </a>
+    <a mat-flat-button color="primary" (click)="changeRoute('reports')">
+      Reports
+    </a>
+    <a mat-flat-button color="primary" (click)="changeRoute('records')">
+      Records
+    </a>
+    <a mat-flat-button color="primary" (click)="changeRoute('students')">
+      Students
+    </a>
+    <a mat-flat-button color="primary" (click)="changeRoute('admins')">
+      Teachers
+    </a>
+    <span class="spacer-full"></span>
+    <a mat-button class="show-mobile" [matMenuTriggerFor]="menu">Menu</a>
+  </div>
+</mat-toolbar>
+
+<mat-menu #mobile="matMenu">
+  <a mat-menu-item color="primary" (click)="changeRoute('levels')">
+    Classes
+  </a>
+  <a mat-menu-item color="primary" (click)="changeRoute('reports')">
+    Reports
+  </a>
+  <a mat-menu-item color="primary" (click)="changeRoute('records')">
+    Records
+  </a>
+  <a mat-menu-item color="primary" (click)="changeRoute('students')">
+    Students
+  </a>
+  <a mat-menu-item color="primary" (click)="changeRoute('admins')">
+    Teachers
+  </a>
+  <a mat-menu-item [matMenuTriggerFor]="menu"> others </a>
+</mat-menu>
+
+<mat-menu #menu="matMenu">
+  <a mat-menu-item [matMenuTriggerFor]="syncMenu"> Synchronization </a>
+  <a mat-menu-item (click)="update()"> Update </a>
+  <a mat-menu-item (click)="logout()"> Logout </a>
+</mat-menu>
+
+<mat-menu #syncMenu="matMenu">
+  <a mat-menu-item (click)="sync('Upload')"> Upload to Online </a>
+  <a mat-menu-item (click)="sync('Download')"> Download from Online </a>
+  <a mat-menu-item (click)="sync('Both')"> Both-ways </a>
+</mat-menu>
+
+<div class="container">
+  <router-outlet></router-outlet>
+</div>

@@ -53,7 +53,6 @@ export class AuthLoginFormComponent implements OnInit {
     if (!value.password || !value.username) {
       value = this.loginForm.value;
     }
-    console.log(value);
     this.emitter.emit(value);
   }
 

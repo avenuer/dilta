@@ -113,6 +113,32 @@ export interface ApiResponse<T> extends BaseResponse {
 
 
 /**
+ * find response for queries
+ *
+ * @export
+ * @interface FindResponse
+ * @extends {FindQueryParam}
+ * @template T
+ */
+export interface FindResponse<T> {
+  data: T[];
+  skip: number;
+  limit: number;
+  total: number;
+}
+
+
+/**
+ * search find query
+ *
+ * @export
+ * @type SearchFindRequest
+ * @template T
+ */
+export type SearchFindRequest<T> = string | Partial<T>;
+
+
+/**
  * Formats api response for the authnetication
  *
  * @template T

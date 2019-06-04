@@ -1,7 +1,20 @@
-import { uniq } from 'lodash';
+import {
+  Grades,
+  GradesComment,
+  GradeSheet,
+  Level,
+  Permission,
+  SchoolDict,
+  SchoolPreset,
+  SchoolPresetBio,
+  Setting,
+  SettingTypes,
+  GradingConfig,
+  GradingRange
+} from '@dilta/shared';
 import { format, getYear } from 'date-fns';
+import { uniq } from 'lodash';
 import * as uuidRandom from 'uuid/v4';
-import { SettingTypes, SchoolPresetBio, SchoolPreset, Permission, Level, Setting, SchoolDict,  } from '@dilta/shared';
 
 export const permision: Permission[] = [
   // { name: 'Guest',  value: 1 },
@@ -66,7 +79,6 @@ export const nuseryPrimarySchool: SchoolPresetBio = {
   permision: permision
 };
 
-
 /** full export of all the presets */
 export const schoolPresetBios: SchoolPreset = {
   nusery: nuserySchool,
@@ -77,10 +89,8 @@ export const schoolPresetBios: SchoolPreset = {
 /** school categories supported */
 export const schoolCategories = Object.keys(schoolPresetBios);
 
-
-
 /**
- * cheans the school presets information to a nice
+ * cleans the school presets information to a nice
  * json dictionary
  *
  * @export
@@ -96,9 +106,11 @@ export function dictSchool(
   const { levels, permision } = _schoolPresetBios[preset];
   const schoolClasses: string[] = levels.map(level => level.name);
   const schoolSubjects = uniq(
-    levels.map(level => level.courses).reduce((p, c) => {
-      return [...p, ...c];
-    }, [])
+    levels
+      .map(level => level.courses)
+      .reduce((p, c) => {
+        return [...p, ...c];
+      }, [])
   );
   return {
     classes: schoolClasses,
@@ -120,7 +132,6 @@ export function dictPermision(permsions: Permission[] = []) {
   permsions.forEach(p => (_dict[p.name] = p.value));
   return _dict;
 }
-
 
 /**
  * Creates an inital presets dynamically for the school
@@ -221,11 +232,58 @@ function busarySetting({ memberclassesInputs }) {
               name: `${currentYear - 2}\\${currentYear - 1}`
             },
             {
-              name: `${currentYear - 3}\\${currentYear - 2 }`
+              name: `${currentYear - 3}\\${currentYear - 2}`
             }
           ]
         }
       }
     }
   };
+}
+
+/**
+ * grade preset returns the comment on the student score.
+ *
+ * @export
+ * @param {number} score
+ * @returns {string}
+ */
+export function gradePreset(grading: GradingConfig, score: number): GradeSheet {
+  let gradeKey: string;
+  Object.entries(grading).forEach(([key, value]: [string, GradingRange]) => {
+    if (!gradeKey) {
+      if (score >= value.min && score <= value.max) {
+        gradeKey = key;
+      }
+    }
+  });
+
+  return {
+    comment: GradesComment[gradeKey],
+    grade: Grades[gradeKey]
+  };
+}
+
+/**
+ * maps student poistion in the class to comment
+ *
+ * @export
+ * @param {number} index
+ * @returns
+ */
+export function classPositionPreset(index: number) {
+  index += 1;
+  if (index === 0) {
+    return 'Not available';
+  }
+  if (index === 1) {
+    return '1st';
+  }
+  if (index === 2) {
+    return '2nd';
+  }
+  if (index === 3) {
+    return '3rd';
+  }
+  return `${index}th`;
 }

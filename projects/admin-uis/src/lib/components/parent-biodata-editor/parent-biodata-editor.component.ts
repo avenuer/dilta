@@ -1,6 +1,6 @@
-import { EventEmitter, Input, OnInit, Output, Component } from '@angular/core';
+import { EventEmitter, Input, OnInit, Output, Component, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Parent, defaultKeys } from '@dilta/shared';
+import { Parent, defaultKeys, parentRelationships, workingCategories } from '@dilta/shared';
 
 export const objParentKeys = [
   'name',
@@ -15,25 +15,27 @@ export const objParentKeys = [
   'workcategory'
 ];
 
-
 @Component({
   selector: 'admin-ui-parent-biodata-form',
   templateUrl: './parent-biodata-editor.component.html',
   styleUrls: ['./parent-biodata-editor.component.scss']
 })
-export class ParentBiodataEditorComponent implements OnInit {
+export class ParentBiodataEditorComponent implements OnInit, OnChanges {
   public static inputError = new Error(`expected a valid object type of Parent
   <app-parent-biodata-form > </app-parent-biodata-form>`);
 
   @Input() public parent: Parent = {} as any;
+  @Input() public states: string[] = [];
+  @Input() public lgas: string[] = [];
+  @Input() public notEditable = false;
+
   @Output() public emitter = new EventEmitter();
 
+  public relationships: string[] = parentRelationships;
+  public workCategories = workingCategories;
   public parentForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
-    // sets intial and for testing
-    this.parentForm = this.form(this.parent);
-  }
+  constructor(private fb: FormBuilder) {}
 
   /**
    *  form(parent)
@@ -43,20 +45,10 @@ export class ParentBiodataEditorComponent implements OnInit {
    */
   public form(parent?: Parent) {
     const { required } = Validators;
-    // checking if parent is defined if not it is
-    // defaulted
-    if (!parent) {
-      parent = defaultKeys(parent, objParentKeys);
-    }
-    // checks if parent is an object if not throws an
-    // error
-    if (typeof parent !== 'object') {
-      throw ParentBiodataEditorComponent.inputError;
-    }
     // constructing form groups
     return this.fb.group({
       name: [parent.name, required],
-      email: [parent.email],
+      email: [parent.email || ''],
       homeAddress: [parent.homeAddress, required],
       phoneNo: [parent.phoneNo, required],
       profession: [parent.profession, required],
@@ -73,11 +65,25 @@ export class ParentBiodataEditorComponent implements OnInit {
    * @param value parent form value
    */
   public emit(value: Parent) {
-    this.emitter.emit(value);
+    this.emitter.emit({ ...this.parent, ...value });
   }
 
   ngOnInit() {
     // for external inputs which has now been resolved
-    this.parentForm.setValue(this.form(this.parent).value);
+    this.parentForm = this.form(this.parent || {} as any);
+  }
+
+  ngOnChanges() {
+    if (this.parent && typeof this.parent === 'object') {
+      Object.keys(this.parent).forEach((key) => {
+        const control = this.parentForm.get(key);
+        if (control) {
+         control.setValue(this.parent[key]);
+        }
+      });
+    }
+    if (this.notEditable && this.parentForm) {
+      this.parentForm.disable();
+    }
   }
 }

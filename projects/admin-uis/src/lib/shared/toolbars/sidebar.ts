@@ -1,5 +1,5 @@
 import { EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { SettingPreference, Settings } from '@dilta/models';
+import { SettingPreference, Settings } from '@dilta/shared';
 import { toPairs } from 'lodash';
 
 interface SiderBarView {

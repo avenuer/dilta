@@ -5,13 +5,20 @@ import {
   OnDestroy,
   OnInit,
   ViewEncapsulation
-  } from '@angular/core';
-import { RouterDirection, schoolFeature } from '@dilta/client-shared';
-import { Auth, School, Signup } from '@dilta/shared';
+} from '@angular/core';
+import {
+  ClientUtilService,
+  RouterDirection,
+  schoolFeature
+} from '@dilta/client-shared';
+import { Auth, School, Signup, AuthenticationLevels } from '@dilta/shared';
 import { Store } from '@ngrx/store';
 import { isNil } from 'lodash';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { first, map, skipWhile } from 'rxjs/operators';
+import { Subscription, Observable } from 'rxjs';
+import { first, map, skipWhile, combineLatest, exhaustMap } from 'rxjs/operators';
+import { ClientAuthService } from '../../services/auth.service';
+
+const { Administrator, Busar, Manager, Teacher } = AuthenticationLevels;
 
 /**
  * ui for signing up adminstartaions for login
@@ -27,25 +34,27 @@ import { first, map, skipWhile } from 'rxjs/operators';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AuthUserSignupComponent implements OnInit, OnDestroy {
-  /**
-   * error displayed by the sub component
-   *
-   * @memberof AuthUserSignupBase
-   */
-  public err$ = new BehaviorSubject<string>(null);
-
+export class AuthUserSignupComponent implements OnInit {
   /**
    * levels of authorization passed to the subcomponent
    *
    * @public
    * @memberof AuthUserSignupBase
    */
-  public authLevels = ['Teacher', 'Busar', 'Manager', 'Administrator'];
+  public authLevels = [Administrator, Busar, Manager, Teacher];
 
-  public localSubscription: Subscription[] = [];
+  constructor(
+    private dir: RouterDirection,
+    private store: Store<any>,
+    private util: ClientUtilService,
+    private auth: ClientAuthService
+  ) {}
 
-  constructor(private dir: RouterDirection, private store: Store<any>) {}
+  currentUser(): Observable<Auth> {
+    return this.store
+      .select(AuthFeature)
+      .pipe(map(auth => (auth ? auth.details : (auth as any))));
+  }
 
   /**
    * action triggered by the sub components submit button
@@ -58,12 +67,15 @@ export class AuthUserSignupComponent implements OnInit, OnDestroy {
       .select(schoolFeature)
       .pipe(
         map(store => store.details),
-        skipWhile(isNil),
+        combineLatest(this.currentUser()),
+        map(([school, user]) => (school ? school : user.school)),
+        map(school => (typeof school === 'string' ? school : school.id)),
+        map((schId) => Object.assign($event, { school: schId })),
+        exhaustMap((signup) => this.auth.signup(signup)),
+        map(authtoken => authtoken.details),
         first()
       )
-      .subscribe((school: School) => {
-        this.store.dispatch(new AuthSignUp({ ...$event, school: school.id }));
-      });
+      .subscribe(auth => this.changeRoute(auth), this.sendError.bind(this));
   }
 
   /**
@@ -74,28 +86,11 @@ export class AuthUserSignupComponent implements OnInit, OnDestroy {
    */
   changeRoute(auth: Auth) {
     if (auth) {
+      this.util.success('Auth SignUp', `successfully signed up user ${auth.username}`);
       this.dir.signupForm(auth);
     }
   }
 
-  /**
-   * listen for manager section of the store changes
-   *
-   * @memberof AuthUserSignupBase
-   */
-  storeListen() {
-    return this.store.select(AuthFeature)
-      .subscribe((state) => {
-        console.log({ state });
-        if (state.error) {
-          this.sendError(state.error);
-          return;
-        }
-        if (state.details) {
-          this.changeRoute(state.details);
-        }
-      });
-  }
 
   /**
    * sends the error to the child component for display
@@ -104,18 +99,8 @@ export class AuthUserSignupComponent implements OnInit, OnDestroy {
    * @memberof AuthUserSignupBase
    */
   sendError(err: Error) {
-    this.err$.next(err.message);
-    setTimeout(() => {
-      this.err$.next(null);
-    }, 3000);
+    this.util.error(err);
   }
 
-  ngOnInit() {
-    this.storeListen();
-  }
-
-  ngOnDestroy() {
-    this.localSubscription.forEach(e => e.unsubscribe());
-    this.err$.unsubscribe();
-  }
+  ngOnInit() {}
 }

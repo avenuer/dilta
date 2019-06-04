@@ -1,7 +1,6 @@
 import { ActionSymbol, moduleSymbol } from './decorators';
 import { modelActionFormat, ModelOperations } from '@dilta/shared';
 import { Provider, ReflectiveInjector } from 'injection-js';
-import 'reflect-metadata';
 
 /**
  * Creates and Resolve modules to create an injector

@@ -1,7 +1,11 @@
 <mat-toolbar color="primary">School Information </mat-toolbar>
 <mat-card>
-  <admin-ui-school-biodata-form [categorys]="schoolCategories$ | async" [states]="states$ | async" [lgas]="lgas$ | async"
-    (emitter)="onSubmit($event)">
-
+  <admin-ui-school-biodata-form
+    [school]="(viewObject$ | async)?.school"
+    [categorys]="(viewObject$ | async)?.categories"
+    [states]="(viewObject$ | async)?.states"
+    [lgas]="(viewObject$ | async)?.lgas"
+    (emitter)="onSubmit($event)"
+  >
   </admin-ui-school-biodata-form>
 </mat-card>

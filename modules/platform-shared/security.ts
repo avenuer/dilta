@@ -1,20 +1,45 @@
-import { School } from './models';
+import { Auth, School } from './models';
+import { Boque } from './pricing';
+
+/** interface for user token */
+export interface AuthTokenUser {
+  details: Auth;
+  token: string;
+}
 
 /**
  * interface for the encrypted data in the database
  *
  * @export
- * @interface SchoolEncryptedData
+ * @interface SchoolEncryptedBaseInfo
  */
-export interface SchoolEncryptedData {
+export interface SchoolEncryptedBaseInfo {
   /**
    * the private apikey for the school online's connections
    *
    * @type {string}
-   * @memberof SchoolEncryptedData
+   * @memberof SchoolEncryptedBaseInfo
    */
   apikey: string;
 
+  /**
+   * the time for the expiring of the liensce
+   *
+   * @type {number}
+   * @memberof SchoolEncryptedBaseInfo
+   */
+  expiretimestamp: number;
+
+  /**
+   * Boque subscription for the liensce bought
+   *
+   * @type {any}
+   * @memberof SchoolEncryptedBaseInfo
+   */
+  boque: any;
+}
+
+export interface SchoolEncryptedData extends SchoolEncryptedBaseInfo {
   /**
    * School Bio Details
    *
@@ -22,14 +47,13 @@ export interface SchoolEncryptedData {
    * @memberof SchoolEncryptedData
    */
   school: School;
-
   /**
-   * the time for the expiring of the liensce
+   * Boque subscription for the liensce bought
    *
-   * @type {number}
-   * @memberof SchoolEncryptedData
+   * @type {Boque}
+   * @memberof SchoolEncryptedBaseInfo
    */
-  expiretimestamp: number;
+  boque: Boque;
 }
 
 /**
@@ -47,6 +71,10 @@ export enum LIENSCE_KEY {
    * Action to decrypt liensce key ti valid json object
    */
   Decrypt = '[Security] Decrypt Liensce',
+  /** Decrypts the token directly....
+   *
+   */
+  Decrypt_Service = '[Security] Decrypt Liensce',
   /** Action to retreiving the liensce key */
   Retrieve = '[Security] Retrieve Liensce',
   /** Action to setting the liensce key */
@@ -69,6 +97,10 @@ export enum USER_AUTH {
   Signup = '[Security] Auth Signup  ',
   /** Action to verify the user token */
   Verify = '[Security] Auth Verify  ',
+  /**
+   * Action to delete a user
+   */
+  Delete = '[Security] Auth Verify  '
 }
 
 /**
@@ -92,5 +124,19 @@ export interface Login {
 export interface Signup {
   username: string;
   password: string;
-  level: string;
+  level: AuthenticationLevels;
+}
+
+
+/**
+ * Various authentication leves assigned to the users
+ *
+ * @export
+ * @enum {number}
+ */
+export enum AuthenticationLevels {
+  Teacher = 'Teacher',
+  Busar = 'Busar',
+  Administrator = 'Administrator',
+  Manager = 'Manager',
 }

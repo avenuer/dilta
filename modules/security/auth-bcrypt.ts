@@ -23,7 +23,7 @@ export class AuthBcryptSecurity {
       trace: 'validatePassword',
       module: 'SecurityModule'
     });
-    if (hash !== 'string' || password !== 'string') {
+    if (typeof hash !== 'string' || typeof password !== 'string') {
       throw missingValidatePasswordParameters;
     }
     return await bcrypt.compare(password, hash);

@@ -1,19 +1,22 @@
 import { ModelBase } from './models.base';
-import { Inject, Injectable, FactoryProvider } from '@dilta/core';
+import { FactoryProvider, Inject, Injectable } from '@dilta/core';
+import { electronDatabase, Embededb } from '@dilta/emdb';
 import {
   Auth,
   EntityNames,
+  Expense,
   Manager,
   Parent,
   Receipt,
+  Record,
   School,
-  Student,
-  User,
   Setting,
-  Expense,
-  Score
-} from '@dilta/shared';
-import { Embededb, electronDatabase } from '@dilta/emdb';
+  Student,
+  Subject,
+  User,
+  Promotion,
+  AcademicSetting
+  } from '@dilta/shared';
 
 /** Token For RXDB leveldown instance */
 export const EmbededDatabaseToken = 'RXDB_LOCAL';
@@ -117,11 +120,11 @@ export class SchoolService extends ModelBase<School> {
  * @extends {ModelBase<Score>}
  */
 @Injectable()
-export class ScoreService extends ModelBase<Score> {
+export class SubjectService extends ModelBase<Subject> {
   constructor(
     @Inject(EmbededDatabaseToken) public database: Promise<Embededb>
   ) {
-    super(EntityNames.Score, database);
+    super(EntityNames.Subject, database);
   }
 }
 
@@ -189,6 +192,56 @@ export class ExpenseService extends ModelBase<Expense> {
   }
 }
 
+/**
+ * responsible teachers own records for database.
+ *
+ * @export
+ * @class RecordService
+ * @extends {ModelBase<Record>}
+ */
+@Injectable()
+export class RecordService extends ModelBase<Record> {
+  constructor(
+    @Inject(EmbededDatabaseToken) public database: Promise<Embededb>
+  ) {
+    super(EntityNames.Record, database);
+  }
+}
+
+
+/**
+ * Responsible for student academic promtion history
+ *
+ * @export
+ * @class PromotionService
+ * @extends {ModelBase<Promotion>}
+ */
+@Injectable()
+export class PromotionService extends ModelBase<Promotion> {
+  constructor(
+    @Inject(EmbededDatabaseToken) public database: Promise<Embededb>
+  ) {
+    super(EntityNames.Promotion, database);
+  }
+}
+
+
+/**
+ * Academic setting for configuration for dynamic view.
+ *
+ * @export
+ * @class AcademicSettingService
+ * @extends {ModelBase<AcademicSetting>}
+ */
+@Injectable()
+export class AcademicSettingService extends ModelBase<AcademicSetting> {
+  constructor(
+    @Inject(EmbededDatabaseToken) public database: Promise<Embededb>
+  ) {
+    super(EntityNames.academic_setting, database);
+  }
+}
+
 /** Provider Token Mapping  */
 const embededDBProvider: FactoryProvider = {
   provide: EmbededDatabaseToken,
@@ -202,9 +255,12 @@ export const databaseServices = [
   ParentService,
   ReceiptService,
   SchoolService,
-  ScoreService,
+  SubjectService,
   StudentService,
   UserService,
   SettingService,
-  ExpenseService
+  ExpenseService,
+  RecordService,
+  PromotionService,
+  AcademicSettingService
 ];

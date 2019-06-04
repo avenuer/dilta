@@ -1,1 +1,11 @@
-<app-parent-biodata-form (emitter)="saveParent($event)" [parent]="parent$ | async"  ></app-parent-biodata-form>
+<div class="container">
+  <div class="space-down">
+    <mat-toolbar > Parent Biodata </mat-toolbar>
+  </div>
+  <admin-ui-parent-biodata-form
+    (emitter)="saveParent($event)"
+    [parent]="parent$ | async"
+    [lgas]="(view$ | async)?.lgas"
+    [states]="(view$ | async)?.states"
+  ></admin-ui-parent-biodata-form>
+</div>

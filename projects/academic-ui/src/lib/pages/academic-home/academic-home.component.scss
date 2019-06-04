@@ -1,0 +1,36 @@
+.logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 25%;
+}
+
+
+
+
+
+
+
+.mobile-bar {
+    display: flex;
+    visibility: hidden;
+}
+
+.desktop-bar {
+    display: flex;
+    visibility: visible;
+}
+
+mat-toolbar {
+    display: flex;
+    flex-direction: row;
+}
+
+@media (max-width: 480px) {
+    .mobile-bar {
+        visibility: visible;
+        justify-content: space-around;
+    }
+    .desktop-bar {
+        visibility: hidden;
+    }
+}

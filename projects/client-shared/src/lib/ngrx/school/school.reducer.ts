@@ -1,15 +1,12 @@
-import { school } from '@dilta/gen';
-import { School } from '@dilta/shared';
 import { schoolActions, SchoolActions } from './school.actions';
+import { School } from '@dilta/shared';
 
 export interface SchoolStore {
   error?: Error;
   details?: School;
 }
 
-const initalState: SchoolStore = {
-  details: { ...school() }
-};
+const initalState: SchoolStore = {};
 
 export function schoolReducer(state = initalState, action: schoolActions) {
 

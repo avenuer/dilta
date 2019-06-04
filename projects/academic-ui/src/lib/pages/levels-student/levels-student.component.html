@@ -1,0 +1,20 @@
+<div class="container">
+  <mat-toolbar class="space-down">
+    <span> Class Students </span> <span class="spacer-full"> </span>
+    <button
+      class="printbtn"
+      (click)="print()"
+      mat-raised-button
+      color="secondary"
+    >
+      Print
+    </button>
+  </mat-toolbar>
+  <acada-student-grid
+    (student)="router.viewStudentDetails($event)"
+    id="print"
+    [config]="config"
+    (paginator)="paginator($event)"
+    [students]="students"
+  ></acada-student-grid>
+</div>

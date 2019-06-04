@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Student, defaultKeys } from '@dilta/shared';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Student, defaultKeys, schoolClassValue, schoolClasses } from '@dilta/shared';
 
 export const objStudentKeys = [
   'name',
@@ -17,16 +17,21 @@ export const objStudentKeys = [
   templateUrl: './student-biodata-editor.html',
   styleUrls: ['./student-biodata-editor.component.scss']
 })
-export class StudentBiodataEditorComponent {
+export class StudentBiodataEditorComponent implements OnChanges {
   public static inputError = new Error(`expected a valid School Object as input for
   StudentBiodataFormBase <app-student-biodata-form></app-student-biodata-form>`);
 
   @Input()
   public student: Student = {} as any;
+  @Input()
+  public notEditable = false;
   @Output()
   public emitter = new EventEmitter();
 
   public studentForm: FormGroup;
+
+  public classes: string[] = schoolClasses;
+
 
   constructor(private fb: FormBuilder) {
     this.studentForm = this.form(this.student);
@@ -51,6 +56,7 @@ export class StudentBiodataEditorComponent {
       dob: [student.dob, required],
       gender: [student.gender, required],
       prevschool: [student.prevschool, required],
+      admissionNo: [student.admissionNo, required],
       parentPhone: [student.parentPhone, required]
     });
   }
@@ -60,6 +66,27 @@ export class StudentBiodataEditorComponent {
    * @param value student form value
    */
   public emit(value: Student) {
+    console.log(value);
+    if (typeof value.class !== 'number') {
+      (value as any).class = schoolClassValue(value.class);
+    }
+    if (this.student) {
+      value = { ...this.student, ...value };
+    }
     this.emitter.emit(value);
+  }
+
+  ngOnChanges() {
+    if (this.student && (typeof this.student === 'object')) {
+      Object.keys(this.student).forEach((key) => {
+        const control = this.studentForm.get(key);
+        if (control) {
+          control.setValue(this.student[key]);
+        }
+      });
+    }
+    if (this.notEditable) {
+      this.studentForm.disable();
+    }
   }
 }

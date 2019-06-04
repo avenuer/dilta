@@ -1,8 +1,7 @@
 import { LiensceCrypto } from './crypto';
 import { Action, Injectable } from '@dilta/core';
-import { Logger } from 'modules/util';
 import { LIENSCE_KEY, SchoolEncryptedData } from '@dilta/shared';
-import { autobind } from 'core-decorators';
+import { Logger } from 'modules/util';
 
 @Injectable()
 export class LiensceSecurity {
@@ -35,6 +34,7 @@ export class LiensceSecurity {
    * @param {string} token jwt token used for decryption
    * @returns
    */
+  @Action(LIENSCE_KEY.Decrypt_Service)
   decryptLiensce(token: string): SchoolEncryptedData {
     this.logger.debug({
       message: `decrypting liensce key`,

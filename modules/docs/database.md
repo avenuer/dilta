@@ -5,25 +5,34 @@ an Model action is formated as `[Model] collectionName operation`, collection Na
 
 following example on the Auth Model has example and note all operations are async in nature, meaning return promises.
 
-```
-import { EntityNames, Auth, FindQueryParam } from '@dilta/shared';
+``` typescript
+import { EntityNames, Auth, FindQueryParam, FindResponse, SearchFindRequest } from '@dilta/shared';
+
+/** Understand Auth is represent a generic Type Here for example: */
+type k<T> = T;
+// therefore
+type k<Auth> = Auth;
+// replace the Auth with type of the EntityModel/
 
 /** Create an new Auth **/
 const auth: Partial<Auth> = { ... };
-app.execute(`[Model] ${EntityNames.Auth} create$`, auth);
+app.execute(`[Model] ${EntityNames.Auth} create$`, auth): Promise<Auth>;
 
-/** Query Auth has find query **/
-const query: Partial<Auth> = {};
+/** Query Auth has find query  also automatically does a search if query is a string **/
+const query: SearchFindRequest<T> = {};
+// assume T = Auth so  const query: Parital<Auth> = {};
 const findParams: Partial<FindQueryParam> = {};
-app.execute(`[Model] ${EntityNames.Auth} find$`, query, findParams);
+app.execute(`[Model] ${EntityNames.Auth} find$`, query, findParams): Promise<FindResponse<Auth>>;
+// can also be a string
+app.execute(`[Model] ${EntityNames.Auth} find$`, 'search-query', findParams): Promise<FindResponse<Auth>>;
 
 /** Retrieve an Auth  like findOne **/
 const auth: Partial<Auth> = { id: 'randomId' };
-app.execute(`[Model] ${EntityNames.Auth} retrieve$`, query);
+app.execute(`[Model] ${EntityNames.Auth} retrieve$`, query): Promise<Auth>;
 
 /** Update and Auth information **/
-app.execute(`[Model] ${EntityNames.Auth} update$`, id, auth);
+app.execute(`[Model] ${EntityNames.Auth} update$`, id, auth): Promise<Auth>;
 
 /** Delete and Auth Information  **/
-app.execute(`[Model] ${EntityNames.Auth} delete$`, query);
+app.execute(`[Model] ${EntityNames.Auth} delete$`, query): Promise<boolean>;
 ```

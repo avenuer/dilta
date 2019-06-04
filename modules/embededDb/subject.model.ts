@@ -1,5 +1,5 @@
-import { EntityNames } from '@dilta/shared';
 import { baseModel, CollectionConfig } from './shared.model';
+import { EntityNames } from '@dilta/shared';
 
 /** key to retrieve the collection form the db intialize object */
 
@@ -12,24 +12,8 @@ export const subjectSchema = {
   description: 'stores student subject records and scores',
   type: 'object',
   properties: {
-    subject: {
-      type: 'string',
-      final: true
-    },
     teacherId: {
       ref: 'user',
-      type: 'string',
-      final: true
-    },
-    class: {
-      type: 'string',
-      final: true
-    },
-    session: {
-      type: 'string',
-      final: true
-    },
-    term: {
       type: 'string',
       final: true
     },
@@ -51,25 +35,33 @@ export const subjectSchema = {
       max: 70,
       default: 0
     },
+    total: {
+      type: 'number',
+      min: 0,
+      max: 100,
+      default: 0
+    },
     studentId: {
       ref: 'student',
+      type: 'string',
+      final: true
+    },
+    recordId: {
+      ref: 'record',
       type: 'string',
       final: true
     },
     ...baseModel.schema
   },
   required: [
-    'subject',
     'teacherId',
-    'class',
-    'session',
-    'term',
     'studentId',
+    'recordId',
     ...baseModel.required
   ]
 };
 
 export const subjectModel: CollectionConfig<typeof subjectSchema> = {
-  name: EntityNames.Score,
+  name: EntityNames.Subject,
   schema: subjectSchema
 };

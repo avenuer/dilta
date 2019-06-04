@@ -1,4 +1,4 @@
-import { LiensceKey } from '../../process/process.actions';
+import { UpdateLiensceKey } from '../../process/process.actions';
 import { processFeature, ProcessState } from '../../process/process.reducer';
 import {
   Component,
@@ -8,6 +8,7 @@ import {
   } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ClientUtilService } from '@dilta/client-shared';
 import { reader, SchoolEncryptedData } from '@dilta/shared';
 import { Store } from '@ngrx/store';
 import { to } from 'await-to-js';
@@ -30,13 +31,6 @@ export class LiensceKeyComponent implements OnInit, OnDestroy {
   public logo = '/assets/logo.svg';
 
   public uploadOptions = {};
-  /**
-   * holds an err displayed to the view
-   *
-   * @type {string}
-   * @memberof LiensceKeyComponent
-   */
-  public err: string;
 
   /**
    * holds and display the liensce key path
@@ -55,7 +49,6 @@ export class LiensceKeyComponent implements OnInit, OnDestroy {
    */
   public key: string;
 
-
   /**
    * formControl for liensce file path
    *
@@ -65,7 +58,8 @@ export class LiensceKeyComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<ProcessState>,
-    private router: Router
+    private router: Router,
+    private util: ClientUtilService
   ) {}
 
   /**
@@ -92,11 +86,7 @@ export class LiensceKeyComponent implements OnInit, OnDestroy {
     if (!err) {
       return;
     }
-    setTimeout(() => {
-      this.err = null;
-      this.key = null;
-    }, 3000);
-    this.err = err.message;
+    this.util.error(err);
   }
 
   /**
@@ -106,7 +96,7 @@ export class LiensceKeyComponent implements OnInit, OnDestroy {
    * @memberof LiensceKeyComponent
    */
   verify(key: string) {
-    this.store.dispatch(new LiensceKey(key));
+    this.store.dispatch(new UpdateLiensceKey(key));
   }
 
   /**
@@ -120,13 +110,12 @@ export class LiensceKeyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.select(processFeature)
-    .subscribe(({ error, schoolData }) => {
-      console.log({ error, schoolData });
+    this.store.select(processFeature).subscribe(({ error, schoolData }) => {
       if (error) {
         return this.displayError(new Error(error.message));
       }
       if (schoolData) {
+        this.util.success('Liensce', 'Liensce Successfully Verified');
         this.setupSchoolDetails(schoolData);
       }
     });

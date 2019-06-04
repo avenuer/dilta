@@ -1,0 +1,10 @@
+div.config-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+div.error {
+  display: flex;
+  justify-content: flex-end;
+}

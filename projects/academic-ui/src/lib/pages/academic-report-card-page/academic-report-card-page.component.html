@@ -1,0 +1,13 @@
+<button
+  class="printbtn"
+  (click)="print()"
+  mat-raised-button
+  color="secondary"
+>
+  Print
+</button>
+
+<acada-academic-report-card
+  [school]="school$ | async"
+  [reportSheet]="reportSheet$ | async"
+></acada-academic-report-card>

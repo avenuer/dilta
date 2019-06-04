@@ -1,7 +1,6 @@
 import { ActionProviderMap } from './methods';
 import { Injectable, ReflectiveInjector } from 'injection-js';
 import { Logger } from 'modules/util/logger.service';
-import 'reflect-metadata';
 
 /**
  * Dummy Class to instantiate default behaviours

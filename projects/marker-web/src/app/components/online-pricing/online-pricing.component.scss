@@ -1,0 +1,29 @@
+.pricing-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.price {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.web-online-pricing {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+
+.header-bar {
+  display: flex;
+  height: 10%;
+}
+
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .web-online-pricing {
+    justify-content: flex-start;
+  }
+}

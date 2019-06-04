@@ -5,9 +5,10 @@ import {
   Auth,
   Manager,
   School,
-  User
+  Student,
+  User,
+  AcademicSetting
   } from '@dilta/shared';
-import { Authsuccess } from 'projects/auth/src/lib/ngrx/auth.reducer';
 
 /**
  * This class holds various route configurations for pages dynamically
@@ -62,6 +63,19 @@ export class SetupRouterDirection extends RouterDirection {
    * @memberof RouterDirection
    */
   managerForm(manager: Manager) {
+    this.router.navigate(['academic-config']);
+  }
+
+
+  /**
+   * route for successfull student update
+   *
+   * @param {Student} student
+   * @memberof SetupRouterDirection
+   */
+  studentForm(student: Student) {}
+
+  academicSettingForm(setting: AcademicSetting) {
     this.router.navigate(['auth', 'signup']);
   }
 }

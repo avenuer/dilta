@@ -1,5 +1,6 @@
+import { CollectionConfig, baseModel } from './shared.model';
+
 import { EntityNames } from '@dilta/shared';
-import { baseModel, CollectionConfig } from './shared.model';
 
 /** key to retrieve the collection form the db intialize object */
 
@@ -16,7 +17,7 @@ export const studentSchema = {
       type: 'string'
     },
     class: {
-      type: 'string'
+      type: 'number'
     },
     gender: {
       type: 'string'
@@ -25,6 +26,9 @@ export const studentSchema = {
       type: 'number'
     },
     bloodgroup: {
+      type: 'string'
+    },
+    admissionNo: {
       type: 'string'
     },
     prevschool: {

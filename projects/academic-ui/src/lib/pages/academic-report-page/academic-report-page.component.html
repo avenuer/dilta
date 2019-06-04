@@ -1,0 +1,23 @@
+<div class="container">
+    <mat-toolbar class="space-down">
+        <span> View Students Report Card </span>
+        <span class="spacer-full"> </span>
+        <button mat-raised-button color="primary" (click)="showFormAndHideTable = !showFormAndHideTable"> Form </button>
+         </mat-toolbar>
+  <mat-card *ngIf="showFormAndHideTable">
+      <acada-academic-report (load)="reportSheetConfig($event)"></acada-academic-report>
+  </mat-card>
+<div   *ngIf="!showFormAndHideTable"
+ class="container">
+  <!-- <button class="printbtn" (click)="util.printHtml('print')"  mat-raised-button color="secondary">Print</button> -->
+  <acada-student-grid
+  id="print"
+  [config]="config"
+  (filter)="searchStudents($event)"
+  (paginator)="paginator($event)"
+  [students]="students"
+  (student)="studentReport($event)"
+></acada-student-grid>
+
+</div>
+</div>

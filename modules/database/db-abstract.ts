@@ -1,3 +1,4 @@
+import { FindResponse } from '@dilta/shared';
 
 /**
  * Generic model operations reguarding database operations
@@ -24,8 +25,7 @@ export abstract class DBModel<T> {
    * @param {Partial<T>} query query object info
    * @memberof Model
    */
-  abstract find$(query: Partial<T>): Promise<T[]>;
-
+  abstract find$(query: Partial<T>): Promise<FindResponse<T>>;
 
   /**
    * methods to create an new item

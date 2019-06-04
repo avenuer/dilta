@@ -1,17 +1,16 @@
-import {Injectable } from '@angular/core';
-import { Login, Auth, USER_AUTH } from '@dilta/shared';
-import { TransportService } from '@dilta/electron-client';
-
-/** interface for user token */
-export interface AuthTokenUser {
-  details: Auth;
-  token: string;
-}
+import { Injectable } from '@angular/core';
+import { AbstractTransportService } from '@dilta/electron-client';
+import {
+  Auth,
+  AuthTokenUser,
+  Login,
+  USER_AUTH
+  } from '@dilta/shared';
 
 @Injectable()
 export class ClientAuthService {
   constructor(
-    private transport: TransportService
+    private transport: AbstractTransportService
   ) {}
 
   /** api request to login */

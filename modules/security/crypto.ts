@@ -13,7 +13,7 @@ export class LiensceCrypto {
     if (typeof target !== 'string') {
       target = JSON.stringify(target);
     }
-    return LiensceGenerator.privateEncrypt(target);
+    return LiensceGenerator.encryptLiensce(target);
   }
 
   /**
@@ -25,7 +25,7 @@ export class LiensceCrypto {
    * @returns
    */
   decrypt<T>(token: string) {
-    const decrypted = LiensceGenerator.publicDecrypt(token);
+    const decrypted = LiensceGenerator.decryptLiensce(token);
     try {
       return JSON.parse(decrypted) as T;
     } catch (e) {

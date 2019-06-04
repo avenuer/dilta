@@ -1,12 +1,31 @@
-require('dotenv').config();
+import 'reflect-metadata';
 
-import { ProcessIPCTransport, program } from '@dilta/electron';
-import { app, BrowserWindow, ipcMain } from 'electron';
-import { devtools } from 'modules/electron/extenstion';
+import { devtools, isDev } from 'modules/electron/extenstion';
 import { join } from 'path';
 
-//  TODO: make conditional import for environmental variables
+// NOTE: Don't change other because of env
+// conditional import for environmental variables
+const ENV_BASE_PATH = isDev()
+  ? join(process.cwd())
+  : join(process.cwd(), 'resources', 'app.asar', 'dist');
+require('dotenv').config({ path: join(ENV_BASE_PATH, 'electron-builder.env') });
 
+import * as serve from 'electron-serve';
+
+import { BrowserWindow, app, ipcMain } from 'electron';
+import {
+  ElectronService,
+  ProcessIPCTransport,
+  WindowConfig,
+  bootElectron
+} from '@dilta/electron';
+
+const protocol = serve({ directory: 'dist', scheme: 'dilta' });
+// Starts the main-computational process
+const program = bootElectron(err => {
+  console.error(err);
+  app.exit(1);
+});
 
 (global as any).program = program;
 
@@ -14,29 +33,42 @@ import { join } from 'path';
 // be closed automatically when the JavaScript object is garbage collected.
 let win: BrowserWindow | null;
 
-function createWindow() {
+async function createWindow(config: WindowConfig) {
   // Create the browser window.
-  win = new BrowserWindow({ width: 503, height: 671, show: false });
+  const devConfig = { width: 503, height: 671, show: false };
+  const bConfig = isDev ? devConfig : config.config || devConfig;
+  win = new BrowserWindow({
+    ...bConfig,
+    webPreferences: {
+      plugins: true,
+
+    }
+  });
   // off toolbars
   win.setMenu(null);
 
   // and load the index.html of the app.
-  // win.loadFile("index.html");
-  win.loadFile(join(__dirname, 'dist', 'setup', 'index.html'));
-  // win.loadURL(`http://localhost:4200`);
-
+  protocol(win);
+  win.loadURL(`dilta://dist/${config.path}`);
 
   // Open the DevTools.
-  win.webContents.openDevTools();
-  // add dev functions
-  devtools(win);
+  if (isDev()) {
+    win.webContents.openDevTools();
+    // add dev functions
+    devtools(win);
+  }
 
   /** show but hide if page not rendered */
-  win.on('ready-to-show', () => {
+  win.on('ready-to-show', async () => {
     if (!win) {
       return;
     }
     win.show();
+    setTimeout(async () => {
+      await (program.injector.get(
+        ElectronService
+      ) as ElectronService).validateLiensceUsage();
+    }, 1000 * 60 * 2);
   });
 
   // Emitted when the window is closed.
@@ -52,8 +84,13 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+  setTimeout(async () => {
+    const config = await (program.injector.get(
+      ElectronService
+    ) as ElectronService).loadView();
+    createWindow(config);
+  }, 1000 * 10);
   ProcessIPCTransport(program, ipcMain);
-  createWindow();
 });
 
 // Quit when all windows are closed.
@@ -65,11 +102,14 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.on('activate', () => {
+app.on('activate', async () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (win === null) {
-    createWindow();
+    const config = await (program.injector.get(
+      ElectronService
+    ) as ElectronService).loadView();
+    createWindow(config);
   }
 });
 

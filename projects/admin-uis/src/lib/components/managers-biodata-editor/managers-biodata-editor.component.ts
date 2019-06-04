@@ -3,7 +3,8 @@ import {
   EventEmitter,
   Input,
   OnInit,
-  Output
+  Output,
+  OnChanges
   } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Manager } from '@dilta/shared';
@@ -27,13 +28,14 @@ export const objMangKeys = [
   templateUrl: './managers-biodata-editor.component.html',
   styleUrls: ['./managers-biodata-editor.component.scss']
 })
-export class ManagersBiodataEditorComponent implements OnInit {
+export class ManagersBiodataEditorComponent implements OnInit, OnChanges {
   public static inputError = new Error(`expected an object of type Manager
   for ManagersBiodataFormBase <admin-ui-managers-biodata-form></admin-ui-managers-biodata-form>`);
 
   public managersForm: FormGroup;
 
   @Input() public managers: Manager = {} as any;
+  @Input() public notEditable = false;
   @Output() public emitter = new EventEmitter();
 
   constructor(private fb: FormBuilder) {
@@ -68,10 +70,29 @@ export class ManagersBiodataEditorComponent implements OnInit {
    * @param value managers form value
    */
   public emit(value) {
+    if (this.managers) {
+      value = { ...this.managers, ...value };
+    }
     this.emitter.emit(value);
   }
 
   ngOnInit() {
     this.managersForm = this.form(this.managers);
   }
+
+
+  ngOnChanges() {
+    if (this.managers && (typeof this.managers === 'object')) {
+      Object.keys(this.managers).forEach((key) => {
+        const control = this.managersForm.get(key);
+        if (control) {
+          control.setValue(this.managers[key]);
+        }
+      });
+    }
+    if (this.notEditable && this.managersForm) {
+      this.managersForm.disable();
+    }
+  }
+
 }

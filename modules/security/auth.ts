@@ -1,21 +1,31 @@
+import { Action, Injectable } from '@dilta/core';
+import {
+  Auth,
+  AuthTokenUser,
+  AuthenticationLevels,
+  USER_AUTH
+} from '@dilta/shared';
 import { AuthDetailsNotFondError, InValidPasswordError } from './errors';
-import { AuthService } from '@dilta/database';
+import { AuthService, SchoolService } from '@dilta/database';
+
 import { AuthSecurity } from './auth-security';
-import { Auth, USER_AUTH } from '@dilta/shared';
-import { Injectable, Action } from '@dilta/core';
 
 @Injectable()
 export class AuthController {
-  constructor(private sec: AuthSecurity, private auth: AuthService) {}
+  constructor(
+    private sec: AuthSecurity,
+    private auth: AuthService,
+    private sch: SchoolService
+  ) {}
 
   /**
-   * signs in the user and respons with jwt token
+   * signs in the user and response with jwt token
    *
    * @param {Partial<Auth>} auth
    * @memberof AuthController
    */
   @Action(USER_AUTH.Login)
-  async login(auth: Partial<Auth>) {
+  async login(auth: Partial<Auth>): Promise<AuthTokenUser> {
     const details = await this.auth.retrieve$({ username: auth.username });
     if (!details) {
       throw new AuthDetailsNotFondError();
@@ -27,6 +37,7 @@ export class AuthController {
     if (!isValid) {
       throw new InValidPasswordError();
     }
+    details.school = await this.sch.retrieve$({ id: details.school as string });
     const response = await this.sec.cleanAndGenerateToken(details);
     return response;
   }
@@ -38,7 +49,7 @@ export class AuthController {
    * @memberof AuthController
    */
   @Action(USER_AUTH.Signup)
-  async signUp(auth: Partial<Auth>) {
+  async signUp(auth: Partial<Auth>): Promise<AuthTokenUser> {
     const saved = await this.sec.save(auth as any);
     return await this.sec.cleanAndGenerateToken(saved as any);
   }
@@ -50,9 +61,32 @@ export class AuthController {
    * @memberof AuthController
    */
   @Action(USER_AUTH.Verify)
-  async verify(token: string) {
+  async verify(token: string): Promise<AuthTokenUser> {
     const details = await this.sec.decryptToken(token);
     const response = await this.sec.cleanAndGenerateToken(details as any);
     return response;
   }
+
+  @Action(USER_AUTH.Delete)
+  async deleteAccount(currentUserToken: string, userIdtoDelete) {
+    const { details } = await this.verify(currentUserToken);
+    const currentUserBio = await this.sec.user.retrieve$({
+      authId: details.id
+    });
+    if (details.level === AuthenticationLevels.Administrator) {
+      if (currentUserBio.id !== userIdtoDelete) {
+        return await this.sec.removeUser(userIdtoDelete);
+      }
+      throw deleteCurrentUserError;
+    }
+    throw authLevelError;
+  }
 }
+
+export const authLevelError = new Error(
+  `Current user lack adminstatrive level to execute operation`
+);
+
+export const deleteCurrentUserError = new Error(
+  `Current user cannot delete it's self while login`
+);

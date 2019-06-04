@@ -1,0 +1,19 @@
+<div class="usage-container">
+  <h1> How the App Works </h1>
+  <hr/>
+  <div class="flows-container">
+    <div *ngFor="let flow of flows; let i = index;" class="flow">
+      <div class="flow-header">
+        <div class="number-container"> <span class="number"> {{ i + 1}} </span> <hr> </div>
+        <span class="spacer-full"></span>
+        <h3> {{ flow.title }} </h3>
+      </div>
+      <div class="flow-footer">
+        <span>
+          {{ flow.info }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="space-down">
+    <mat-card>
+      <mat-form-field class="input">
+        <input
+          matInput
+          (keyup)="search.emit($event.target.value)"
+          placeholder="search"
+        />
+      </mat-form-field>
+    </mat-card>
+  </div>
+  <acada-dynamic-table
+    id="print"
+    (sender)="emitter.emit($event)"
+    [datagrid]="users"
+    [keys]="keys"
+  ></acada-dynamic-table>
+  <mat-paginator
+    *ngIf="config && config.paginator"
+    [length]="config.paginator.length"
+    [pageSize]="config.paginator.count"
+    [pageSizeOptions]="config.paginator.options"
+    (page)="paginator.emit($event)"
+  >
+  </mat-paginator>
+</div>

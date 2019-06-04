@@ -2,19 +2,24 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnInit,
   Output
-  } from '@angular/core';
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
+  User,
   defaultKeys,
   errorInvalid,
   errorNotAndObject,
   fileBase64,
-  User
-  } from '@dilta/shared';
-import { isEmpty } from 'lodash';
+  schoolClassValue,
+  schoolClassValueToKey,
+  schoolClasses
+} from '@dilta/shared';
+
 import { UploadInput } from 'ngx-uploader';
+import { isEmpty } from 'lodash';
 
 export const adminKeys = [
   'name',
@@ -33,7 +38,7 @@ export const adminKeys = [
   templateUrl: 'admin-biodata-editor.component.html',
   styleUrls: ['./admin-biodata-editor.component.scss']
 })
-export class AdminBiodataEditorComponent implements OnInit {
+export class AdminBiodataEditorComponent implements OnInit, OnChanges {
   public static AdminInputError = new Error(`invalid admin input object
     passed:<app-user-biodata-form></app-user-biodata-form>`);
   public static ClassListInputError = new Error(`empty or invalid class
@@ -47,14 +52,14 @@ export class AdminBiodataEditorComponent implements OnInit {
   @Input()
   public admin: User = {} as any;
   @Input()
-  public classes: string[];
-  @Input()
   public subjects: string[];
   @Input()
   public levels: string[];
 
   @Output()
   public emitter = new EventEmitter();
+  // inputs are enabled or disabled
+  @Input() public notEditable = false;
 
   // additional configuration for file uploads
   @Input()
@@ -64,7 +69,8 @@ export class AdminBiodataEditorComponent implements OnInit {
 
   public adminForm: FormGroup;
 
-  public img = '/assets/user-avatar.svg';
+  public classes: string[] = schoolClasses;
+
 
   constructor(private fb: FormBuilder) {}
 
@@ -72,17 +78,17 @@ export class AdminBiodataEditorComponent implements OnInit {
     const { required } = Validators;
     // checks if the value is defined if not defaulted
     if (!value) {
-      value = defaultKeys(value, adminKeys);
+      value = defaultKeys(value || {}, adminKeys);
     }
     // checks the value is an object else throw error
     errorNotAndObject(value, AdminBiodataEditorComponent.AdminInputError);
     // constructs the form group value
     return this.fb.group({
       address: [value.address, required],
-      class: [value.class || this.classes[0], required],
+      class: [(value.class) ? schoolClassValueToKey(value.class) : this.classes[0], required],
       email: [value.email || '', ''],
       gender: [value.gender, required],
-      image: [value.image, required],
+      image: [value.image || '/assets/user-avatar.svg', required],
       name: [value.name, required],
       phoneNo: [value.phoneNo, required],
       phoneNos: [value.phoneNos || '', ''],
@@ -107,8 +113,7 @@ export class AdminBiodataEditorComponent implements OnInit {
    * and sets the form image value
    */
   setImg(img) {
-    this.img = img;
-    this.adminForm.get('image').setValue(this.img);
+    this.adminForm.get('image').setValue(img);
   }
 
   /**
@@ -120,6 +125,9 @@ export class AdminBiodataEditorComponent implements OnInit {
 
   emit(value: Partial<User>) {
     value = this.cleanValue(value);
+    if (this.admin) {
+      value = { ...this.admin, ...value };
+    }
     this.emitter.emit(value);
   }
 
@@ -132,6 +140,7 @@ export class AdminBiodataEditorComponent implements OnInit {
    */
   cleanValue(value: Partial<User>) {
     value.phoneNos = !value.phoneNos ? 'none' : value.phoneNos;
+    (value as any).class = schoolClassValue(value.class);
     return value;
   }
 
@@ -164,5 +173,19 @@ export class AdminBiodataEditorComponent implements OnInit {
   ngOnInit() {
     this.adminForm = this.form(this.admin);
     // this.validateInput();
+  }
+
+  ngOnChanges() {
+    if (this.admin && (typeof this.admin === 'object')) {
+      Object.keys(this.admin).forEach((key) => {
+        const control = this.adminForm.get(key);
+        if (control) {
+          control.setValue(this.admin[key]);
+        }
+      });
+    }
+    if (this.notEditable && this.adminForm) {
+      this.adminForm.disable();
+    }
   }
 }

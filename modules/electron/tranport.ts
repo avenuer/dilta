@@ -7,6 +7,7 @@ import {
   } from '@dilta/shared';
 import { Event, IpcMain } from 'electron';
 
+
 /**
  * Listens and calls execution action and sends it back to the main process
  *
@@ -14,6 +15,7 @@ import { Event, IpcMain } from 'electron';
  * @param {IpcMain} ipc
  */
 export function ProcessIPCTransport(program: DiltaApp, ipc: IpcMain) {
+  (global as any).program = program;
   const { app } = program;
   ipc.on(Transport.Request, async (event: Event, ctx: ApiFormat) => {
     app.logger.debug(
@@ -34,7 +36,7 @@ export function ProcessIPCTransport(program: DiltaApp, ipc: IpcMain) {
           trace: 'ProcessIPCTransport',
           module: 'Electron Ipc'
         },
-        error
+        {error, ctx}
       );
       event.sender.send(Transport.Response, failureResponse(ctx.id, error));
     }

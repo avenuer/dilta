@@ -1,55 +1,56 @@
-<form [formGroup]="studentForm">
-  <div class="form-group">
-    <label class="required">Student Name</label>
-    <input size="75" formControlName="name" type="text" class="form-control">
-    <span *ngIf="!studentForm.controls['name'].valid && studentForm.controls['name'].touched" class="form-error"><i class="mi mi-Info "></i> school Name is required </span>
-  </div>
-  <div class="form-group">
-    <label class="required"> Class </label>
-    <input formControlName="class" type="text" class="form-control">
-    <span *ngIf="!studentForm.controls['class'].valid && studentForm.controls['class'].touched" class="form-error"><i class="mi mi-Info "></i> Class is required </span>
-  </div>
-  <div class="form-group">
-    <label class="required"> Date Of Birth </label>
-    <input id="dateControl" type="date" clrDate formControlName="dob"/>
-    <span *ngIf="!studentForm.controls['dob'].valid && studentForm.controls['dob'].touched" class="form-error"><i class="mi mi-Info "></i> dob is required </span>
-  </div>
-  <div class="form-group row">
-    <div class="col-xs m-left">
-      <label class="required">Gender</label>
-      <div class="select">
-        <select formControlName="gender">
-            <option disabled>Gender</option>
-                  <option>Male</option>
-                  <option>Female</option>
-        </select>
-      </div>
-      <span *ngIf="!studentForm.controls['gender'].valid && studentForm.controls['gender'].touched" class="form-error"><i class="mi mi-Info "></i> Gender is required </span>
-    </div>
-    <div class="col-xs space-left">
-      <label>Blood Group </label>
-      <div class="select">
-        <select formControlName="bloodgroup">
-            <option disabled>Blood Group</option>
-            <option>A</option>
-            <option>B</option>
-            <option>AB</option>
-            <option>O</option>
-     </select>
-      </div>
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="required">Previous School </label>
-    <input formControlName="prevschool" type="text" class="form-control">
-    <span *ngIf="!studentForm.controls['prevschool'].valid && studentForm.controls['prevschool'].touched" class="form-error"><i class="mi mi-Info "></i> Previous school Name is required </span>
-  </div>
-  <div class="form-group">
-    <label class="required">Parent Phone No </label>
-    <input formControlName="parentPhone" type="text" class="form-control">
-    <span *ngIf="!studentForm.controls['parentPhone'].valid && studentForm.controls['parentPhone'].touched" class="form-error"><i class="mi mi-Info "></i> Previous school Name is required </span>
-  </div>
-  <div class="float-right">
-    <button id="save" [disabled]="!studentForm.valid" (click)="emit(studentForm.value)" class="btn btn-primary"> Save</button>
+<form class="container" [formGroup]="studentForm">
+    <mat-form-field>
+        <mat-label> Student Name </mat-label>
+        <input matInput required size="75" id="name" formControlName="name" type="text">
+        <mat-error *ngIf="!studentForm.controls['name'].valid && studentForm.controls['name'].touched"> Student Name is required </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label> Class </mat-label>
+        <mat-select  formControlName="class" required placeholder="Class">
+          <mat-option *ngFor="let schClass of classes" [value]="schClass" > {{ schClass }} </mat-option>
+        </mat-select>
+        <mat-error *ngIf="!studentForm.controls['class'].valid && studentForm.controls['class'].touched"> Class is required </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label> Date Of Birth </mat-label>
+        <input  matInput required size="75" id="name" formControlName="dob" type="date">
+        <mat-error *ngIf="!studentForm.controls['dob'].valid && studentForm.controls['dob'].touched">  </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label> Parent Phone No  </mat-label>
+        <input  matInput required size="75" id="name" formControlName="parentPhone" type="text">
+        <mat-error *ngIf="!studentForm.controls['parentPhone'].valid && studentForm.controls['parentPhone'].touched"> Previous school Name is required  </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label> Gender </mat-label>
+        <mat-select  formControlName="gender" required placeholder="gender">
+          <mat-option [value]="'Male'" > Male </mat-option>
+          <mat-option [value]="'Female'" > Female </mat-option>
+        </mat-select>
+        <mat-error *ngIf="!studentForm.controls['gender'].valid && studentForm.controls['gender'].touched"> Gender is required  </mat-error>
+      </mat-form-field>
+  <mat-form-field>
+      <mat-label> Admission No  </mat-label>
+      <input  matInput required size="75" id="name" formControlName="admissionNo" type="text">
+      <mat-error *ngIf="!studentForm.controls['admissionNo'].valid && studentForm.controls['admissionNo'].touched"> Admission Number is required </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label> Blood Group  </mat-label>
+        <mat-select  formControlName="bloodgroup" required placeholder="bloodgroup">
+          <mat-option [value]="'A'" > A </mat-option>
+          <mat-option [value]="'B'" > B </mat-option>
+          <mat-option [value]="'AB'" > AB </mat-option>
+          <mat-option [value]="'O'" > O </mat-option>
+        </mat-select>
+        <mat-error *ngIf=""> </mat-error>
+      </mat-form-field>
+  <mat-form-field>
+      <mat-label> Previous School  </mat-label>
+      <input  matInput required size="75" id="name" formControlName="prevschool" type="text">
+      <mat-error *ngIf="!studentForm.controls['prevschool'].valid && studentForm.controls['prevschool'].touched"> Previous school Name is required </mat-error>
+    </mat-form-field>
+
+  <div *ngIf="!notEditable" class="save-btn">
+    <button  id="save" [disabled]="!studentForm.valid" (click)="emit(studentForm.value)" mat-raised-button color="primary"> Save</button>
   </div>
 </form>

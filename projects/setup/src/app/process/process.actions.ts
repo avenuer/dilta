@@ -48,7 +48,7 @@ export class ResetLiensceKey implements Action {
  */
 export class UpdateLiensceKey implements Action {
   readonly type = ProcessAction.UPDATE_LIENSCE_KEY;
-  constructor(public payload: SchoolEncryptedData) {}
+  constructor(public payload: string) {}
 }
 
 /**

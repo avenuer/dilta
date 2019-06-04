@@ -1,0 +1,40 @@
+<div class="container">
+
+  <table mat-table [dataSource]="datagrid" class="mat-elevation-z8">
+    <!--
+      - Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition"
+    -->
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="position">
+      <th mat-header-cell *matHeaderCellDef>No.</th>
+      <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+    </ng-container>
+
+    <!-- Dynamic Columns -->
+    <ng-container *ngFor="let key of keys" [matColumnDef]="key.key">
+      <th mat-header-cell *matHeaderCellDef>{{ key.title || key.key }}</th>
+      <td class="dyn-cell"
+        mat-cell
+        (dblclick)="activate({ key: key, index: i })"
+        *matCellDef="let element; let i = index"
+      >
+      <span>
+        {{ mapValue({ key: key, index: i }) }}
+      </span>
+      <span [id]="key.key + '_' + i + 'error'" hidden> {{ key.key + '_' + i + 'error'}} </span>
+      <div  [id]="key.key + '_' + i + 'input'" hidden>
+        <mat-form-field>
+          <input  (change)="edited($event, { key: key, index: i })"  matInput required type="text" />
+          </mat-form-field>
+      </div>
+      </td>
+    </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+  </table>
+</div>

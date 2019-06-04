@@ -9,12 +9,16 @@ console.log(__dirname);
 
 module.exports = {
   target: 'electron-main',
-  entry: 'main.ts',
+  entry: {
+    main: path.join(process.cwd(), 'main.ts'),
+    // cli: path.join(process.cwd(), 'modules', 'cli', 'cli.ts'),
+    // gen: path.join(process.cwd(), 'modules', 'generator', 'populate.school.ts')
+  },
   devtool: 'eval-source-map',
   // watch: true,
   output: {
     path: path.resolve(__dirname, '..', 'dist'),
-    filename: 'main.js'
+    filename: '[name].js'
   },
   externals: [nodeExternals()],
   resolve: {
@@ -28,34 +32,20 @@ module.exports = {
     // parrellization of build
     new HappyPack({
       id: 'ts',
-      threads: 2,
+      threads: 3,
       loaders: [
         {
           loader: 'ts-loader',
           options: { happyPackMode: true }
         }
       ]
-    }),
-    new HappyPack({
-      id: 'nodeloader',
-      threads: 2,
-      loaders: [
-        {
-          loader: 'node-loader',
-        }
-      ]
-    }),
-
+    })
   ],
   module: {
     rules: [
       {
         test: /\.ts$/,
         loader: 'happypack/loader?id=ts',
-      },
-      {
-        test: /\.node$/,
-        loader: 'happypack/loader?id=nodeloader',
       }
     ]
   }

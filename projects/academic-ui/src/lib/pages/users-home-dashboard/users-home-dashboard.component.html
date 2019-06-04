@@ -1,0 +1,32 @@
+
+<div class="container">
+    <button (click)="router.navigate(['academics', 'reports'])" mat-raised-button color="primary">
+      <span>Academic Reports</span>
+    </button>
+    <div class="records-container">
+      <mat-toolbar> <span>
+        Academic Records
+      </span>
+      <span class="spacer-full"></span>
+      <button (click)="router.navigate(['academics', 'record'])" mat-raised-button color="primary" >New Record </button>
+     </mat-toolbar>
+
+      <acada-record-grid (record)="acada.viewRecord($event)" [records]="records" [config]="config"></acada-record-grid>
+      <button (click)="router.navigate(['academics', 'records'])" mat-raised-button color="primary">Full Records</button>
+    </div>
+
+    <div class="students-container">
+      <mat-toolbar>
+        <span> Student Details </span>
+        <span class="spacer-full"></span>
+        <button (click)="router.navigate(['academics', 'student'])" mat-raised-button color="primary" >New Student </button>
+         </mat-toolbar>
+      <acada-student-grid
+      (student)="dir.viewStudentDetails($event)"
+        [students]="students"
+        [config]="config"
+      ></acada-student-grid>
+      <button (click)="router.navigate(['academics', 'students'])" mat-raised-button color="primary">Students</button>
+    </div>
+
+</div>

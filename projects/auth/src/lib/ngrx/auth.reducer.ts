@@ -1,6 +1,5 @@
-import { Auth } from '@dilta/shared';
 import { AuthActions, AuthActionTypes, Status } from './auth.action';
-import { AuthTokenUser } from '../services/auth.service';
+import { Auth, AuthTokenUser } from '@dilta/shared';
 
 /**
  * Interface for a successfull Authentication
@@ -36,7 +35,7 @@ export interface Authsuccess extends Partial<AuthTokenUser> {
 export const authInitialState: Authsuccess = {
   status: Status.Pending,
   timeStamp: Date(),
-  error: null
+  error: null,
 };
 
 /**
@@ -56,9 +55,8 @@ export function authReducer(
     case AuthActionTypes.Success: {
       return {
         // return new class state
-        ...state,
+        ...authInitialState,
         ...action.payload,
-        error: null,
         status: Status.Success,
         timeStamp: Date.now()
       };
@@ -66,7 +64,7 @@ export function authReducer(
     case AuthActionTypes.LoginFailure:
     case AuthActionTypes.SignUpFailure: {
       return {
-        ...state,
+        ...authInitialState,
         error: action.payload,
         status: Status.Failure,
         timeStamp: Date.now()
