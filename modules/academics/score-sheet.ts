@@ -20,7 +20,8 @@ import {
   StudentRecordMergeTermSheet,
   CumulativeRecordData,
   SchoolClass,
-  GradingConfig
+  GradingConfig,
+  cummulativeAverage
 } from '@dilta/shared';
 import { gradePreset, classPositionPreset } from 'modules/presets';
 
@@ -58,8 +59,18 @@ export class ScoreSheet {
         this.mergeRecordScores(sheet, rec, settings.grade)
       )
     );
-    const scoreSheet = this.differentTermScores(sheet, recordScoreSheets);
+
+    const scoreSheet = this.differentTermScores(
+      sheet,
+      recordScoreSheets,
+      settings.grade
+    );
     const cumulative = this.studentCumulativeRecord(scoreSheet, settings.grade);
+    const allTerms = this.studentCumulativeRecord(
+      recordScoreSheets,
+      settings.grade,
+      'cumAvg'
+    );
     const totalStudents = await this.studentCounts(sheet.level);
     return {
       scoreSheet,
@@ -67,12 +78,13 @@ export class ScoreSheet {
       biodata: student,
       ...sheet,
       totalStudents,
+      allTerms,
       settings
     };
   }
 
   async classRecords({ term, session, level }: AcadmicRecordSheet) {
-    const { data } = await this.record.find({ class: level, term, session });
+    const { data } = await this.record.find({ class: level, session });
     return data;
   }
 
@@ -191,9 +203,10 @@ export class ScoreSheet {
    */
   differentTermScores(
     studentSheet: StudentSheet,
-    scoreSheet: StudentRecordMergeSheet[]
+    scoreSheet: StudentRecordMergeSheet[],
+    grading: GradingConfig
   ): StudentRecordMergeSheet[] {
-    const map = this.mapSheetSubject(studentSheet, scoreSheet);
+    const map = this.mapSheetSubject(studentSheet, scoreSheet, grading);
     return scoreSheet
       .filter(sheet => sheet.term === studentSheet.term)
       .map(sheet => Object.assign({}, sheet, map.get(sheet.subject) || {}));
@@ -209,17 +222,22 @@ export class ScoreSheet {
    */
   mapSheetSubject(
     { term }: StudentSheet,
-    scoreSheet: StudentRecordMergeSheet[]
+    scoreSheet: StudentRecordMergeSheet[],
+    grading: GradingConfig
   ) {
     const map = new Map<string, StudentRecordMergeTermSheet>();
     scoreSheet.forEach(sheet => {
+      console.log(`term ${sheet.term} subject: ${sheet.subject} total: ${sheet.total}`)
       if (map.has(sheet.subject)) {
         const report = map.get(sheet.subject);
-        map.set(sheet.subject, this.mapSheetToTermScores(report, sheet, term));
+        map.set(
+          sheet.subject,
+          this.mapSheetToTermScores(report, sheet, term, grading)
+        );
       } else {
         map.set(
           sheet.subject,
-          this.mapSheetToTermScores({ ...sheet }, sheet, term)
+          this.mapSheetToTermScores({ ...sheet }, sheet, term, grading)
         );
       }
     });
@@ -233,18 +251,20 @@ export class ScoreSheet {
    * @returns {CumulativeRecordData}
    * @memberof ScoreSheet
    */
-  studentCumulativeRecord(sheets: RecordSheet[], grading: GradingConfig): CumulativeRecordData {
+  studentCumulativeRecord(
+    sheets: StudentRecordMergeTermSheet[],
+    grading: GradingConfig,
+    key: keyof StudentRecordMergeTermSheet = 'total'
+  ): CumulativeRecordData {
     let total = 0;
     for (let i = 0; i < sheets.length; i++) {
-      total += sheets[i].total;
-      console.log(sheets[i].total);
+      total += sheets[i][key] as number;
     }
     const average =
       total !== 0
         ? Math.round(sheets.length > 1 ? total / sheets.length : total)
         : total;
     const grade = gradePreset(grading, average).grade;
-    console.log(average, grade, total);
     return { average, grade, total };
   }
 
@@ -260,22 +280,25 @@ export class ScoreSheet {
   mapSheetToTermScores(
     report: StudentRecordMergeTermSheet,
     sheet: StudentRecordMergeSheet,
-    currentTerm: TermPreset
+    currentTerm: TermPreset,
+    grading: GradingConfig
   ) {
-    const { First, Second, Third } = TermPreset;
-    const allowedTerms = [First, Second, Third].filter(
-      term => term !== currentTerm
-    );
-
-    if (allowedTerms.includes(First) && sheet.term === First) {
+    const { Lesson, First, Second, Third } = TermPreset;
+    if (sheet.term === currentTerm) {
+      report = { ...report, ...sheet };
+    }
+    const calcumAvgs = cummulativeAverage(currentTerm);
+    if ( sheet.term === First) {
       report.firstTerm = sheet.total;
     }
-    if (allowedTerms.includes(Second) && sheet.term === Second) {
+    if ( sheet.term === Second) {
       report.secondTerm = sheet.total;
     }
-    if (allowedTerms.includes(Third) && sheet.term === Third) {
+    if (sheet.term === Third) {
       report.thirdTerm = sheet.total;
     }
+    report.cumAvg = calcumAvgs(report);
+    report.cumGrade = gradePreset(grading, report.cumAvg).grade;
     return report;
   }
 }

@@ -25,6 +25,7 @@ export class AcademicGradingConfigComponent implements OnInit, OnChanges {
   public gradingForm: FormGroup;
 
   public grades: string[] = ['A', 'B', 'C', 'D', 'E', 'F'];
+  public notEditable = false;
 
   @Input() gradingConfig: GradingConfig;
   @Output() emitter = new EventEmitter();

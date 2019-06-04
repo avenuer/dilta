@@ -15,7 +15,7 @@ import { AcademicService } from '../services/academic.service';
 import { NgModule } from '@angular/core';
 import { StudentPageModule, UserPageModule, ParentPageModule } from '@dilta/admin-uis';
 import { AuthenticationFeatureModule } from '@dilta/client-auth';
-import { MaterialModule, RouterDirection, SchoolFeatureNgrxModule } from '@dilta/client-shared';
+import { MaterialModule, RouterDirection, SchoolFeatureNgrxModule, SharedPdfViewerModule } from '@dilta/client-shared';
 import { ElectronTransportModule } from '@dilta/electron-client';
 import { ProcessNgrxModule } from 'projects/setup/src/app/process/process.module';
 import {
@@ -36,7 +36,8 @@ import {
     SchoolFeatureNgrxModule,
     ProcessNgrxModule,
     AuthenticationFeatureModule,
-    UserPageModule
+    UserPageModule,
+    SharedPdfViewerModule
   ],
   declarations: [
     AcademicHomeComponent,

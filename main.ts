@@ -36,9 +36,14 @@ let win: BrowserWindow | null;
 async function createWindow(config: WindowConfig) {
   // Create the browser window.
   const devConfig = { width: 503, height: 671, show: false };
-  win = new BrowserWindow(
-   (isDev) ? devConfig:  config.config || devConfig
-  );
+  const bConfig = isDev ? devConfig : config.config || devConfig;
+  win = new BrowserWindow({
+    ...bConfig,
+    webPreferences: {
+      plugins: true,
+
+    }
+  });
   // off toolbars
   win.setMenu(null);
 
@@ -63,7 +68,7 @@ async function createWindow(config: WindowConfig) {
       await (program.injector.get(
         ElectronService
       ) as ElectronService).validateLiensceUsage();
-    }, 1000 * 60 * 2 );
+    }, 1000 * 60 * 2);
   });
 
   // Emitted when the window is closed.

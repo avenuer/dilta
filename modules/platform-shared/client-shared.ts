@@ -1,4 +1,6 @@
 import { RecordSheetConfig } from './models';
+import { TermPreset } from './preset';
+import { StudentRecordMergeTermSheet } from './academics';
 
 export const DateFormat = 'DD-MMM-YYYY';
 
@@ -38,14 +40,56 @@ export interface KeysConfig {
  */
 export type MathExp = string;
 
+/**
+ * generates an academic report grid config that matches school desire
+ * TODO:// replace AcademicReportCardGridConfig with this function generally.
+ * @export
+ * @param {boolean} [liberal=false]
+ * @returns {KeysConfig[]}
+ */
+export function AcademicReportCardGridConfigFactory(
+  liberal: boolean = false
+): KeysConfig[] {
+  const config: KeysConfig[] = [
+    { key: 'subject', title: 'Subject', type: 'string', editable: false },
+    { key: 'firstCa', title: '1st/C.A', type: 'number', editable: false },
+    { key: 'secondCa', title: '2nd/C.A', type: 'number', editable: false },
+    { key: 'exam', title: 'Exam', type: 'number', editable: false },
+    { key: 'total', title: 'Total', type: 'number', editable: false },
+    { key: 'avg', title: 'C/Avg', type: 'number', editable: false }
+  ];
+  if (!liberal) {
+    config.push({
+      key: 'classPosition',
+      title: 'Position',
+      type: 'string',
+      editable: false
+    });
+  }
+  config.push({
+    key: 'grade',
+    title: 'Grade',
+    type: 'string',
+    editable: false
+  });
+  if (!liberal) {
+    config.push({
+      key: 'comment',
+      title: 'Remarks',
+      type: 'string',
+      editable: false
+    });
+  }
+  return config;
+}
+
 export const AcademicReportCardGridConfig: KeysConfig[] = [
-  { key: 'no', title: 'N/O', type: 'number', editable: false },
   { key: 'subject', title: 'Subject', type: 'string', editable: false },
-  { key: 'firstCa', title: '1st C.A', type: 'number', editable: false },
-  { key: 'secondCa', title: '2nd C.A', type: 'number', editable: false },
-  { key: 'exam', title: 'Examination', type: 'number', editable: false },
+  { key: 'firstCa', title: '1st/C.A', type: 'number', editable: false },
+  { key: 'secondCa', title: '2nd/C.A', type: 'number', editable: false },
+  { key: 'exam', title: 'Exam', type: 'number', editable: false },
   { key: 'total', title: 'Total', type: 'number', editable: false },
-  { key: 'avg', title: 'Class Average', type: 'number', editable: false },
+  { key: 'avg', title: 'C/Avg', type: 'number', editable: false },
   { key: 'classPosition', title: 'Position', type: 'string', editable: false },
   { key: 'grade', title: 'Grade', type: 'string', editable: false },
   { key: 'comment', title: 'Remarks', type: 'string', editable: false }
@@ -279,9 +323,14 @@ export interface PrintData<T> {
 
 export interface PrintDataConfig {
   filename: string;
-  map?: (doc: any) => any;
+  map?: (doc: any, height: number) => PrinterDocHeader;
   startY?: number;
   margin?: number;
+}
+
+export interface PrinterDocHeader {
+  doc: any;
+  height: number;
 }
 
 export const ParentChildren: KeysConfig[] = [
@@ -297,3 +346,87 @@ export const ParentChildren: KeysConfig[] = [
   },
   { key: 'dob', title: 'D.O.B', type: 'string', editable: false }
 ];
+
+/**
+ * Updates the table to configure displayed
+ * tables different terms
+ *
+ * @param {TermPreset} term
+ * @memberof AcademicReportCardGridComponent
+ */
+export function updateReportKeys(term: TermPreset, keys: KeysConfig[]) {
+  const tableKeys = keys.map(e => e.key);
+  if (!tableKeys.includes('firstTerm')) {
+    keys.push({
+      key: 'firstTerm',
+      title: '1/Term',
+      type: 'number',
+      editable: false
+    });
+  }
+  if (!tableKeys.includes('secondTerm') && term > TermPreset.First) {
+    keys.push({
+      key: 'secondTerm',
+      title: '2/Term',
+      type: 'number',
+      editable: false
+    });
+  }
+  if (!tableKeys.includes('thirdTerm') && term > TermPreset.Second) {
+    keys.push({
+      key: 'thirdTerm',
+      title: '3/Term',
+      type: 'number',
+      editable: false
+    });
+  }
+
+  if (!tableKeys.includes('cumAvg')) {
+    keys.push({
+      key: 'cumAvg',
+      title: 'C/AVG',
+      type: 'number',
+      editable: false
+    });
+    keys.push({
+      key: 'cumGrade',
+      title: 'C/Grd',
+      type: 'string',
+      editable: false
+    });
+  }
+  return keys;
+}
+
+export function cummulativeAverage(term: TermPreset) {
+  return (obj: StudentRecordMergeTermSheet) => {
+    if (term === TermPreset.Second) {
+      const total = (obj.firstTerm || 0) + (obj.secondTerm || 0);
+      if (total === 0) {
+        return total;
+      }
+      return total / 2;
+    }
+    if (term === TermPreset.Third) {
+      const total =
+        (obj.firstTerm || 0) + (obj.secondTerm || 0) + (obj.thirdTerm || 0);
+      if (total === 0) {
+        return total;
+      }
+      return total / 3;
+    }
+    return obj.firstTerm || 0;
+  };
+}
+
+export function fixDuplicateKeys(config: KeysConfig[]) {
+  const keys = [];
+  console.log(keys, config);
+  return config.filter(cfg => {
+    if (!keys.includes(cfg.key)) {
+      keys.push(cfg.key);
+      return true;
+    }
+    return false;
+  });
+}

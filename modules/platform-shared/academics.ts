@@ -81,8 +81,13 @@ export interface CumulativeRecordData {
   grade: Grades;
 }
 
+export interface CumulativeRecordTermsData {
+  cumAvg: number;
+  cumGrade: Grades;
+}
+
 export type StudentRecordMergeSheet = Record & RecordSheet;
-export type StudentRecordMergeTermSheet = Record & RecordSheet & DifferentTermScores;
+export type StudentRecordMergeTermSheet = Record & RecordSheet & DifferentTermScores & Partial<CumulativeRecordTermsData>;
 export type RecordSheet = ClassSheet &  StudentRecordSheet;
 
 export interface StudentReportSheet extends StudentSheet {
@@ -91,6 +96,7 @@ export interface StudentReportSheet extends StudentSheet {
   cumulative?: CumulativeRecordData;
   totalStudents: number;
   settings: AcademicSetting;
+  allTerms?: CumulativeRecordData;
 }
 
 export interface GenderDistrubution {

@@ -260,6 +260,13 @@ export enum NuseryPrimarySchoolClassPreset {
   'Primary Six'
 }
 
+export enum ReceptionClassPreset {
+  'Reception' = 40,
+  'Reception One',
+  'Reception Two',
+}
+
+
 export enum JuniorSecondaryClassPreset {
   'JSS One' = 211,
   'JSS Two',
@@ -290,15 +297,16 @@ export enum SpecialCasesPreset {
 export type SchoolClass = NuseryPrimarySchoolClassPreset &
   JuniorSecondaryClassPreset &
   SeniorSecondarySchoolClassPreset &
-  SpecialCasesPreset;
+  SpecialCasesPreset & ReceptionClassPreset;
 
 /** all school classes available */
 export const schoolClasses = cleanNumericEnums(
   Object.keys({
     ...NuseryPrimarySchoolClassPreset,
+    ...ReceptionClassPreset,
     ...JuniorSecondaryClassPreset,
     ...SeniorSecondarySchoolClassPreset,
-    ...SpecialCasesPreset
+    ...SpecialCasesPreset,
   })
 );
 /** all school terms available */
@@ -317,7 +325,7 @@ export function schoolClassValue(className: string): number {
     NuseryPrimarySchoolClassPreset,
     JuniorSecondaryClassPreset,
     SeniorSecondarySchoolClassPreset,
-    SpecialCasesPreset
+    SpecialCasesPreset, ReceptionClassPreset
   ].forEach(preset => {
     if (Object.keys(preset).includes(className)) {
       number = preset[className];
@@ -342,7 +350,8 @@ export function schoolClassValueToKey(classValue: number) {
     ...NuseryPrimarySchoolClassPreset,
     ...JuniorSecondaryClassPreset,
     ...SeniorSecondarySchoolClassPreset,
-    ...SpecialCasesPreset
+    ...SpecialCasesPreset,
+    ...ReceptionClassPreset
   }).forEach(([key, value]) => {
     if (value === Number(classValue)) {
       schoolKey = key;

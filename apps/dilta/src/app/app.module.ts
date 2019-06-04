@@ -39,6 +39,7 @@ import { ElectronTransportService } from '@dilta/electron-client';
     { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
     { provide: AbstractTransportService, useClass: ElectronTransportService }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: []
 })
 export class AppModule {}
