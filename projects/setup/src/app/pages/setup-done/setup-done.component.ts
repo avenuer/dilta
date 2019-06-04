@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientUtilService, RouterDirection } from '@dilta/client-shared';
-import { TransportService } from '@dilta/electron-client';
+import { AbstractTransportService } from '@dilta/electron-client';
 import { ElectronActions } from '@dilta/shared';
 
 @Component({
@@ -9,7 +9,7 @@ import { ElectronActions } from '@dilta/shared';
   styleUrls: ['./setup-done.component.scss']
 })
 export class SetupDoneComponent implements OnInit {
-  constructor(public dir: RouterDirection, public transport: TransportService, private util: ClientUtilService) {}
+  constructor(public dir: RouterDirection, public transport: AbstractTransportService, private util: ClientUtilService) {}
 
   signUp() {
     this.dir.router.navigate(['auth', 'signup']);

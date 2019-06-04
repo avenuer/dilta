@@ -11,13 +11,19 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SchoolPageModule, UserPageModule } from '@dilta/admin-uis';
 import { AuthPagesModule } from '@dilta/client-auth';
-import { ClientSharedModule, MaterialModule, RouterDirection, AcademicSettingModule } from '@dilta/client-shared';
+import {
+  ClientSharedModule,
+  MaterialModule,
+  RouterDirection,
+  AcademicSettingModule
+} from '@dilta/client-shared';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
 import { NgxUploaderModule } from 'ngx-uploader';
-
+import { AbstractTransportService } from 'projects/client-shared/src/lib/abstract/transport.service';
+import { ElectronTransportService } from '@dilta/electron-client';
 
 // custom route provider to match setup route directional mapping
 const direction: ClassProvider = {
@@ -50,7 +56,12 @@ const direction: ClassProvider = {
     UserPageModule,
     AppRoutingModule
   ],
-  providers: [direction, SnotifyService, { provide: 'SnotifyToastConfig', useValue: ToastDefaults }],
+  providers: [
+    direction,
+    SnotifyService,
+    { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
+    { provide: AbstractTransportService, useClass: ElectronTransportService }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

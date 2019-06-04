@@ -10,7 +10,8 @@ const MarkerPath = path.join(__dirname, '..', 'projects', 'marker-web');
 
 module.exports = {
   entry: {
-    prender: path.join(MarkerPath, 'src' ,'prender.ts')
+    prender: path.join(MarkerPath, 'src' ,'prender.ts'),
+    server: path.join(__dirname, '..', 'modules', 'server', 'server.ts')
   },
   target: 'node',
   resolve: {

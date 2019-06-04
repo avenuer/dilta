@@ -28,6 +28,7 @@
       "@dilta/preset": ["modules/presets"],
       "@dilta/security": ["modules/security"],
       "@dilta/util": ["modules/util"],
+      "@dilta/server": ["modules/server"],
       "@dilta/academic-ui": ["projects/academic-ui/src"],
       "@dilta/admin-uis": ["projects/admin-uis/src/lib"],
       "@dilta/client-auth": ["projects/auth/src/lib"],

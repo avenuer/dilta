@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ClientUtilService, RouterDirection } from '@dilta/client-shared';
-import { TransportService } from '@dilta/electron-client';
+import { AbstractTransportService } from '@dilta/electron-client';
 import {
   EntityNames,
   ModelOperations,
@@ -67,7 +67,7 @@ export class UserBioDataFormPageComponent implements OnInit {
   constructor(
     private store: Store<any>,
     private dir: RouterDirection,
-    private transport: TransportService,
+    private transport: AbstractTransportService,
     private route: ActivatedRoute,
     private util: ClientUtilService
   ) {}

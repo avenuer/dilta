@@ -13,7 +13,7 @@ import {
 } from '@dilta/shared';
 import { Store } from '@ngrx/store';
 import { distinct, first } from 'rxjs/operators';
-import { TransportService } from '@dilta/electron-client';
+import { AbstractTransportService } from '@dilta/electron-client';
 
 @Component({
   selector: 'auth-admin-login',
@@ -25,7 +25,7 @@ export class AuthUserLoginComponent implements OnInit {
     private store: Store<any>,
     private dir: RouterDirection,
     private util: ClientUtilService,
-    private transport: TransportService
+    private transport: AbstractTransportService
   ) {}
 
   /**

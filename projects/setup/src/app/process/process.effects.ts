@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { TransportService } from '@dilta/electron-client';
+import { AbstractTransportService } from '@dilta/electron-client';
 import {
   ProcessAction,
   RetrieveLiensceKey,
@@ -24,7 +24,7 @@ import { of, Observable } from 'rxjs';
 export class ProcessEffects {
   constructor(
     private action: Actions,
-    private transport: TransportService
+    private transport: AbstractTransportService
   ) {
 
   }

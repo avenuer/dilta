@@ -9,7 +9,7 @@ import {
   PresetAction
 } from '@dilta/shared';
 import { exhaustMap, map, first, combineLatest, tap } from 'rxjs/operators';
-import { TransportService } from '@dilta/electron-client';
+import { AbstractTransportService } from '@dilta/electron-client';
 import { Observable } from 'rxjs';
 import { RouterDirection, ClientUtilService } from '@dilta/client-shared';
 
@@ -35,7 +35,7 @@ export class ParentBioProfileComponent implements OnInit {
   constructor(
     private actR: ActivatedRoute,
     private dir: RouterDirection,
-    private transport: TransportService,
+    private transport: AbstractTransportService,
     private util: ClientUtilService
   ) {}
 

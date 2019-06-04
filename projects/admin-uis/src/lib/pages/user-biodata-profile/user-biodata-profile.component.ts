@@ -14,7 +14,7 @@ import { combineLatest, exhaustMap, first, map, tap } from 'rxjs/operators';
 import { AuthFeature } from 'projects/auth/src/lib/ngrx';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { TransportService } from '@dilta/electron-client';
+import { AbstractTransportService } from '@dilta/electron-client';
 
 export interface UserBiodataParam {
   id: string;
@@ -42,7 +42,7 @@ export class UserBiodataProfileComponent implements OnInit {
     private store: Store<any>,
     private actr: ActivatedRoute,
     private route: Router,
-    private transport: TransportService,
+    private transport: AbstractTransportService,
     private util: ClientUtilService,
     private dir: RouterDirection
   ) {}

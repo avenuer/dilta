@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientUtilService } from '@dilta/client-shared';
 import { Store } from '@ngrx/store';
-import { TransportService } from '@dilta/electron-client';
+import { AbstractTransportService } from '@dilta/electron-client';
 import { AuthLogOut } from 'projects/auth/src/lib/ngrx';
 import { ElectronActions, ElectronOperations, Synchronization } from '@dilta/shared';
 import { first } from 'rxjs/operators';
@@ -17,7 +17,7 @@ export class AcademicHomeComponent implements OnInit {
     private store: Store<any>,
     private router: Router,
     private util: ClientUtilService,
-    private transport: TransportService
+    private transport: AbstractTransportService
   ) {}
 
   changeRoute(path: string) {

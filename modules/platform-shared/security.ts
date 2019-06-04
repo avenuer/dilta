@@ -11,17 +11,35 @@ export interface AuthTokenUser {
  * interface for the encrypted data in the database
  *
  * @export
- * @interface SchoolEncryptedData
+ * @interface SchoolEncryptedBaseInfo
  */
-export interface SchoolEncryptedData {
+export interface SchoolEncryptedBaseInfo {
   /**
    * the private apikey for the school online's connections
    *
    * @type {string}
-   * @memberof SchoolEncryptedData
+   * @memberof SchoolEncryptedBaseInfo
    */
   apikey: string;
 
+  /**
+   * the time for the expiring of the liensce
+   *
+   * @type {number}
+   * @memberof SchoolEncryptedBaseInfo
+   */
+  expiretimestamp: number;
+
+  /**
+   * Boque subscription for the liensce bought
+   *
+   * @type {any}
+   * @memberof SchoolEncryptedBaseInfo
+   */
+  boque: any;
+}
+
+export interface SchoolEncryptedData extends SchoolEncryptedBaseInfo {
   /**
    * School Bio Details
    *
@@ -29,20 +47,11 @@ export interface SchoolEncryptedData {
    * @memberof SchoolEncryptedData
    */
   school: School;
-
-  /**
-   * the time for the expiring of the liensce
-   *
-   * @type {number}
-   * @memberof SchoolEncryptedData
-   */
-  expiretimestamp: number;
-
   /**
    * Boque subscription for the liensce bought
    *
    * @type {Boque}
-   * @memberof SchoolEncryptedData
+   * @memberof SchoolEncryptedBaseInfo
    */
   boque: Boque;
 }

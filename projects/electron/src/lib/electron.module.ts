@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { TransportService } from './electron.service';
+import { AbstractTransportService } from './electron.service';
 import { NgxElectronModule } from 'ngx-electron';
 
 @NgModule({
   imports: [ NgxElectronModule ],
-  providers: [TransportService]
+  providers: [AbstractTransportService]
 })
 export class ElectronTransportModule { }

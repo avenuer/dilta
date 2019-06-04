@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ClientUtilService, RouterDirection } from '@dilta/client-shared';
-import { TransportService } from '@dilta/electron-client';
+import { AbstractTransportService } from '@dilta/electron-client';
 import { EntityNames, Manager, ModelOperations } from '@dilta/shared';
 import { exhaustMap, first } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -26,7 +26,7 @@ export class ManagerDataFormComponent implements OnInit {
 
   constructor(
     private dir: RouterDirection,
-    private transport: TransportService,
+    private transport: AbstractTransportService,
     private route: ActivatedRoute,
     private util: ClientUtilService
   ) {}

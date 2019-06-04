@@ -1,0 +1,31 @@
+<div class="container">
+  <div>
+    <mat-form-field>
+      <mat-label>Boque</mat-label>
+      <mat-select (change)="setBoque('boque', $event)" required >
+        <mat-option  *ngFor="let _boque of subscriptions" [value]="_boque">{{ _boque }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label> Range </mat-label>
+      <mat-select (change)="setBoque('range', $event)" required>
+        <mat-option *ngFor="let _range of ranges" [value]="_range"> {{ _range }} </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </div>
+  {{ boque | json }}
+  <div *ngIf="boque.subscription && boque.allowed" >
+      <admin-ui-school-biodata-form
+      [school]="(viewObject$ | async)?.school"
+      [categorys]="(viewObject$ | async)?.categories"
+      [states]="(viewObject$ | async)?.states"
+      [lgas]="(viewObject$ | async)?.lgas"
+      (emitter)="onSubmit($event, boque)"
+    >
+    </admin-ui-school-biodata-form>
+  </div>
+<div class="error" *ngIf="err">
+  <p> {{ err }} </p>
+</div>
+</div>

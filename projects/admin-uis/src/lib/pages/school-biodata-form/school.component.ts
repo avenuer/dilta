@@ -5,7 +5,7 @@ import {
   RouterDirection,
   SchoolActionSuccess
 } from '@dilta/client-shared';
-import { TransportService } from '@dilta/electron-client';
+import { AbstractTransportService } from '@dilta/electron-client';
 import {
   EntityNames,
   ModelOperations,
@@ -44,7 +44,7 @@ export class SchoolDataFormComponent implements OnInit {
   constructor(
     private dir: RouterDirection,
     private store: Store<any>,
-    private transport: TransportService,
+    private transport: AbstractTransportService,
     private route: ActivatedRoute,
     private util: ClientUtilService
   ) {}

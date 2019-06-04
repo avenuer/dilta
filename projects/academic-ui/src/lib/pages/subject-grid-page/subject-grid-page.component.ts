@@ -2,7 +2,7 @@ import { AcademicService } from '../../services/academic.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { ClientUtilService, PrinterService, RouterDirection } from '@dilta/client-shared';
-import { TransportService } from '@dilta/electron-client';
+import { AbstractTransportService } from '@dilta/electron-client';
 import {
   AcademicActions,
   AcademicSubject,
@@ -60,7 +60,7 @@ export class SubjectGridPageComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private transport: TransportService,
+    private transport: AbstractTransportService,
     private acada: AcademicService,
     private printer: PrinterService,
     public util: ClientUtilService,

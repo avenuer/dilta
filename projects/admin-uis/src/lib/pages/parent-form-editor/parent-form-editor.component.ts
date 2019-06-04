@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TransportService } from '@dilta/electron-client';
+import { AbstractTransportService } from '@dilta/electron-client';
 import {
   EntityNames,
   ModelOperations,
@@ -39,7 +39,7 @@ export class ParentFormEditorComponent implements OnInit {
     private store: Store<any>,
     private actR: ActivatedRoute,
     private dir: RouterDirection,
-    private transport: TransportService,
+    private transport: AbstractTransportService,
     private util: ClientUtilService
   ) {}
 

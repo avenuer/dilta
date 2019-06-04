@@ -17,7 +17,7 @@ import { isUndefined } from 'lodash';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { TransportService } from '@dilta/electron-client';
+import { AbstractTransportService } from '@dilta/electron-client';
 import { format } from 'date-fns';
 
 @Component({
@@ -30,7 +30,7 @@ export class StudentBioFormEditorComponent implements OnInit {
 
   constructor(
     private store: Store<any>,
-    private transport: TransportService,
+    private transport: AbstractTransportService,
     private avr: ActivatedRoute,
     private util: ClientUtilService,
     private dir: RouterDirection

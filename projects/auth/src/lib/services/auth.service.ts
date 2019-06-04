@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TransportService } from '@dilta/electron-client';
+import { AbstractTransportService } from '@dilta/electron-client';
 import {
   Auth,
   AuthTokenUser,
@@ -10,7 +10,7 @@ import {
 @Injectable()
 export class ClientAuthService {
   constructor(
-    private transport: TransportService
+    private transport: AbstractTransportService
   ) {}
 
   /** api request to login */

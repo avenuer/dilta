@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AcademicSetting, EntityNames, ModelOperations } from '@dilta/shared';
 import { RouterDirection } from '../services/direction.service';
 import { Store } from '@ngrx/store';
-import { TransportService } from '@dilta/electron-client';
+import { AbstractTransportService } from '@dilta/electron-client';
 import { schoolFeature } from '../ngrx/school';
 import { exhaustMap, map, first } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -23,7 +23,7 @@ export class AcademicSettingComponent implements OnInit {
   constructor(
     private store: Store<any>,
     private dir: RouterDirection,
-    private transport: TransportService,
+    private transport: AbstractTransportService,
     private util: ClientUtilService
   ) {}
 

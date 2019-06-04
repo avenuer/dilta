@@ -14,6 +14,8 @@ import { WebMaterialModule } from './web-material.module';
 import { NgModule } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NgtUniversalModule } from '@ng-toolkit/universal';
+import { WebLienscePageRouteModule } from './pages/liensce-page/liensce-page.routing.module';
+import { WebLienscePageModule } from './pages/liensce-page/liensce-page.module';
 
 
 @NgModule({
@@ -34,7 +36,9 @@ import { NgtUniversalModule } from '@ng-toolkit/universal';
     NgtUniversalModule,
       NoopAnimationsModule,
       WebMaterialModule,
-      AppRoutingModule
+      AppRoutingModule,
+      WebLienscePageModule,
+      WebLienscePageRouteModule
    ],
    providers: [],
    bootstrap: [

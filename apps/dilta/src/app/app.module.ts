@@ -12,11 +12,11 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
+import { AbstractTransportService } from 'projects/client-shared/src/lib/abstract/transport.service';
+import { ElectronTransportService } from '@dilta/electron-client';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     MaterialModule,
@@ -26,15 +26,19 @@ import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     !environment.production
-    ? StoreDevtoolsModule.instrument({
-        name: 'Dilta Application Store'
-      })
-    : [],
+      ? StoreDevtoolsModule.instrument({
+          name: 'Dilta Application Store'
+        })
+      : [],
     DiltaAppRoutingModule,
     AuthPagesModule,
-    AcademicPageModule,
+    AcademicPageModule
   ],
-  providers: [SnotifyService, { provide: 'SnotifyToastConfig', useValue: ToastDefaults }],
+  providers: [
+    SnotifyService,
+    { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
+    { provide: AbstractTransportService, useClass: ElectronTransportService }
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

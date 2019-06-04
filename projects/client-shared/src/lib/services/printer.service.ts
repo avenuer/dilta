@@ -19,11 +19,11 @@ import { format } from 'date-fns';
 import { Store } from '@ngrx/store';
 import { schoolFeature } from '../ngrx/school';
 import { map, first, exhaustMap, withLatestFrom, tap } from 'rxjs/operators';
-import { TransportService } from '@dilta/electron-client';
+import { AbstractTransportService } from '../abstract/transport.service';
 
 @Injectable()
 export class PrinterService {
-  constructor(private store: Store<any>, private transport: TransportService) {}
+  constructor(private store: Store<any>, private transport: AbstractTransportService) {}
 
   school$() {
     return this.store.select(schoolFeature).pipe(

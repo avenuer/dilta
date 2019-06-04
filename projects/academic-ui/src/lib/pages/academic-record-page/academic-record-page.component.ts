@@ -2,7 +2,7 @@ import { AcademicService } from '../../services/academic.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientUtilService } from '@dilta/client-shared';
-import { TransportService } from '@dilta/electron-client';
+import { AbstractTransportService } from '@dilta/electron-client';
 import { EntityNames, ModelOperations, Record } from '@dilta/shared';
 import { exhaustMap, first, map } from 'rxjs/operators';
 
@@ -13,7 +13,7 @@ import { exhaustMap, first, map } from 'rxjs/operators';
 })
 export class AcademicRecordPageComponent implements OnInit {
   constructor(
-    private transport: TransportService,
+    private transport: AbstractTransportService,
     private router: Router,
     private acada: AcademicService,
     private util: ClientUtilService

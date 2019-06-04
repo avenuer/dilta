@@ -11,7 +11,7 @@ import { exhaustMap, first, map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { TransportService } from '@dilta/electron-client';
+import { AbstractTransportService } from '@dilta/electron-client';
 import { format } from 'date-fns';
 
 const failedStudentDeleteError = new Error(
@@ -31,7 +31,7 @@ export class StudentBioProfileComponent implements OnInit {
     private store: Store<any>,
     private actr: ActivatedRoute,
     private route: RouterDirection,
-    private transport: TransportService,
+    private transport: AbstractTransportService,
     private util: ClientUtilService
   ) {}
 

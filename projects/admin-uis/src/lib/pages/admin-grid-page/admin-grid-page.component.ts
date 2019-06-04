@@ -18,7 +18,7 @@ import { first, map } from 'rxjs/operators';
 
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TransportService } from '@dilta/electron-client';
+import { AbstractTransportService } from '@dilta/electron-client';
 import { format } from 'date-fns';
 import { PageEvent } from '@angular/material';
 import { CleanUser } from '../../components/admin-grid/admin-grid.component';
@@ -48,7 +48,7 @@ export class AdminGridPageComponent implements OnInit {
   private queryObj: Partial<User> | string = {};
 
   constructor(
-    private transport: TransportService,
+    private transport: AbstractTransportService,
     private router: Router,
     private store: Store<any>,
     private printer: PrinterService,

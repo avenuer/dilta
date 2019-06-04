@@ -63,9 +63,9 @@ export enum LiensceSubscription {
  * @enum {number}
  */
 export enum LiensceSubscriptionBasePrice {
-  Basic = 5500,
-  Classic = 8500,
-  Super = 15000
+  Basic = 10500,
+  Classic = 15500,
+  Super = 20000
 }
 
 const allowed = (paid: number, index = 0) =>

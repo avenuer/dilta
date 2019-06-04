@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { TransportService } from '@dilta/electron-client';
+import { AbstractTransportService } from '@dilta/electron-client';
 import {
   EntityNames,
   FindQueryParam,
@@ -24,7 +24,7 @@ import { AuthFeature } from 'projects/auth/src/lib/ngrx';
 @Injectable()
 export class AcademicService {
   constructor(
-    private transport: TransportService,
+    private transport: AbstractTransportService,
     private router: Router,
     private store: Store<any>
   ) {}
