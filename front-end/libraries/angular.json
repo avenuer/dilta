@@ -1,0 +1,287 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "admin-ui": {
+      "projectType": "library",
+      "root": "projects/admin-ui",
+      "sourceRoot": "projects/admin-ui/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/admin-ui/tsconfig.lib.json",
+            "project": "projects/admin-ui/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/admin-ui/src/test.ts",
+            "tsConfig": "projects/admin-ui/tsconfig.spec.json",
+            "karmaConfig": "projects/admin-ui/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/admin-ui/tsconfig.lib.json",
+              "projects/admin-ui/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "auth-ui": {
+      "projectType": "library",
+      "root": "projects/auth-ui",
+      "sourceRoot": "projects/auth-ui/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/auth-ui/tsconfig.lib.json",
+            "project": "projects/auth-ui/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/auth-ui/src/test.ts",
+            "tsConfig": "projects/auth-ui/tsconfig.spec.json",
+            "karmaConfig": "projects/auth-ui/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/auth-ui/tsconfig.lib.json",
+              "projects/auth-ui/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "datagrid": {
+      "projectType": "library",
+      "root": "projects/datagrid",
+      "sourceRoot": "projects/datagrid/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/datagrid/tsconfig.lib.json",
+            "project": "projects/datagrid/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/datagrid/src/test.ts",
+            "tsConfig": "projects/datagrid/tsconfig.spec.json",
+            "karmaConfig": "projects/datagrid/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/datagrid/tsconfig.lib.json",
+              "projects/datagrid/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "academic-ui": {
+      "projectType": "library",
+      "root": "projects/academic-ui",
+      "sourceRoot": "projects/academic-ui/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/academic-ui/tsconfig.lib.json",
+            "project": "projects/academic-ui/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/academic-ui/src/test.ts",
+            "tsConfig": "projects/academic-ui/tsconfig.spec.json",
+            "karmaConfig": "projects/academic-ui/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/academic-ui/tsconfig.lib.json",
+              "projects/academic-ui/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "auth-ngrx-store": {
+      "projectType": "library",
+      "root": "projects/auth-ngrx-store",
+      "sourceRoot": "projects/auth-ngrx-store/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/auth-ngrx-store/tsconfig.lib.json",
+            "project": "projects/auth-ngrx-store/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/auth-ngrx-store/src/test.ts",
+            "tsConfig": "projects/auth-ngrx-store/tsconfig.spec.json",
+            "karmaConfig": "projects/auth-ngrx-store/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/auth-ngrx-store/tsconfig.lib.json",
+              "projects/auth-ngrx-store/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "school-ngrx-store": {
+      "projectType": "library",
+      "root": "projects/school-ngrx-store",
+      "sourceRoot": "projects/school-ngrx-store/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/school-ngrx-store/tsconfig.lib.json",
+            "project": "projects/school-ngrx-store/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/school-ngrx-store/src/test.ts",
+            "tsConfig": "projects/school-ngrx-store/tsconfig.spec.json",
+            "karmaConfig": "projects/school-ngrx-store/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/school-ngrx-store/tsconfig.lib.json",
+              "projects/school-ngrx-store/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "settings-ui": {
+      "projectType": "library",
+      "root": "projects/settings-ui",
+      "sourceRoot": "projects/settings-ui/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/settings-ui/tsconfig.lib.json",
+            "project": "projects/settings-ui/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/settings-ui/src/test.ts",
+            "tsConfig": "projects/settings-ui/tsconfig.spec.json",
+            "karmaConfig": "projects/settings-ui/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/settings-ui/tsconfig.lib.json",
+              "projects/settings-ui/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "web-transport": {
+      "projectType": "library",
+      "root": "projects/web-transport",
+      "sourceRoot": "projects/web-transport/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/web-transport/tsconfig.lib.json",
+            "project": "projects/web-transport/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/web-transport/src/test.ts",
+            "tsConfig": "projects/web-transport/tsconfig.spec.json",
+            "karmaConfig": "projects/web-transport/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/web-transport/tsconfig.lib.json",
+              "projects/web-transport/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }},
+  "defaultProject": "admin-ui"
+}

@@ -1,0 +1,60 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "paths": {
+      "admin-routes": [
+        "dist/admin-routes"
+      ],
+      "admin-routes/*": [
+        "dist/admin-routes/*"
+      ],
+      "academic-routes": [
+        "dist/academic-routes"
+      ],
+      "academic-routes/*": [
+        "dist/academic-routes/*"
+      ],
+      "auth-routes": [
+        "dist/auth-routes"
+      ],
+      "auth-routes/*": [
+        "dist/auth-routes/*"
+      ],
+      "electron-transport": [
+        "dist/electron-transport"
+      ],
+      "electron-transport/*": [
+        "dist/electron-transport/*"
+      ],
+      "client-shared": [
+        "dist/client-shared"
+      ],
+      "client-shared/*": [
+        "dist/client-shared/*"
+      ],
+      "settings-routes": [
+        "dist/settings-routes"
+      ],
+      "settings-routes/*": [
+        "dist/settings-routes/*"
+      ]
+    }
+  }
+}
