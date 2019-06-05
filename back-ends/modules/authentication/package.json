@@ -1,0 +1,38 @@
+{
+  "name": "@dilta/authentication",
+  "version": "1.0.0",
+  "description": "responsible for various authentication like signup and login",
+  "author": "john5117 <abiodunogundijo@gmail.com>",
+  "homepage": "https://github.com/avenuer/dilta/tree/master/server-side/modules/authentication#readme",
+  "license": "ISC",
+  "main": "lib/authentication.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avenuer/dilta.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/avenuer/dilta/issues"
+  },
+  "dependencies": {
+    "@dilta/core": "^1.0",
+"@dilta/database": "^1.0",
+"@dilta/shared": "^1.0",
+"@dilta/util": "^1.0",
+"bcrypt": "^3.0.3",
+"core-decorators": "^0.20.0",
+"jsonwebtoken": "^8.3.0"
+  }
+}

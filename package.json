@@ -1,0 +1,23 @@
+{
+  "name": "dilta",
+  "version": "1.0.0",
+  "description": "dilta edu-tech consultant mono-repo",
+  "main": "none",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avenuer/dilta.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/avenuer/dilta/issues"
+  },
+  "homepage": "https://github.com/avenuer/dilta#readme",
+  "devDependencies": {
+    "@types/node": "^12.0.4",
+    "typescript": "^3.5.1"
+  }
+}

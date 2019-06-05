@@ -1,0 +1,7 @@
+{
+  "packages": [
+    "back-ends/modules/*",
+    "back-ends/platforms/*"
+  ],
+  "version": "1.0.0"
+}
