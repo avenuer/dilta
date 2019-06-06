@@ -12,7 +12,7 @@ import { userModel } from './user.model';
 import { recordModel } from './record.model';
 import * as RxDB from 'rxdb';
 import { RxDatabase } from 'rxdb';
-import { Logger } from 'modules/util';
+import { Logger } from '@dilta/util';
 import { promotionModel } from './promotion.model';
 import { academicSettingsModel } from './academic-settings.model';
 

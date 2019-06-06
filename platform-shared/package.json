@@ -5,7 +5,8 @@
   "author": "john5117 <abiodunogundijo@gmail.com>",
   "homepage": "https://github.com/avenuer/dilta/tree/master/server-side/modules/platform-shared#readme",
   "license": "ISC",
-  "main": "lib/platform-shared.js",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -21,6 +22,7 @@
     "url": "git+https://github.com/avenuer/dilta.git"
   },
   "scripts": {
+    "tsc": "tsc",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "bugs": {

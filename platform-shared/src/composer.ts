@@ -77,7 +77,7 @@ export function getProp(value: object, key: string, defValue = null) {
  * @param {string} [method] the method on the reader to be call on the file object
  * @returns {Promise<string>} promisified base64 string
  */
-export function reader(file: File, method?: string): Promise<string> {
+export function reader<File>(file: File, method?: string): Promise<string> {
   const fReader = new FileReader();
   return new Promise((resolve, reject) => {
     fReader.addEventListener(

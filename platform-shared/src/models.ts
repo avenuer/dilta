@@ -207,7 +207,7 @@ export interface User extends Partial<BaseModel> {
   gender: string;
   phoneNo: string;
   address: string;
-  image: File | string;
+  image: string;
   authId: string | Auth;
   class?: SchoolClass;
   subject?: string;

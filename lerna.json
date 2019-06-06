@@ -1,7 +1,10 @@
 {
   "packages": [
     "back-ends/modules/*",
-    "back-ends/platforms/*"
+    "back-ends/platforms/*",
+    "./*"
   ],
-  "version": "1.0.0"
+  "version": "independent",
+  "npmClient": "yarn",
+  "useWorkspaces": true
 }

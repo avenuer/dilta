@@ -1,5 +1,5 @@
 import * as gen from './school.data';
-import { Embededb } from '@dilta/emdb';
+import { Embededb } from '@dilta/embdb';
 import { Parent, Student, User, Subject, Record } from '@dilta/shared';
 import { RxCollection } from 'rxdb';
 import * as faker from 'faker';

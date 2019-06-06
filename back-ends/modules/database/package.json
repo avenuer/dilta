@@ -1,9 +1,9 @@
 {
-  "name": "@dilta/generator",
+  "name": "@dilta/database",
   "version": "1.0.0",
-  "description": "Generates mock data for testing the various applications",
+  "description": "> TODO: description",
   "author": "john5117 <abiodunogundijo@gmail.com>",
-  "homepage": "https://github.com/avenuer/dilta/tree/master/server-side/modules/generator#readme",
+  "homepage": "https://github.com/avenuer/dilta/tree/master/server-side/modules/database#readme",
   "license": "ISC",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -29,11 +29,13 @@
     "url": "https://github.com/avenuer/dilta/issues"
   },
   "dependencies": {
-    "@dilta/shared": "^1.0",
+    "@dilta/core": "^1.0",
     "@dilta/embdb": "^1.0",
+    "@dilta/util": "^1.0",
+    "@dilta/shared": "^1.0",
+    "rxjs": "^6.0.0",
     "date-fns": "^1.29.0",
-    "faker": "^4.1.0",
     "lodash": "^4.17.11",
-    "shuffle-array": "^1.0.1"
+    "core-decorators": "^0.20.0"
   }
 }

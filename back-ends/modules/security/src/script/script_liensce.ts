@@ -1,5 +1,5 @@
 import { createCipher, createDecipher } from 'crypto';
-import { SchoolEncryptedData } from '@dilta/shared';
+import { SchoolEncryptedData, LiensceSubscription } from '@dilta/shared';
 import { format, addYears } from 'date-fns';
 
 enum Liensce {
@@ -62,7 +62,12 @@ export class LiensceGenerator {
         name: 'DreamStack Nusery and Primary School',
         category: 'primary',
         id: 'globalId'
-      } as any
+      } as any,
+      boque: {
+        allowed: 100,
+        paid: 50,
+        subscription: LiensceSubscription.Basic
+      }
     };
     return LiensceGenerator.encryptLiensce(bio);
   }

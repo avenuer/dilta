@@ -1,7 +1,7 @@
 import { LiensceCrypto } from './crypto';
 import { Action, Injectable } from '@dilta/core';
 import { LIENSCE_KEY, SchoolEncryptedData } from '@dilta/shared';
-import { Logger } from 'modules/util';
+import { Logger } from '@dilta/util';
 
 @Injectable()
 export class LiensceSecurity {
