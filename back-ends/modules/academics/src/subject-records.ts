@@ -1,23 +1,23 @@
 import { Action, Injectable } from '@dilta/core';
-import { RecordService, StudentService, SubjectService, AcademicSettingService } from '@dilta/database';
 import {
   AcademicActions,
   AcademicSubject,
   Student,
   Subject,
   SubjectRecords,
-  SubjectRecordDeletedStatus
+  SubjectRecordDeletedStatus,
+  EntityNames,
+  ModelOperations,
+  FindResponse,
+  Record,
+  AcademicSetting
 } from '@dilta/shared';
 import { sortBy } from 'lodash';
+import { NetworkDroneService } from '@dilta/network';
 
 @Injectable()
 export class RecordOperations {
-  constructor(
-    private record: RecordService,
-    private subject: SubjectService,
-    private student: StudentService,
-    private setting: AcademicSettingService
-  ) {}
+  constructor(private net: NetworkDroneService) {}
 
   /**
    * cleans and update the student record when it's done
@@ -30,8 +30,14 @@ export class RecordOperations {
   async updateSubjectRecord(record: AcademicSubject) {
     const { name, ...details } = record;
     const resp = !record.id
-      ? await this.subject.create$(details)
-      : await this.subject.update$(record.id, details);
+      ? await this.net.modelActionFormat<Subject>(
+          EntityNames.Subject,
+          ModelOperations.Create
+        )(details)
+      : await this.net.modelActionFormat<Subject>(
+          EntityNames.Subject,
+          ModelOperations.Update
+        )(record.id, details);
     return { name, ...resp };
   }
 
@@ -44,11 +50,23 @@ export class RecordOperations {
    */
   @Action(AcademicActions.SubjectRecord)
   async subjectRecord(recordId: string): Promise<SubjectRecords> {
-    const record = await this.record.retrieve$({ id: recordId });
+    const record = await this.net.modelActionFormat<Record>(
+      EntityNames.Record,
+      ModelOperations.Retrieve
+    )({ id: recordId });
     if (record) {
-      const records = await this.subject.find({ recordId });
-      const students = await this.student.find({ class: record.class });
-      const setting = await this.setting.retrieve$({ school: record.school });
+      const records = await this.net.modelActionFormat<FindResponse<Subject>>(
+        EntityNames.Subject,
+        ModelOperations.Find
+      )({ recordId });
+      const students = await this.net.modelActionFormat<FindResponse<Student>>(
+        EntityNames.Student,
+        ModelOperations.Find
+      )({ class: record.class });
+      const setting = await this.net.modelActionFormat<AcademicSetting>(
+        EntityNames.academic_setting,
+        ModelOperations.Retrieve
+      )({ school: record.school });
       if (!setting) {
         throw academicSettingNeverExist;
       }
@@ -102,7 +120,6 @@ export class RecordOperations {
     return map;
   }
 
-
   /**
    * deletes both the records and the sub subjects
    *
@@ -111,7 +128,9 @@ export class RecordOperations {
    * @memberof RecordOperations
    */
   @Action(AcademicActions.DeleteSubjectRecord)
-  async deleteSubjectRecordS(recordId: string): Promise<SubjectRecordDeletedStatus> {
+  async deleteSubjectRecordS(
+    recordId: string
+  ): Promise<SubjectRecordDeletedStatus> {
     const isRecordDeleted = await this.deleteRecord(recordId);
     const allSubjectDeletedStatus = await this.deleteSubjects(recordId);
     return {
@@ -130,7 +149,10 @@ export class RecordOperations {
    * @memberof RecordOperations
    */
   async deleteRecord(recordId: string) {
-    return this.record.delete$({ id: recordId });
+    return this.net.modelActionFormat<boolean>(
+      EntityNames.Record,
+      ModelOperations.Delete
+    )({ id: recordId });
   }
 
   /**
@@ -141,10 +163,16 @@ export class RecordOperations {
    * @memberof RecordOperations
    */
   async deleteSubjects(recordId: string) {
-    const { data } = await this.subject.find({ recordId });
+    const { data } = await this.net.modelActionFormat<FindResponse<Subject>>(
+      EntityNames.Subject,
+      ModelOperations.Find
+    )({ recordId });
     const results = await Promise.all(
       data.map(sub =>
-        this.subject.delete$({ id: sub.id, recordId: sub.recordId })
+        this.net.modelActionFormat<boolean>(
+          EntityNames.Subject,
+          ModelOperations.Delete
+        )({ id: sub.id, recordId: sub.recordId })
       )
     );
     return results;
@@ -152,4 +180,6 @@ export class RecordOperations {
 }
 
 const recordNeverExist = new Error('Record Requested doesnt exist');
-const academicSettingNeverExist = new Error(`School academic settting doesn't exist`);
+const academicSettingNeverExist = new Error(
+  `School academic settting doesn't exist`
+);

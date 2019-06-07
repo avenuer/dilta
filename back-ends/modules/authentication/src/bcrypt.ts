@@ -2,8 +2,6 @@ import { Injectable } from '@dilta/core';
 import { Logger } from '@dilta/util';
 import * as bcrypt from 'bcrypt';
 
-
-
 @Injectable()
 export class BcryptSecurity {
   /** salt used for the encryption and decryption */

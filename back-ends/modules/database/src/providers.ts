@@ -37,15 +37,6 @@ export class AuthService extends ModelBase<Auth> {
   ) {
     super(EntityNames.Auth, database);
   }
-
-  /** redacts to protect user fields */
-  santizeAuth(authId: Auth) {
-    if (!authId) {
-      return authId;
-    }
-    const { hash, updatedAt, password, ...allowed } = authId;
-    return allowed;
-  }
 }
 
 /**

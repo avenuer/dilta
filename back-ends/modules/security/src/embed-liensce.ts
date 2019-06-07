@@ -1,23 +1,26 @@
 import { Keytar } from './keys.program';
 import { LiensceSecurity } from './liensce';
 import { Action, Injectable } from '@dilta/core';
-import { SchoolService, StudentService } from '@dilta/database';
 import {
   LIENSCE_KEY,
   Platform,
   SchoolEncryptedData,
-  schoolClasses,
   SpecialCasesPreset,
-  Boque
+  Boque,
+  School,
+  EntityNames,
+  ModelOperations,
+  FindResponse,
+  Student
 } from '@dilta/shared';
 import { isBefore } from 'date-fns';
+import { NetworkDroneService } from '@dilta/network';
 
 @Injectable()
 export class EmbededLiensceService {
   constructor(
     private keytar: Keytar,
-    private sch: SchoolService,
-    private student: StudentService,
+    private net: NetworkDroneService,
     private lsc: LiensceSecurity
   ) {}
 
@@ -57,7 +60,10 @@ export class EmbededLiensceService {
     this.isLiensceVaild(secret);
     // save school details if platform is desktop
     if (process.env.PLATFORM === Platform.Desktop) {
-      this.sch.create$(secret.school);
+      this.net.modelActionFormat<School>(
+        EntityNames.School,
+        ModelOperations.Create
+      )(secret.school);
     }
     return secret;
   }
@@ -80,7 +86,6 @@ export class EmbededLiensceService {
     });
   }
 
-
   /**
    * checks for the limit of users that remains for a liensce extension
    *
@@ -91,7 +96,10 @@ export class EmbededLiensceService {
    */
   async validateLiensceUsage(schoolId: string, boque: Boque) {
     const { Graduated, Left } = SpecialCasesPreset;
-    const { data } = await this.student.find$({ school: schoolId });
+    const { data } = await this.net.modelActionFormat<FindResponse<Student>>(
+      EntityNames.Student,
+      ModelOperations.Find
+    )({ school: schoolId });
     const students = data.filter(
       student => student.class !== Graduated && student.class !== Left
     );

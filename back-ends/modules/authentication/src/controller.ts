@@ -3,20 +3,19 @@ import {
   Auth,
   AuthTokenUser,
   AuthenticationLevels,
-  USER_AUTH
+  USER_AUTH,
+  EntityNames,
+  ModelOperations,
+  User
 } from '@dilta/shared';
 import { AuthDetailsNotFondError, InValidPasswordError } from './errors';
-import { AuthService, SchoolService } from '@dilta/database';
+import { NetworkDroneService } from '@ditla/network';
 
 import { Santization } from './santization';
 
 @Injectable()
 export class AuthController {
-  constructor(
-    private sec: Santization,
-    private auth: AuthService,
-    private sch: SchoolService
-  ) {}
+  constructor(private sec: Santization, private net: NetworkDroneService) {}
 
   /**
    * signs in the user and response with jwt token
@@ -26,7 +25,10 @@ export class AuthController {
    */
   @Action(USER_AUTH.Login)
   async login(auth: Partial<Auth>): Promise<AuthTokenUser> {
-    const details = await this.auth.retrieve$({ username: auth.username });
+    const details = await this.net.modelActionFormat<Auth>(
+      EntityNames.Auth,
+      ModelOperations.Retrieve
+    )({ username: auth.username });
     if (!details) {
       throw new AuthDetailsNotFondError();
     }
@@ -37,7 +39,11 @@ export class AuthController {
     if (!isValid) {
       throw new InValidPasswordError();
     }
-    details.school = await this.sch.retrieve$({ id: details.school as string });
+    const school = await this.net.modelActionFormat(
+      EntityNames.School,
+      ModelOperations.Retrieve
+    )({ id: details.school as string });
+    details.school = school;
     const response = await this.sec.cleanAndGenerateToken(details);
     return response;
   }
@@ -70,7 +76,10 @@ export class AuthController {
   @Action(USER_AUTH.Delete)
   async deleteAccount(currentUserToken: string, userIdtoDelete) {
     const { details } = await this.verify(currentUserToken);
-    const currentUserBio = await this.sec.user.retrieve$({
+    const currentUserBio = await this.net.modelActionFormat<User>(
+      EntityNames.User,
+      ModelOperations.Retrieve
+    )({
       authId: details.id
     });
     if (details.level === AuthenticationLevels.Administrator) {

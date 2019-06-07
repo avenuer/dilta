@@ -1,10 +1,11 @@
-import { AuthService, UserService } from '@dilta/database';
 import { sign, verify } from 'jsonwebtoken';
 
-import { Auth } from '@dilta/shared';
+import { Auth, EntityNames, User, ModelOperations } from '@dilta/shared';
 import { BcryptSecurity } from './bcrypt';
 import { Injectable } from '@dilta/core';
 import { autobind } from 'core-decorators';
+import { NetworkDroneService } from '@dilta/network';
+import { santizeAuth } from '@dilta/util';
 
 const JWT_ALGORITHM = process.env.JWT_ALGORITHM;
 const AUDIENCE = process.env.AUDIENCE;
@@ -20,10 +21,9 @@ const JWT_OPTIONS = {
 @Injectable()
 export class Santization {
   constructor(
-    public auth: AuthService,
-    private crypt: BcryptSecurity,
-    public user: UserService
-  ) {}
+    private net: NetworkDroneService,
+    private crypt: BcryptSecurity)
+  {}
 
   /**
    * clean the auth details and generate jwt token
@@ -33,14 +33,17 @@ export class Santization {
    * @memberof ClientAuthService
    */
   async cleanAndGenerateToken(details: Auth) {
-    details = (this.auth.santizeAuth(details) as any) as Auth;
+    details = (santizeAuth(details) as any) as Auth;
     const token = await this.createToken(details);
     return { token, details };
   }
 
   /** saves the user authentication */
   async save(auth: Auth) {
-    const existingUser = await this.auth.retrieve$({ username: auth.username });
+    const existingUser = await this.net.modelActionFormat<Auth>(
+      EntityNames.Auth,
+      ModelOperations.Retrieve
+    )({ username: auth.username });
     if (existingUser) {
       throw new Error(
         `account with username ${existingUser.username} already exists`
@@ -48,7 +51,10 @@ export class Santization {
     }
     const password = await this.crypt.hashPassword(auth.password);
     auth.password = password;
-    auth = await this.auth.create$(auth);
+    auth = await this.net.modelActionFormat<Auth>(
+      EntityNames.Auth,
+      ModelOperations.Create
+    )(auth);
     return auth;
   }
 
@@ -93,12 +99,21 @@ export class Santization {
   }
 
   async removeUser(userId: string) {
-    const user = await this.user.retrieve$({ id: userId });
+    const user = await this.net.modelActionFormat<User>(
+      EntityNames.User,
+      ModelOperations.Retrieve
+    )({ id: userId });
     if (user) {
-      const isAuthDelete = await this.auth.delete$({
+      const isAuthDelete = await this.net.modelActionFormat<boolean>(
+        EntityNames.Auth,
+        ModelOperations.Delete
+      )({
         id: user.authId as string
       });
-      const isUserDelete = await this.user.delete$({ id: user.id });
+      const isUserDelete = await this.net.modelActionFormat<boolean>(
+        EntityNames.User,
+        ModelOperations.Delete
+      )({ id: user.id });
       if (isAuthDelete && isUserDelete) {
         return `${
           user.name

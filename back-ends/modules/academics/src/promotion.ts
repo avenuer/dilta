@@ -3,21 +3,25 @@ import {
   Promotion,
   levelPromotion,
   ClassPromotion,
-  AcademicActions
+  AcademicActions,
+  FindResponse,
+  Student,
+  EntityNames,
+  ModelOperations
 } from '@dilta/shared';
-import { PromotionService, StudentService } from '@dilta/database';
 import { Injectable, Action } from '@dilta/core';
+import { NetworkDroneService } from '@dilta/network';
 
 @Injectable()
 export class AcademicPromotion {
-  constructor(
-    private promotion: PromotionService,
-    private student: StudentService
-  ) {}
+  constructor(private net: NetworkDroneService) {}
 
   @Action(AcademicActions.PromoteClass)
   async promoteClass(sheet: ClassPromotion) {
-    const { data } = await this.student.find$({ class: sheet.level });
+    const { data } = await this.net.modelActionFormat<FindResponse<Student>>(
+      EntityNames.Student,
+      ModelOperations.Find
+    )({ class: sheet.level });
     const histroys = await Promise.all(
       data.map(
         async student =>
@@ -32,11 +36,17 @@ export class AcademicPromotion {
     const newLevel = sheet.newLevel || levelPromotion(sheet.level).nextLevel;
     let history = await this.retrieveSessionPromotion(sheet);
     if (history.newLevel !== newLevel) {
-      history = await this.promotion.update$(history.id, {
+      history = await this.net.modelActionFormat<Promotion>(
+        EntityNames.Promotion,
+        ModelOperations.Update
+      )(history.id, {
         ...history,
         newLevel
       });
-      const student = this.student.update$(sheet.studentId, {
+      const student = this.net.modelActionFormat<Student>(
+        EntityNames.Student,
+        ModelOperations.Update
+      )(sheet.studentId, {
         class: history.newLevel
       });
     }
@@ -49,13 +59,19 @@ export class AcademicPromotion {
     session,
     studentId
   }: PromotionSheet) {
-    let history: Promotion = await this.promotion.retrieve$({
+    let history: Promotion = await this.net.modelActionFormat<Promotion>(
+      EntityNames.Promotion,
+      ModelOperations.Retrieve
+    )({
       level,
       session,
       studentId
     });
     if (!history) {
-      history = await this.promotion.create$({
+      history = await this.net.modelActionFormat<Promotion>(
+        EntityNames.Promotion,
+        ModelOperations.Create
+      )({
         level,
         session,
         studentId,

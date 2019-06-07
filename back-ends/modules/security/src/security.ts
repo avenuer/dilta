@@ -6,7 +6,6 @@ import { EmbededLiensceService } from './embed-liensce';
 import { Keytar } from './keys.program';
 import { LiensceSecurity } from './liensce';
 import { Injectable, Module } from '@dilta/core';
-import { DatabaseModule } from '@dilta/database';
 import { Platform } from '@dilta/shared';
 import { UtilModule } from '@dilta/util';
 
@@ -16,7 +15,7 @@ const embeddedProviders =
     : [];
 
 @Module({
-  imports: [UtilModule, DatabaseModule],
+  imports: [UtilModule],
   providers: [
     AuthController,
     AuthBcryptSecurity,

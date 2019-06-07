@@ -1,11 +1,5 @@
 import { Action, Injectable } from '@dilta/core';
 import {
-  RecordService,
-  StudentService,
-  SubjectService,
-  AcademicSettingService
-} from '@dilta/database';
-import {
   StudentReportSheet,
   AcadmicRecordSheet,
   RecordSheet,
@@ -21,9 +15,15 @@ import {
   CumulativeRecordData,
   SchoolClass,
   GradingConfig,
-  cummulativeAverage
+  cummulativeAverage,
+  Student,
+  EntityNames,
+  ModelOperations,
+  AcademicSetting,
+  FindResponse
 } from '@dilta/shared';
 import { gradePreset, classPositionPreset } from '@dilta/presets';
+import { NetworkDroneService } from '@dilta/network';
 
 /***
  * 1. Collates all records that matches the class and session
@@ -35,12 +35,7 @@ import { gradePreset, classPositionPreset } from '@dilta/presets';
 
 @Injectable()
 export class ScoreSheet {
-  constructor(
-    private record: RecordService,
-    private subject: SubjectService,
-    private student: StudentService,
-    private setting: AcademicSettingService
-  ) {}
+  constructor(private net: NetworkDroneService) {}
 
   /**
    * collates student data and all student records for the session
@@ -52,8 +47,14 @@ export class ScoreSheet {
   @Action(AcademicActions.StudentReportSheet)
   async studentSheet(sheet: StudentSheet): Promise<StudentReportSheet> {
     const records = await this.classRecords(sheet);
-    const student = await this.student.retrieve$({ id: sheet.studentId });
-    const settings = await this.setting.retrieve$({ school: student.school });
+    const student = await this.net.modelActionFormat<Student>(
+      EntityNames.Student,
+      ModelOperations.Retrieve
+    )({ id: sheet.studentId });
+    const settings = await this.net.modelActionFormat<AcademicSetting>(
+      EntityNames.academic_setting,
+      ModelOperations.Retrieve
+    )({ school: student.school });
     const recordScoreSheets = await Promise.all(
       records.map(async rec =>
         this.mergeRecordScores(sheet, rec, settings.grade)
@@ -84,12 +85,18 @@ export class ScoreSheet {
   }
 
   async classRecords({ term, session, level }: AcadmicRecordSheet) {
-    const { data } = await this.record.find({ class: level, session });
+    const { data } = await this.net.modelActionFormat<FindResponse<Record>>(
+      EntityNames.Record,
+      ModelOperations.Find
+    )({ class: level, session });
     return data;
   }
 
   async studentCounts(level: SchoolClass) {
-    const { total } = await this.student.find({ class: level });
+    const { total } = await this.net.modelActionFormat<FindResponse<Student>>(
+      EntityNames.Student,
+      ModelOperations.Find
+    )({ class: level });
     return total;
   }
 
@@ -140,7 +147,10 @@ export class ScoreSheet {
    * @memberof ScoreSheet
    */
   async classSheets(recordId: string, studentId?: string): Promise<ClassSheet> {
-    const { data } = await this.subject.find({ recordId: recordId });
+    const { data } = await this.net.modelActionFormat<FindResponse<Subject>>(
+      EntityNames.Student,
+      ModelOperations.Find
+    )({ recordId: recordId });
     // this sort from highest to lowest
     const sorted = data.sort((a, b) => b.total - a.total);
     // retrieves the student position
@@ -174,7 +184,10 @@ export class ScoreSheet {
     studentId: string,
     grading: GradingConfig
   ): Promise<StudentRecordSheet> {
-    let score: Subject = await this.subject.retrieve$({
+    let score: Subject = await this.net.modelActionFormat<Subject>(
+      EntityNames.Student,
+      ModelOperations.Retrieve
+    )({
       recordId,
       studentId
     });
@@ -227,7 +240,9 @@ export class ScoreSheet {
   ) {
     const map = new Map<string, StudentRecordMergeTermSheet>();
     scoreSheet.forEach(sheet => {
-      console.log(`term ${sheet.term} subject: ${sheet.subject} total: ${sheet.total}`)
+      console.log(
+        `term ${sheet.term} subject: ${sheet.subject} total: ${sheet.total}`
+      );
       if (map.has(sheet.subject)) {
         const report = map.get(sheet.subject);
         map.set(
@@ -288,10 +303,10 @@ export class ScoreSheet {
       report = { ...report, ...sheet };
     }
     const calcumAvgs = cummulativeAverage(currentTerm);
-    if ( sheet.term === First) {
+    if (sheet.term === First) {
       report.firstTerm = sheet.total;
     }
-    if ( sheet.term === Second) {
+    if (sheet.term === Second) {
       report.secondTerm = sheet.total;
     }
     if (sheet.term === Third) {

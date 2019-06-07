@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@dilta/core": "^1.0",
-    "@dilta/database": "^1.0",
+    "@dilta/network": "^0.0.1",
     "@dilta/shared": "^1.0",
     "@dilta/presets": "^1.0",
     "lodash": "^4.17"
