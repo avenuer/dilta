@@ -1,6 +1,6 @@
 {
   "name": "@dilta/shared",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "exposes functionalities and variables both commonly used on the client and serverside",
   "author": "john5117 <abiodunogundijo@gmail.com>",
   "homepage": "https://github.com/avenuer/dilta/tree/master/server-side/modules/platform-shared#readme",

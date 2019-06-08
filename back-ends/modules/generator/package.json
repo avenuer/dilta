@@ -1,6 +1,6 @@
 {
   "name": "@dilta/generator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generates mock data for testing the various applications",
   "author": "john5117 <abiodunogundijo@gmail.com>",
   "homepage": "https://github.com/avenuer/dilta/tree/master/server-side/modules/generator#readme",
@@ -29,8 +29,8 @@
     "url": "https://github.com/avenuer/dilta/issues"
   },
   "dependencies": {
-    "@dilta/shared": "^1.0",
-    "@dilta/embdb": "^1.0",
+    "@dilta/embdb": "^1.0.1",
+    "@dilta/shared": "^1.0.1",
     "date-fns": "^1.29.0",
     "faker": "^4.1.0",
     "lodash": "^4.17.11",

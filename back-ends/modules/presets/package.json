@@ -1,6 +1,6 @@
 {
   "name": "@dilta/presets",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Provide some already prepared require data for the application",
   "author": "john5117 <abiodunogundijo@gmail.com>",
   "homepage": "https://github.com/avenuer/dilta/tree/master/server-side/modules/presets#readme",
@@ -29,8 +29,8 @@
     "url": "https://github.com/avenuer/dilta/issues"
   },
   "dependencies": {
-    "@dilta/core": "^1.0",
-    "@dilta/shared": "^1.0",
+    "@dilta/core": "^1.0.1",
+    "@dilta/shared": "^1.0.1",
     "date-fns": "^1.29.0",
     "lodash": "^4.17",
     "uuid": "^3.3.2"
