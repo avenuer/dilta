@@ -1,6 +1,6 @@
 {
   "name": "@dilta/network",
-  "version": "0.0.2-alpha.0",
+  "version": "0.0.1",
   "description": "The intergalatical transport between submodules for various services\"",
   "keywords": [
     "network",
@@ -34,8 +34,8 @@
     "url": "https://github.com/avenuer/dilta/issues"
   },
   "dependencies": {
-    "@dilta/core": "^1.0.1",
-    "@dilta/shared": "^1.0.1",
+    "@dilta/core": "^1.0",
+    "@dilta/shared": "^1.0",
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {

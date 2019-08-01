@@ -1,6 +1,6 @@
 {
   "name": "@dilta/core",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "Dilta dependency injection system which collates actions across various services in a module",
   "author": "john5117 <abiodunogundijo@gmail.com>",
   "homepage": "https://github.com/avenuer/dilta/tree/master/server-side/modules/core#readme",
@@ -29,9 +29,9 @@
     "url": "https://github.com/avenuer/dilta/issues"
   },
   "dependencies": {
-    "@dilta/shared": "^1.0.1",
     "injection-js": "^2.2.1",
     "lodash": "^4.17.11",
-    "reflect-metadata": "^0.1.12"
+    "reflect-metadata": "^0.1.12",
+    "@dilta/shared": "^1.0.0"
   }
 }

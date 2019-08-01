@@ -55,12 +55,11 @@ export class ScoreSheet {
       EntityNames.academic_setting,
       ModelOperations.Retrieve
     )({ school: student.school });
-    const recordScoreSheets = await Promise.all(
+    const recordScoreSheets: StudentRecordMergeSheet[] = await Promise.all(
       records.map(async rec =>
         this.mergeRecordScores(sheet, rec, settings.grade)
       )
     );
-
     const scoreSheet = this.differentTermScores(
       sheet,
       recordScoreSheets,

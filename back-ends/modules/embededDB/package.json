@@ -1,6 +1,6 @@
 {
   "name": "@dilta/embdb",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "Provides schemas and intialization of database for the platforms",
   "author": "john5117 <abiodunogundijo@gmail.com>",
   "homepage": "https://github.com/avenuer/dilta/tree/master/server-side/modules/embededDB#readme",
@@ -29,8 +29,8 @@
     "url": "https://github.com/avenuer/dilta/issues"
   },
   "dependencies": {
-    "@dilta/shared": "^1.0.1",
-    "@dilta/util": "^1.0.1",
+    "@dilta/shared": "^1.0",
+    "@dilta/util": "^1.0",
     "leveldown": "^4.0.1",
     "lodash": "^4.17.11",
     "pouchdb-adapter-http": "^7.0.0",

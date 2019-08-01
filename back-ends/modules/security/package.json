@@ -1,6 +1,6 @@
 {
   "name": "@dilta/security",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "> TODO: description",
   "author": "john5117 <abiodunogundijo@gmail.com>",
   "homepage": "https://github.com/avenuer/dilta/tree/master/server-side/modules/security#readme",
@@ -29,10 +29,10 @@
     "url": "https://github.com/avenuer/dilta/issues"
   },
   "dependencies": {
-    "@dilta/core": "^1.0.1",
-    "@dilta/network": "^0.0.2-alpha.0",
-    "@dilta/shared": "^1.0.1",
-    "@dilta/util": "^1.0.1",
+    "@dilta/core": "^1.0",
+    "@dilta/network": "^0.0.1",
+    "@dilta/shared": "^1.0",
+    "@dilta/util": "^1.0",
     "await-to-js": "^2.0.1",
     "bcrypt": "^3.0.3",
     "core-decorators": "^0.20.0",

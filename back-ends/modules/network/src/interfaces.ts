@@ -23,6 +23,7 @@ export enum HiveStatus {
 export enum HivePortOperationType {
   Dock,
   Leave,
+  Ships,
   Forward
 }
 
@@ -33,7 +34,7 @@ export enum HivePortOperationType {
  * @interface HivePortRequest
  */
 export interface HivePortRequest {
-  actions: string[];
+  actions: [string, ...any[]];
   operation: HivePortOperationType;
 }
 
@@ -59,8 +60,8 @@ export interface HiveResponse<T> {
  * @interface DroneTransport
  */
 export interface DroneTransport {
-  register(actions: string[]): Promise<HiveResponse<string>>;
-  unregister(): Promise<HiveResponse<string>>;
+  register(droneName: string, actions: string[]): Promise<HiveResponse<string>>;
+  unregister(droneName: string): Promise<HiveResponse<string>>;
   forward<T>(...args): Promise<HiveResponse<T>>;
 }
 
@@ -68,7 +69,9 @@ export type DroneLink = string;
 
 export type HiveProtocol = (
   drone: string,
-  actions: string[]
+  actions: [string, ...any[]]
 ) => Promise<ApiResponse<any>>;
 
 export const DroneTransportToken = Symbol(`NetworkDroneTransportToken`);
+
+export type DroneTransportProtocol<T> = (fargs: [string, ...any[]]) => Promise<HiveResponse<T>>

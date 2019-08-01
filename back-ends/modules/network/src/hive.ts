@@ -6,6 +6,7 @@ import {
   DroneLink,
   HiveProtocol
 } from './interfaces';
+import { Injectable } from '@dilta/core';
 
 /**
  * THe Drone Hive which all worker drones registers
@@ -31,7 +32,7 @@ export class DronesHive {
     req: HivePortRequest,
     drone: DroneLink
   ): Promise<HiveResponse<any>> {
-    const { Dock, Forward, Leave } = HivePortOperationType;
+    const { Dock, Forward, Leave, Ships } = HivePortOperationType;
     switch (req.operation) {
       case Forward:
         return this.forward(req.actions);
@@ -39,12 +40,28 @@ export class DronesHive {
         return this.register(drone, req.actions);
       case Leave:
         return await this.unregister(drone);
+      case Ships:
+          return this.storeActions();
       default:
         return {
           err: `${drone} tries to perform invalid operation in the hive`,
           status: HiveStatus.TransportError
         };
     }
+  }
+
+
+  /**
+   * retrieves all the hives store actions and drones
+   *
+   * @returns {HiveResponse<any>}
+   * @memberof DronesHive
+   */
+  storeActions(): HiveResponse<any> {
+    return {
+      data: this.store,
+      status: HiveStatus.TransportSuccess
+    };
   }
 
   /**
@@ -71,7 +88,7 @@ export class DronesHive {
    * @returns
    * @memberof DronesHive
    */
-  async forward(actions: string[]) {
+  async forward(actions: [string, ...any[]]) {
     // since the action is always first in the array
     const drone = this.store.get(actions[0]);
     const res = await this.protocol(drone, actions);

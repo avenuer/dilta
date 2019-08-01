@@ -1,0 +1,9 @@
+<div class="gallery">
+  <div *ngFor="let feature of features; let i = odd" class="gallery-item">
+    <!-- [style.background]="'url(assets/images/' + feature.icon + ')'" -->
+    <div  class="">
+      <img [src]="'assets/images/' + feature.icon" alt="" />
+      <!-- <p class="gallery-text">{{ feature.info }}</p> -->
+    </div>
+  </div>
+</div>

@@ -1,6 +1,8 @@
 {
   "packages": [
     "back-ends/modules/*",
+    "back-ends/platforms/*",
+    "front-ends/*",
     "./*"
   ],
   "version": "independent",

@@ -7,11 +7,13 @@
   "workspaces": [
     "back-ends/modules/*",
     "back-ends/platforms/*",
+    "front-ends/*",
     "./*"
   ],
   "scripts": {
     "link:packages": "lerna exec -- yarn link",
     "unlink:packages": "lerna exec -- yarn unlink",
+    "tsc:link": "lerna run tsc && lerna link",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

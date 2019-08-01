@@ -1,16 +1,10 @@
-import {
-  Injectable,
-  ReflectiveInjector,
-  collateActions,
-  Inject
-} from '@dilta/core';
+import { Injectable, Inject } from '@dilta/core';
 
 import { Logger } from '@dilta/util';
 import {
-  HiveStatus,
-  DroneTransport,
   HiveActions,
-  DroneTransportToken
+  DroneTransportToken,
+  DroneTransportProtocol
 } from './interfaces';
 import { modelActionFormat, ModelOperations, EntityNames } from '@dilta/shared';
 
@@ -23,60 +17,10 @@ import { modelActionFormat, ModelOperations, EntityNames } from '@dilta/shared';
 @Injectable()
 export class NetworkDroneService {
   private localHive: HiveActions;
-
   constructor(
-    private injector: ReflectiveInjector,
-    @Inject(DroneTransportToken) private drone: DroneTransport,
+    @Inject(DroneTransportToken) private transport: DroneTransportProtocol<any>,
     private logger: Logger
-  ) {
-    this.localHive = collateActions(this.injector);
-  }
-
-  /**
-   * all actions in the current module
-   *
-   * @readonly
-   * @memberof NetworkDroneService
-   */
-  get actions() {
-    const actions = [];
-    this.localHive.forEach((map, key) => actions.push(key));
-    return actions;
-  }
-
-  /**
-   * method for the injected module to register itself on the hive
-   *
-   * @memberof NetworkDroneService
-   */
-  async register() {
-    const response = await this.drone.register(this.actions);
-    if (response.status !== HiveStatus.TransportSuccess) {
-      this.logger.error({
-        module: 'TransportModule',
-        trace: 'NetworkDone:register',
-        message: response.err
-      });
-      process.exit(1);
-    }
-  }
-
-  /**
-   * method for the un-injected module to register itself on the hive
-   *
-   * @memberof NetworkDroneService
-   */
-  async unregister() {
-    const response = await this.drone.unregister();
-    if (response.status !== HiveStatus.TransportSuccess) {
-      this.logger.error({
-        module: 'TransportModule',
-        trace: 'NetworkDone:unregister',
-        message: response.err
-      });
-      process.exit(1);
-    }
-  }
+  ) {}
 
   /**
    * Simpler abstraction for doing CRUD operations
@@ -106,7 +50,7 @@ export class NetworkDroneService {
         trace: 'NetworkDone:transort',
         message: `Action: ${action} \n payload: ${args.toString()}`
       });
-      const res = await this.drone.forward<T>(args);
+      const res = await this.transport([action, ...args]);
       if (res.err) {
         throw res.err;
       }

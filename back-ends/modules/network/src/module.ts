@@ -11,7 +11,6 @@ export class DroneNetworkModule {
   constructor() {}
 }
 
-
 /**
  * bootsrap a module over a network
  *
@@ -20,11 +19,14 @@ export class DroneNetworkModule {
  * @param {T} bootclass
  * @returns {DiltaApp}
  */
-export function networkBootStrap<T>(bootclass: T): DiltaApp {
+export function networkBootStrap<T>(
+  name: string,
+  bootclass: T,
+  callback?: (name: string, diltaApp: DiltaApp) => void
+): DiltaApp {
   const diltaApp = bootStrap(bootclass);
-  const drone = diltaApp.injector.get(
-    NetworkDroneService
-  ) as NetworkDroneService;
-  drone.register();
+  if (callback) {
+    callback(name, diltaApp);
+  }
   return diltaApp;
 }

@@ -1,6 +1,6 @@
 {
   "name": "@dilta/database",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "> TODO: description",
   "author": "john5117 <abiodunogundijo@gmail.com>",
   "homepage": "https://github.com/avenuer/dilta/tree/master/server-side/modules/database#readme",
@@ -29,13 +29,13 @@
     "url": "https://github.com/avenuer/dilta/issues"
   },
   "dependencies": {
-    "@dilta/core": "^1.0.1",
-    "@dilta/embdb": "^1.0.1",
-    "@dilta/shared": "^1.0.1",
-    "@dilta/util": "^1.0.1",
-    "core-decorators": "^0.20.0",
+    "@dilta/core": "^1.0",
+    "@dilta/embdb": "^1.0",
+    "@dilta/util": "^1.0",
+    "@dilta/shared": "^1.0",
+    "rxjs": "^6.0.0",
     "date-fns": "^1.29.0",
     "lodash": "^4.17.11",
-    "rxjs": "^6.0.0"
+    "core-decorators": "^0.20.0"
   }
 }
