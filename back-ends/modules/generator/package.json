@@ -1,0 +1,39 @@
+{
+  "name": "@dilta/generator",
+  "version": "1.0.0",
+  "description": "Generates mock data for testing the various applications",
+  "author": "john5117 <abiodunogundijo@gmail.com>",
+  "homepage": "https://github.com/avenuer/dilta/tree/master/server-side/modules/generator#readme",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avenuer/dilta.git"
+  },
+  "scripts": {
+    "tsc": "tsc",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/avenuer/dilta/issues"
+  },
+  "dependencies": {
+    "@dilta/shared": "^1.0",
+    "@dilta/embdb": "^1.0",
+    "date-fns": "^1.29.0",
+    "faker": "^4.1.0",
+    "lodash": "^4.17.11",
+    "shuffle-array": "^1.0.1"
+  }
+}

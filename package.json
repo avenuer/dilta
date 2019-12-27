@@ -1,41 +1,29 @@
 {
   "name": "dilta",
-  "description": "School Managment Software Platform",
-  "author": {
-    "name": "Oyegoke Abiodun",
-    "email": "abiodunogundijo@gmail.com",
-    "url": "http://www.marker.ng"
-  },
-  "bin": "./cli.js",
-  "version": "0.0.0",
-  "main": "./dist/main.js",
+  "version": "1.0.0",
+  "description": "dilta edu-tech consultant mono-repo",
+  "main": "none",
+  "private": true,
+  "workspaces": [
+    "back-ends/modules/*",
+    "back-ends/platforms/*",
+    "front-ends/*",
+    "./*"
+  ],
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e",
-    "repl": "node -r ./debugger.js repl.ts",
-    "dilta:internal": "ng run dilta-internal-mobile:ionic-cordova-build --platform=android && cordova build android",
-    "marker-web:live": "npm run marker-web:prod && ts-node ./projects/marker-web/src/prender.ts",
-    "marker-web:browser:prod": "ng build marker-web --prod",
-    "marker-web:server:prod": "ng run marker-web:server && webpack-cli --config ./configs/webpack.marker-web.js --progress --colors",
-    "marker-web:prod": "npm run marker-web:server:prod && npm run marker-web:browser:prod",
-    "server": "node local.js",
-    "dilta-server": "ts-node modules/server/server.ts",
-    "cli": "node ./dist/cli.js",
-    "e:start": "cross-env-shell PLATFORM=desktop ELECTRON_IS_DEV=development \"npm run e:clean && npx electron . \"",
-    "e:watch": "npx webpack-cli --config=webpack.electron.js -w",
-    "e:pack": "npx webpack-cli --config=./configs/webpack.electron.js",
-    "e:launch": "cross-env-shell ELECTRON_IS_DEV=development \"npm run e:pack && npm run e:start\"",
-    "e:rebuild": "npx electron-rebuild",
-    "e:package": "rimraf build/package && npx electron-builder",
-    "e:build:package": "cross-env-shell ELECTRON_IS_DEV=development \"npm run e:pack && e:package\"",
-    "e:build:ship": "cross-env-shell PLATFORM=desktop ELECTRON_IS_DEV=production \"npm run e:pack && e:package\"",
-    "e:build:cli": "pkg -t node6-win ./dist/cli.js -o ./build/cli",
-    "e:clean": "rimraf C:\\Users\\AbiZeus\\AppData\\Local\\Temp\\pubkey.bc\\A3503c69c90b007512d60"
+    "link:packages": "lerna exec -- yarn link",
+    "unlink:packages": "lerna exec -- yarn unlink",
+    "tsc:link": "lerna run tsc && lerna link",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avenuer/dilta.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/avenuer/dilta/issues"
   "private": true,
   "dependencies": {
     "@angular/animations": "^7.1.4",
@@ -112,7 +100,10 @@
     "uuid": "^3.3.2",
     "zone.js": "^0.8.26"
   },
+  "homepage": "https://github.com/avenuer/dilta#readme",
   "devDependencies": {
+    "@types/node": "^12.0.4",
+    "typescript": "^3.5.1"
     "@angular-devkit/architect": "^0.12.2",
     "@angular-devkit/build-angular": "^0.11.4",
     "@angular-devkit/core": "^7.2.2",
@@ -153,7 +144,6 @@
     "ts-node": "~7.0.1",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
     "tslint": "~5.12.0",
-    "typescript": "^3.1.6",
     "webpack-node-externals": "^1.7.2"
   }
 }

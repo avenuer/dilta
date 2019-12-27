@@ -1,0 +1,26 @@
+// school$() {
+//   return this.store.select(schoolFeature).pipe(
+//     first(),
+//     map(school => school.details)
+//   );
+// }
+
+// schoolHeader$() {
+//   return this.school$().pipe(
+//     tap(console.log),
+//     exhaustMap(school =>
+//       this.transport.modelAction<Manager>(
+//         EntityNames.Manager,
+//         ModelOperations.Retrieve,
+//         { school: school.id }
+//       )
+//     ),
+//     withLatestFrom(this.school$()),
+//     tap(console.log),
+//     map(([manager, school]) => this.generateDocumentHeader(school, manager))
+//   );
+// }
+
+
+
+

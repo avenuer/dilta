@@ -9,8 +9,8 @@
 /build/docs
 
 # Test Direct
-database
-remotedb
+# database
+# remotedb
 
 *~
 *.sw[mnpcod]

@@ -1,0 +1,94 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "paths": {
+      "landing-pages": [
+        "dist/landing-pages"
+      ],
+      "landing-pages/*": [
+        "dist/landing-pages/*"
+      ],
+      "auth-pages": [
+        "dist/auth-pages"
+      ],
+      "auth-pages/*": [
+        "dist/auth-pages/*"
+      ],
+      "client-shared": [
+        "dist/client-shared"
+      ],
+      "client-shared/*": [
+        "dist/client-shared/*"
+      ],
+      "printing-press": [
+        "dist/printing-press"
+      ],
+      "printing-press/*": [
+        "dist/printing-press/*"
+      ],
+      "school-pages": [
+        "dist/school-pages"
+      ],
+      "school-pages/*": [
+        "dist/school-pages/*"
+      ],
+      "transport": [
+        "dist/transport"
+      ],
+      "transport/*": [
+        "dist/transport/*"
+      ],
+      "marker-pages": [
+        "dist/marker-pages"
+      ],
+      "marker-pages/*": [
+        "dist/marker-pages/*"
+      ],
+      "overview-pages": [
+        "dist/overview-pages"
+      ],
+      "overview-pages/*": [
+        "dist/overview-pages/*"
+      ],
+      "dynamic-grid": [
+        "dist/dynamic-grid"
+      ],
+      "dynamic-grid/*": [
+        "dist/dynamic-grid/*"
+      ],
+      "auth-store": [
+        "dist/auth-store"
+      ],
+      "auth-store/*": [
+        "dist/auth-store/*"
+      ],
+      "model-pages": [
+        "dist/model-pages"
+      ],
+      "model-pages/*": [
+        "dist/model-pages/*"
+      ]
+    }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
+}
