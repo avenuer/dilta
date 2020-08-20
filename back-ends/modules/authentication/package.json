@@ -33,7 +33,7 @@
     "@dilta/shared": "^1.0",
     "@dilta/network": "^0.0.1",
     "@dilta/util": "^1.0",
-    "bcrypt": "^3.0.3",
+    "bcrypt": "^5.0.0",
     "core-decorators": "^0.20.0",
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.11"
